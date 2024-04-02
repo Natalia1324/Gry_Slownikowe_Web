@@ -86,7 +86,7 @@
         function checkLetter(letter) {
             var found = false;
             for (var i = 0; i < wordToGuess.length; i++) {
-                if (wordToGuess[i].toLowerCase() === letter.toLowerCase()) {
+                if (wordToGuess[i].toLowerCase() === letter.toLowerCase() || wordToGuess[i] === ' ') {
                     guessedWord = guessedWord.substring(0, i) + wordToGuess[i] + guessedWord.substring(i + 1);
                     found = true;
                 }
@@ -109,7 +109,7 @@
             if (currentAttempts >= maxAttempts) {
                 // Tutaj dodaj kod, który wykona się, gdy gracz przegra
                 alert("Przegrałeś! Szukane słowo to: " + wordToGuess);
-            } else if (guessedWord.toLowerCase() === wordToGuess.toLowerCase()) {
+            } else if (guessedWord.replace(/\s+/g, '').toLowerCase() === wordToGuess.replace(/\s+/g, '').toLowerCase()) {
                 // Tutaj dodaj kod, który wykona się, gdy gracz wygra
                 alert("Gratulacje! Zgadłeś słowo: " + wordToGuess);
             }
@@ -126,7 +126,7 @@
         }
 
         // Inicjalizacja stanu gry
-        guessedWord = "_".repeat(wordToGuess.length); // Początkowo zakrywamy słowo
+        guessedWord = wordToGuess.replace(/[a-zA-Ząćęłńóśźż]/g, "_"); // Początkowo zakrywamy litery, a spacje od razu odkrywamy
         updateScreen();
     </script>
 
