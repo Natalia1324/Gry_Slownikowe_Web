@@ -41,38 +41,11 @@ namespace Gry_Słownikowe.Controllers
             return RedirectToAction("Krzyzowki", "Game");
         }
 
-
-
-
         public IActionResult Zgadywanki()
         {
             // Tutaj możesz przekierować użytkownika na stronę Zgadywanki
            return RedirectToAction("Zgadywanki", "Game");
         }
-        public IActionResult ZgadywankiMenu()
-        {
-            return View();
-        }
-
-        public IActionResult ZgadywankiZasady()
-        {
-            return View();
-        }
-
-        public IActionResult ZgadywankiPTrudności()
-        {
-            return View();
-        }
-
-        public IActionResult ZgadywankiSlowotok(string poziom)
-        {
-            ViewBag.PoziomTrudnosci = poziom;
-            return View();
-        }
-
-
-
-
         public IActionResult Privacy()
         {
             return View();

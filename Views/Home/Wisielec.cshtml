@@ -1,0 +1,133 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Wisielec";
+    char[] alfabet = { 'a', 'ą', 'b', 'c', 'ć', 'd', 'e', 'ę', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'ł', 'm', 'n', 'o', 'ó', 'p', 'r', 's', 'ś', 't', 'u', 'w', 'y', 'z', 'ź', 'ż', 'q', 'v', 'x' };
+}
+
+<div class="WelcomeToWisielca">
+    <!--text-center-->
+
+    <h3 class="display-4">Zagrajmy w Wisielca</h3>
+    <!--<p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>-->
+</div>
+
+<div class="Kontener_Wisielec">
+    <div class="Kontener_Wisielec_Lewy">
+        @Html.TextBox("ScreenInput", null, new { @class = "Wisielec_Screen", disabled = "disabled" })
+    </div>
+    <div class="Kontener_Wisielec_Prawy">
+        Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym. Został po raz pierwszy użyty w XV w. przez nieznanego drukarza do wypełnienia tekstem próbnej książki. Pięć wieków później zaczął być używany przemyśle elektronicznym, pozostając praktycznie niezmienionym. Spopularyzował się w latach 60. XX w. wraz z publikacją arkuszy Letrasetu, zawierających fragmenty Lorem Ipsum, a ostatnio z zawierającym różne wersje Lorem Ipsum oprogramowaniem przeznaczonym do realizacji druków na komputerach osobistych, jak Aldus PageMaker
+    </div>
+</div>
+
+<div>
+    <br>
+    <table class="Klawiatura">
+        <tr>
+            <td><button type="button" class="btn btn-primary litera">a</button></td>
+            <td><button type="button" class="btn btn-primary litera">ą</button></td>
+            <td><button type="button" class="btn btn-primary litera">b</button></td>
+            <td><button type="button" class="btn btn-primary litera">c</button></td>
+            <td><button type="button" class="btn btn-primary litera">ć</button></td>
+            <td><button type="button" class="btn btn-primary litera">d</button></td>
+            <td><button type="button" class="btn btn-primary litera">e</button></td>
+            <td><button type="button" class="btn btn-primary litera">ę</button></td>
+            <td><button type="button" class="btn btn-primary litera">f</button></td>
+            <td><button type="button" class="btn btn-primary litera">g</button></td>
+        </tr>
+        <tr>
+            <td><button type="button" class="btn btn-primary litera">h</button></td>
+            <td><button type="button" class="btn btn-primary litera">i</button></td>
+            <td><button type="button" class="btn btn-primary litera">j</button></td>
+            <td><button type="button" class="btn btn-primary litera">k</button></td>
+            <td><button type="button" class="btn btn-primary litera">l</button></td>
+            <td><button type="button" class="btn btn-primary litera">ł</button></td>
+            <td><button type="button" class="btn btn-primary litera">m</button></td>
+            <td><button type="button" class="btn btn-primary litera">n</button></td>
+            <td><button type="button" class="btn btn-primary litera">o</button></td>
+            <td><button type="button" class="btn btn-primary litera">ó</button></td>
+        </tr>
+        <tr>
+            <td><button type="button" class="btn btn-primary litera">p</button></td>
+            <td><button type="button" class="btn btn-primary litera">r</button></td>
+            <td><button type="button" class="btn btn-primary litera">s</button></td>
+            <td><button type="button" class="btn btn-primary litera">ś</button></td>
+            <td><button type="button" class="btn btn-primary litera">t</button></td>
+            <td><button type="button" class="btn btn-primary litera">u</button></td>
+            <td><button type="button" class="btn btn-primary litera">w</button></td>
+            <td><button type="button" class="btn btn-primary litera">y</button></td>
+            <td><button type="button" class="btn btn-primary litera">z</button></td>
+            <td><button type="button" class="btn btn-primary litera">ź</button></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><button type="button" class="btn btn-primary litera">ż</button></td>
+            <td><button type="button" class="btn btn-primary litera">q</button></td>
+            <td><button type="button" class="btn btn-primary litera">v</button></td>
+            <td><button type="button" class="btn btn-primary litera">x</button></td>
+            <td></td>
+        </tr>
+    </table>
+</div>
+
+@section Scripts
+   {
+    <script type="text/javascript">
+        var wordToGuess = "Lorem Ipsum"; // Słowo do zgadnięcia
+        var guessedWord = ""; // Zgadnięte litery
+        var maxAttempts = 6; // Maksymalna liczba prób
+        var currentAttempts = 0; // Aktualna liczba prób
+
+        // Funkcja sprawdzająca, czy dana litera znajduje się w słowie do zgadnięcia
+        function checkLetter(letter) {
+            var found = false;
+            for (var i = 0; i < wordToGuess.length; i++) {
+                if (wordToGuess[i].toLowerCase() === letter.toLowerCase()) {
+                    guessedWord = guessedWord.substring(0, i) + wordToGuess[i] + guessedWord.substring(i + 1);
+                    found = true;
+                }
+            }
+            if (!found) {
+                currentAttempts++;
+                // Tutaj możesz dodać kod odpowiedzialny za zmianę wyglądu wisielca
+            }
+            updateScreen();
+            checkGameOver();
+        }
+
+        // Funkcja aktualizująca wyświetlanie stanu gry
+        function updateScreen() {
+            document.getElementById("ScreenInput").value = guessedWord;
+        }
+
+        // Funkcja sprawdzająca, czy gra się zakończyła
+        function checkGameOver() {
+            if (currentAttempts >= maxAttempts) {
+                // Tutaj dodaj kod, który wykona się, gdy gracz przegra
+                alert("Przegrałeś! Szukane słowo to: " + wordToGuess);
+            } else if (guessedWord.toLowerCase() === wordToGuess.toLowerCase()) {
+                // Tutaj dodaj kod, który wykona się, gdy gracz wygra
+                alert("Gratulacje! Zgadłeś słowo: " + wordToGuess);
+            }
+        }
+
+        // Obsługa kliknięcia na literę
+        var buttons = document.getElementsByClassName("litera");
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener("click", function () {
+                var letter = this.innerText;
+                checkLetter(letter);
+                this.disabled = true; // Wyłącz przycisk po kliknięciu
+            });
+        }
+
+        // Inicjalizacja stanu gry
+        guessedWord = "_".repeat(wordToGuess.length); // Początkowo zakrywamy słowo
+        updateScreen();
+    </script>
+
+}
