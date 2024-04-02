@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Zgadywanki";
+}
+
+<style>
+    h1.title {
+        margin-top: 100px;
+    }
+</style>
+
+<div class="text-center d-flex flex-column align-items-center justify-content-center">
+    <h1 class="display-1 title " style="height: 15vh;">Słowotok</h1>
+    <div class="mt-3">
+        <a href="@Url.Action("ZgadywankiZasady", "Home")" class="btn btn-primary">Zasady</a>
+    </div>
+
+    <div class="mt-3">
+        <a href="@Url.Action("ZgadywankiPTrudności", "Home")" class="btn btn-primary">Rozpocznij grę!</a>
+    </div>
+</div>

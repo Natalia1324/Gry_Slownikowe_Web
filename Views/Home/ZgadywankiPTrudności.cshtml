@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Poziom Trudności";
+}
+
+<style>
+    h1.title {
+        margin-top: 100px;
+    }
+</style>
+
+<div class="text-center d-flex flex-column align-items-center justify-content-center">
+    <h1 class="display-1 title" style="height: 15vh;">Wybierz poziom trudności:</h1>
+    <div class="mt-3">
+        <a href="@Url.Action("ZgadywankiSlowotok", "Home", new { poziom = "Łatwy" })" class="btn btn-primary">Łatwy</a>
+    </div>
+    <div class="mt-3">
+        <a href="@Url.Action("ZgadywankiSlowotok", "Home", new { poziom = "Średni" })" class="btn btn-primary">Średni</a>
+    </div>
+    <div class="mt-3">
+        <a href="@Url.Action("ZgadywankiSlowotok", "Home", new { poziom = "Trudny" })" class="btn btn-primary">Trudny</a>
+    </div>
+</div>

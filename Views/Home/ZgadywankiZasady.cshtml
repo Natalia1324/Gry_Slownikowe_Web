@@ -1,0 +1,72 @@
+﻿@{
+    ViewData["Title"] = "Zasady Gry";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-vfXzQV8CPwaVVd4Cf1Ut5Lr+o+vDHCNBUHlRYB+caF3Un3B+0rzqX8jBE6OaBUX70s/FqkuAbLxSA6jPXN0F+Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        h1.title {
+            margin-top: 20px;
+        }
+
+        .rules-container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            overflow-y: auto;
+            height: 50vh;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .point {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="text-center d-flex flex-column align-items-center justify-content-center">
+        <h1 class="display-1 title">Zasady Gry</h1>
+        <div class="rules-container mt-3">
+
+            <p>
+                <span class="point">1. Celem gry:</span>
+                <br />
+                Twoim celem jest odgadnięcie jak największej liczby słów z zestawu dostępnych liter przed upływem konkretnego czasu.
+                <br />
+                Musisz odgadnąć pięć słów UWAGA! nie wszystkie wpisane słowa będą poprawne
+                <br />
+
+                <span class="point">2. Poziomy trudności:</span>
+                <br />
+                - Łatwy: Gracz ma 30 minut na odgadnięcie słów.
+                <br />
+                - Średni: Gracz ma 20 minut na odgadnięcie słów.
+                <br />
+                - Trudny: Gracz ma 10 minut na odgadnięcie słów.
+                <br />
+
+                <span class="point">3. Zwycięstwo: </span>
+                <br />
+                - Gracz zwycięża, osiągając jak największą liczbę punktów poprzez odgadnięcie jak największej liczby słów w dostępnym czasie.
+                <br />
+
+                <span class="point">4. Porażka:</span>
+                <br />
+                - Gracz przegrywa, jeśli nie odgadnie żadnego słowa przed upływem czasu lub gdy wszystkie możliwe słowa zostaną odgadnięte, zanim osiągnie maksymalną liczbę punktów.
+            </p>
+        </div>
+        <div class="mt-3">
+            <a href="@Url.Action("ZgadywankiMenu", "Home")" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i> Powrót
+            </a>
+        </div>
+    </div>
+</body>
+</html>
