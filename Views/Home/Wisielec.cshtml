@@ -18,8 +18,8 @@
         @Html.TextBox("ScreenInput", null, new { @class = "Wisielec_Screen", disabled = "disabled" })
     </div>
     <div class="Kontener_Wisielec_Prawy">
-        Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym. Został po raz pierwszy użyty w XV w. przez nieznanego drukarza do wypełnienia tekstem próbnej książki. Pięć wieków później zaczął być używany przemyśle elektronicznym, pozostając praktycznie niezmienionym. Spopularyzował się w latach 60. XX w. wraz z publikacją arkuszy Letrasetu, zawierających fragmenty Lorem Ipsum, a ostatnio z zawierającym różne wersje Lorem Ipsum oprogramowaniem przeznaczonym do realizacji druków na komputerach osobistych, jak Aldus PageMaker
-    </div>
+        <img id="wisielecImg" src="wisielec0.jfif" alt="Wisielec">
+     </div>
 </div>
 
 <div>
@@ -79,7 +79,7 @@
     <script type="text/javascript">
         var wordToGuess = "Lorem Ipsum"; // Słowo do zgadnięcia
         var guessedWord = ""; // Zgadnięte litery
-        var maxAttempts = 6; // Maksymalna liczba prób
+        var maxAttempts = 7; // Maksymalna liczba prób
         var currentAttempts = 0; // Aktualna liczba prób
 
         // Funkcja sprawdzająca, czy dana litera znajduje się w słowie do zgadnięcia
@@ -93,7 +93,7 @@
             }
             if (!found) {
                 currentAttempts++;
-                // Tutaj możesz dodać kod odpowiedzialny za zmianę wyglądu wisielca
+                updateWisielecImage(); // Aktualizuj obrazek wisielca
             }
             updateScreen();
             checkGameOver();
@@ -104,14 +104,22 @@
             document.getElementById("ScreenInput").value = guessedWord;
         }
 
+        // Funkcja aktualizująca obrazek wisielca
+        function updateWisielecImage() {
+            var currentImageNumber = currentAttempts;
+            document.getElementById("wisielecImg").src = "Graphics/wisielec" + currentImageNumber + ".jfif";
+        }
+
         // Funkcja sprawdzająca, czy gra się zakończyła
         function checkGameOver() {
             if (currentAttempts >= maxAttempts) {
                 // Tutaj dodaj kod, który wykona się, gdy gracz przegra
                 alert("Przegrałeś! Szukane słowo to: " + wordToGuess);
+                startNewGame(); // Rozpocznij nową grę po przegranej
             } else if (guessedWord.replace(/\s+/g, '').toLowerCase() === wordToGuess.replace(/\s+/g, '').toLowerCase()) {
                 // Tutaj dodaj kod, który wykona się, gdy gracz wygra
                 alert("Gratulacje! Zgadłeś słowo: " + wordToGuess);
+                startNewGame(); // Rozpocznij nową grę po wygranej
             }
         }
 
@@ -123,6 +131,19 @@
                 checkLetter(letter);
                 this.disabled = true; // Wyłącz przycisk po kliknięciu
             });
+        }
+
+        // Funkcja rozpoczynająca nową grę
+        function startNewGame() {
+            wordToGuess = "Lorem Ipsum"; // Nowe słowo do zgadnięcia
+            guessedWord = wordToGuess.replace(/[a-zA-Ząćęłńóśźż]/g, "_"); // Zakryj litery
+            currentAttempts = 0; // Zresetuj liczbę prób
+            updateScreen(); // Zaktualizuj ekran
+            // Włącz przyciski liter
+            var buttons = document.getElementsByClassName("litera");
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].disabled = false;
+            }
         }
 
         // Inicjalizacja stanu gry
