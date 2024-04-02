@@ -17,7 +17,35 @@ namespace Gry_Słownikowe.Controllers
         {
             return View();
         }
+        public IActionResult MainMenu()
+        {
+            return View();
+        }
 
+        [Route("Wordle")]
+        public IActionResult Wordle()
+        {
+            // Tutaj możesz przekierować użytkownika na stronę Wordle
+            return View();
+        }
+
+        public IActionResult Scrabble()
+        {
+            // Tutaj możesz przekierować użytkownika na stronę Scrabble
+            return RedirectToAction("Scrabble", "Game");
+        }
+
+        public IActionResult Krzyzowki()
+        {
+            // Tutaj możesz przekierować użytkownika na stronę Krzyzowki
+            return RedirectToAction("Krzyzowki", "Game");
+        }
+
+        public IActionResult Zgadywanki()
+        {
+            // Tutaj możesz przekierować użytkownika na stronę Zgadywanki
+            return RedirectToAction("Zgadywanki", "Game");
+        }
         public IActionResult Privacy()
         {
             return View();
