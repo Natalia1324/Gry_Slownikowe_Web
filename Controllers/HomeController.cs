@@ -41,11 +41,18 @@ namespace Gry_Słownikowe.Controllers
             return RedirectToAction("Krzyzowki", "Game");
         }
 
+        public IActionResult Wisielec()
+        {
+            // Tutaj możesz przekierować użytkownika na stronę Wisielec
+            return RedirectToAction("Wisielec", "Game");
+        }
+
         public IActionResult Zgadywanki()
         {
             // Tutaj możesz przekierować użytkownika na stronę Zgadywanki
             return RedirectToAction("Zgadywanki", "Game");
         }
+
         public IActionResult Privacy()
         {
             return View();
