@@ -18,7 +18,8 @@
         @Html.TextBox("ScreenInput", null, new { @class = "Wisielec_Screen", disabled = "disabled" })
     </div>
     <div class="Kontener_Wisielec_Prawy">
-        <img id="wisielecImg" src="wisielec0.jfif" alt="Wisielec">
+        <p id="attemptsCount"></p>
+        <img id="wisielecImg" src="Graphics/wisielec0.jfif" alt="Wisielec">
      </div>
 </div>
 
@@ -77,26 +78,34 @@
 @section Scripts
    {
     <script type="text/javascript">
-        var wordToGuess = "Lorem Ipsum"; // Słowo do zgadnięcia
-        var guessedWord = ""; // Zgadnięte litery
-        var maxAttempts = 7; // Maksymalna liczba prób
-        var currentAttempts = 0; // Aktualna liczba prób
+        var wordToGuess = "Lorem Ipsum";    // Słowo do zgadnięcia (bedzie losowa)
+        var guessedWord = "";               // Zgadnięte litery
+        var maxAttempts = 7;                // Maksymalna liczba prób
+        var currentAttempts = 0;            // Aktualna liczba prób
 
         // Funkcja sprawdzająca, czy dana litera znajduje się w słowie do zgadnięcia
         function checkLetter(letter) {
             var found = false;
             for (var i = 0; i < wordToGuess.length; i++) {
-                if (wordToGuess[i].toLowerCase() === letter.toLowerCase() || wordToGuess[i] === ' ') {
+                if (wordToGuess[i].toLowerCase() === letter.toLowerCase()) {//|| wordToGuess[i] == ' '
                     guessedWord = guessedWord.substring(0, i) + wordToGuess[i] + guessedWord.substring(i + 1);
                     found = true;
                 }
             }
+            
             if (!found) {
                 currentAttempts++;
-                updateWisielecImage(); // Aktualizuj obrazek wisielca
+                console.log("Liczba prób po: " + currentAttempts);
             }
+            updateWisielecImage(); // Aktualizuj obrazek wisielca
+            updateAttemptsCount(); // Aktualizuj liczbę prób
             updateScreen();
             checkGameOver();
+        }
+
+        // Funkcja aktualizująca liczbę prób
+        function updateAttemptsCount() {
+                document.getElementById("attemptsCount").innerText = "Liczba prób: " + currentAttempts + "/" + maxAttempts;
         }
 
         // Funkcja aktualizująca wyświetlanie stanu gry
@@ -135,7 +144,7 @@
 
         // Funkcja rozpoczynająca nową grę
         function startNewGame() {
-            wordToGuess = "Lorem Ipsum"; // Nowe słowo do zgadnięcia
+            wordToGuess = "Ala ma Kota  kot mam ale"; // Nowe słowo do zgadnięcia
             guessedWord = wordToGuess.replace(/[a-zA-Ząćęłńóśźż]/g, "_"); // Zakryj litery
             currentAttempts = 0; // Zresetuj liczbę prób
             updateScreen(); // Zaktualizuj ekran
