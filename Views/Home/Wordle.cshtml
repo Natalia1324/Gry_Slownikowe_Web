@@ -2,4 +2,253 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    ViewData["Title"] = "Wordle";
 }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wordle</title>
+    <style>
+        h1 {
+            margin-top: 10px; 
+            margin-bottom: 10px; 
+            margin-left: 150px;
+            color: white;
+        }
+
+        body {
+            background-color: black;
+        }
+        #grid-container {
+            display: grid;
+            column-rule: 1px;
+            column-gap: 1px;
+           
+           
+        }
+        
+        .input {
+            width: 100px;
+            heigth: 175px;
+            font-size: 60px;
+            background-color: gray;
+            color: white;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        #enable-next-row {
+            
+            margin-left: 135px;
+            width: 200px;
+            height: 80px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .row {
+            display: flex;
+            margin-bottom: 1px;
+        }
+
+        #wynik {
+            margin-top: 30px;
+            margin-left: -20px;
+            margin-bottom: 5px;
+            
+        }
+
+            #wynik p {
+                color: white; 
+                font-size: 30px; 
+            }
+
+        #restart {
+            pointer-events: none;
+            display: none;
+            margin-left: 135px;
+            width: 200px;
+            height: 80px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            
+        }
+    </style>
+</head>
+<body>
+    <h1>WORDLE</h1>
+    <div id="grid-container">
+        <div class="row">
+        <input type="text" class="input" value="" maxlength="1">
+        <input type="text" class="input" value="" maxlength="1" >
+        <input type="text" class="input" value="" maxlength="1" >
+        <input type="text" class="input" value="" maxlength="1">
+        <input type="text" class="input" value="" maxlength="1">
+        </div>
+
+        <div class="row">
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+        </div>
+
+        <div class="row">
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+        </div>
+
+        <div class="row">
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+        </div>
+
+        <div class="row">
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+        </div>
+
+        <div class="row">
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+            <input type="text" class="input" value="" maxlength="1" disabled>
+        </div>
+    </div>
+    <button id="enable-next-row">Zgadnij</button>
+    <div id="wynik">
+       
+
+    </div>
+    <form asp-controller="Home" asp-action="Wordle" method="get" id="aaa">
+    {
+        <button id="restart" type="submit">Restart</button>
+    </form>
+   
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var inputs = document.querySelectorAll("#grid-container .row .input");
+
+          
+            inputs[0].focus();
+
+            inputs.forEach(function (input, index) {
+                input.addEventListener("input", function () {
+                    if (input.value.length >= input.maxLength && index < inputs.length - 1) {
+                        
+                        inputs[index + 1].focus();
+                    }
+                });
+            });
+            input.addEventListener("keydown", function (event) {
+                if (event.key === "Backspace" && input.value === "" && index > 0) {
+                   
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+        var enabledRowIndex = -1;
+        var words = ["karta", "brzeg", "domek", "melon", "trasa", "mango", "bekon", "sklep", "kiosk", "kogut"];
+
+        var randomIndex = Math.floor(Math.random() * words.length);
+        var text = words[randomIndex];
+        var correct = false;
+        var textSet = new Set(text);
+        var wynikwypisany = false;
+        var restarted = false;
+        
+        
+        document.getElementById("enable-next-row").addEventListener("click", function () {
+           
+                restarted = false;
+                var rows = document.querySelectorAll("#grid-container .row");
+
+                for (var i = (enabledRowIndex + 1); i < 6; i++) {
+                    if (!rows[i].querySelector(".input").disabled) {
+                        enabledRowIndex = i;
+                        break;
+                    }
+                }
+                var concatenatedText = ""
+                if (enabledRowIndex > -1 && enabledRowIndex < 6) {
+                    rows[enabledRowIndex].querySelectorAll(".input").forEach(function (input) {
+                        input.disabled = true;
+                    });
+                    concatenatedText = Array.from(rows[enabledRowIndex].querySelectorAll(".input")).map(input => input.value).join('');
+                    if (concatenatedText === text && wynikwypisany === false) {
+
+
+                        correct = true;
+                        var paragraph = document.createElement("p");
+                        paragraph.textContent = "Gratulacje! Odgadles poprawnie za " + (enabledRowIndex + 1) + " razem!";
+                        var wynikDiv = document.getElementById("wynik");
+                        wynikDiv.appendChild(paragraph);
+                        wynikwypisany = true;
+                        var button = document.getElementById("restart");
+                        button.style.display = "block";
+                        button.style.pointerEvents = "auto";
+                    }
+
+
+                    for (var j = 0; j < concatenatedText.length; j++) {
+                        var currentChar = concatenatedText[j];
+                        if (currentChar === text[j]) {
+
+                            rows[enabledRowIndex].querySelectorAll(".input")[j].style.backgroundColor = "green";
+                        }
+                        else if (textSet.has(currentChar)) {
+
+                            rows[enabledRowIndex].querySelectorAll(".input")[j].style.backgroundColor = "#b8860b";
+                        }
+                        else {
+                            rows[enabledRowIndex].querySelectorAll(".input")[j].style.backgroundColor = "#444";
+                        }
+
+                    }
+
+                }
+
+                if (enabledRowIndex < 5 && correct === false) {
+                    rows[enabledRowIndex + 1].querySelectorAll(".input").forEach(function (input) {
+                        input.disabled = false;
+                    });
+                }
+
+                if (enabledRowIndex === 5 && correct === false && wynikwypisany === false) {
+                    var paragraph = document.createElement("p");
+                    paragraph.textContent = "Niestety nie zgadles :( Wynikiem bylo slowo: " + text.toUpperCase();
+                    var wynikDiv = document.getElementById("wynik");
+                    wynikDiv.appendChild(paragraph);
+                    wynikwypisany = true;
+                    var button = document.getElementById("restart");
+                    button.style.display = "block";
+                    button.style.pointerEvents = "auto";
+                }
+
+
+            
+             
+        });
+    </script> 
+</body>
+</html>
