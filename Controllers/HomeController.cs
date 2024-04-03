@@ -76,7 +76,10 @@ namespace Gry_Słownikowe.Controllers
 
 
 
-
+        public IActionResult Wisielec()
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
         {
