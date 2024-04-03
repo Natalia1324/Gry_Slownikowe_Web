@@ -25,9 +25,11 @@ namespace Gry_Słownikowe.Controllers
         [Route("Wordle")]
         public IActionResult Wordle()
         {
-            // Tutaj możesz przekierować użytkownika na stronę Wordle
+            
             return View();
         }
+
+
 
         public IActionResult Scrabble()
         {
