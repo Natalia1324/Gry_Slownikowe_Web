@@ -19,38 +19,28 @@ namespace Gry_Słownikowe.Controllers
         }
         public IActionResult MainMenu()
         {
+            //SJP_API api = new SJP_API("półlok");
+            //Console.WriteLine(api.getCzyIstnieje());
+            //Console.WriteLine(api.getDopuszczalnosc());
+            //Console.WriteLine(api.getSlowo());
+            //foreach (var def in api.getZnaczenia())
+            //{
+            //    Console.WriteLine(def);
+            //}
+
+            //SJP_API api2 = new SJP_API();
+            //Console.WriteLine(api2.getCzyIstnieje());
+            //Console.WriteLine(api2.getDopuszczalnosc());
+            //Console.WriteLine(api2.getSlowo());
+            //foreach (var def in api2.getZnaczenia())
+            //{
+            //    Console.WriteLine(def);
+            //}
             return View();
         }
-
-        [Route("Wordle")]
         public IActionResult Wordle()
         {
-            
             return View();
-        }
-
-
-
-        public IActionResult Scrabble()
-        {
-            // Tutaj możesz przekierować użytkownika na stronę Scrabble
-            return RedirectToAction("Scrabble", "Game");
-        }
-
-        public IActionResult Krzyzowki()
-        {
-            // Tutaj możesz przekierować użytkownika na stronę Krzyzowki
-            return RedirectToAction("Krzyzowki", "Game");
-        }
-
-
-
-
-
-        public IActionResult Zgadywanki()
-        {
-            // Tutaj możesz przekierować użytkownika na stronę Zgadywanki
-           return RedirectToAction("Zgadywanki", "Game");
         }
 
         public IActionResult ZgadywankiMenu ()
