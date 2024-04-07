@@ -1,6 +1,7 @@
 using Gry_Słownikowe.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Web;
 
 namespace Gry_Słownikowe.Controllers
 {
@@ -40,7 +41,24 @@ namespace Gry_Słownikowe.Controllers
         }
         public IActionResult Wordle()
         {
-            return View();
+            string slowo = "";
+            List<string> znaczenia= new List<string>();
+            while (slowo.Length != 5)
+            {
+                if (znaczenia.Count > 0)
+                {
+                    znaczenia.Clear();
+                }
+                SJP_API api = new SJP_API();
+                slowo = api.getSlowo();
+                znaczenia= api.getZnaczenia();
+
+
+            }
+            string polskieZnaki = HttpUtility.HtmlEncode(slowo);
+            string znaczeniePL = HttpUtility.HtmlAttributeEncode(znaczenia.First());
+            WordleModel model = new WordleModel(polskieZnaki, znaczeniePL);
+            return View(model);
         }
 
         public IActionResult ZgadywankiMenu ()

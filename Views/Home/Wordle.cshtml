@@ -3,10 +3,13 @@
 *@
 @{
     ViewData["Title"] = "Wordle";
+   
 }
+ @model Gry_Słownikowe.Models.WordleModel
+
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <title>Wordle</title>
@@ -171,12 +174,15 @@
         var words = ["karta", "brzeg", "domek", "melon", "trasa", "mango", "bekon", "sklep", "kiosk", "kogut"];
 
         var randomIndex = Math.floor(Math.random() * words.length);
-        var text = words[randomIndex];
+        //var text = words[randomIndex];
+       // var text = "@Model.slowo";
+        var text = @Html.Raw(Json.Serialize(Model.slowo));
+        var znaczenie = @Html.Raw(Json.Serialize(Model.znaczenia));
         var correct = false;
         var textSet = new Set(text);
         var wynikwypisany = false;
         var restarted = false;
-        
+       
         
         document.getElementById("enable-next-row").addEventListener("click", function () {
            
@@ -200,7 +206,7 @@
 
                         correct = true;
                         var paragraph = document.createElement("p");
-                        paragraph.textContent = "Gratulacje! Odgadles poprawnie za " + (enabledRowIndex + 1) + " razem!";
+                        paragraph.textContent = "Gratulacje! Odgadles poprawnie za " + (enabledRowIndex + 1) + " razem!" + "\n" + "Znaczenie slowa: "+ znaczenie;
                         var wynikDiv = document.getElementById("wynik");
                         wynikDiv.appendChild(paragraph);
                         wynikwypisany = true;
@@ -236,7 +242,7 @@
 
                 if (enabledRowIndex === 5 && correct === false && wynikwypisany === false) {
                     var paragraph = document.createElement("p");
-                    paragraph.textContent = "Niestety nie zgadles :( Wynikiem bylo slowo: " + text.toUpperCase();
+                    paragraph.textContent = "Niestety nie zgadles :( Wynikiem bylo slowo: " + text.toUpperCase() + "\n" + "Znaczenie slowa: "+znaczenie;
                     var wynikDiv = document.getElementById("wynik");
                     wynikDiv.appendChild(paragraph);
                     wynikwypisany = true;
