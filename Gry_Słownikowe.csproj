@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Graphics\" />
+    <Folder Include="Models\Crossword\" />
   </ItemGroup>
 
   <ItemGroup>
