@@ -6,6 +6,8 @@ namespace CrosswordComponents
 {
     /**
      * Klasa reprezentująca manager i generator krzyżówki
+     * 
+     * TODO - połączyć z API
      */
     public class CrosswordBuilder
     {
