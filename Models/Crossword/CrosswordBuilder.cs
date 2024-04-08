@@ -1,9 +1,4 @@
-﻿using System;
-using Crossword;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Crossword;
 
 //https://www.baeldung.com/cs/generate-crossword-puzzle
 
@@ -18,11 +13,6 @@ namespace CrosswordComponents
          * Maksymalna ilość słów 
          */
         public int MaxWords { get; set; }
-
-        /**
-         * Pobrane słowa i ich znaczenia
-         */
-        private Dictionary<string, string> _wordsWithMeanings;
 
         /**
         * Obiekt krzyżówki
@@ -44,17 +34,8 @@ namespace CrosswordComponents
         /**
          * Metoda generująca krzyżówkę
          */
-        public ICrosswordModelReadOnly GenerateCrossword()
+        public ICrosswordModelReadOnly GetCrossword()
         {
-            int count = 0;
-            foreach (var pair in _wordsWithMeanings)
-            {
-               if(_crosswordModel.InsertWord(pair.Key, pair.Value))
-                {
-                    count++;
-                }
-                if (count >= MaxWords) break;
-            }
             return _crosswordModel;
         }
     }
