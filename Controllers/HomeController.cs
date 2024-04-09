@@ -82,9 +82,12 @@ namespace Gry_Słownikowe.Controllers
             return View();
         }
 
-
-
         public IActionResult Wisielec()
+        {
+            return View();
+        }
+
+        public IActionResult Krzyzowka()
         {
             return View();
         }
