@@ -1,5 +1,6 @@
 ﻿using Crossword;
 using Gry_Słownikowe.Models;
+using System.Text.RegularExpressions;
 using System.Web;
 
 //https://www.baeldung.com/cs/generate-crossword-puzzle
@@ -67,7 +68,7 @@ namespace CrosswordComponents
                 meaning = HttpUtility.HtmlAttributeEncode(meanings.ElementAt(random.Next(meanings.Count)));
                 //meaning = meanings.ElementAt(random.Next(meanings.Count));
 
-                if (word.Length < 2 ) { continue; }
+                if (word.Length < 1 || word.Length > 32 || !ContainsOnlyPolishLetters(word)) { continue; }
 
                 if (_words.Contains(word))
                 {
@@ -80,6 +81,14 @@ namespace CrosswordComponents
                 }
             }
             return _crosswordModel;
+        }
+        /**
+         * Sprawdzenie czy zawiera polskie litery
+         */
+        private bool ContainsOnlyPolishLetters(string word)
+        {
+            Regex polishLettersRegex = new Regex(@"^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+$");
+            return polishLettersRegex.IsMatch(word);
         }
     }
 }

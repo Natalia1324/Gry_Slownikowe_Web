@@ -24,8 +24,22 @@
     }
 </style>
 
-<h1>TEST - działa, czasem dostaje mega długi ciąg znaków i generuje haos -> do poprawy</h1>
+<h1>TEST - działa :DDDDDDDDDD (chyba)</h1>
 
+<h2>
+    Definicje
+</h2>
+
+<ol>
+    @for (int i = 0; i < Model.GetDescriptions().Count; i++)
+    {
+        <li>@Model.GetDescriptions()[i]</li>
+    }
+</ol>
+
+<h3>
+    Krzyzówka
+</h3>
 <div class="container">
     @for (int y = 0; y < crosswordRows; y++)
     {
@@ -35,7 +49,18 @@
                 string cellId = $"{x}_{y}";
                 if (Model[y, x] != null)
                 {
-                    <div id="@cellId" class="cell" style="background-color: yellow;">@Model[y, x].Value</div>
+                    if (@Model[y, x].FirstLetter)
+                    {
+                        <div id="@cellId" class="cell" style="background-color:darkgoldenrod;">
+                            @Model[y, x].WordNumber
+                            @Model[y, x].Value
+                           </div>
+                    }
+                    else
+                    {
+                        <div id="@cellId" class="cell" style="background-color: yellow;">@Model[y, x].Value</div>
+                    }
+
                 }
                 else
                 {

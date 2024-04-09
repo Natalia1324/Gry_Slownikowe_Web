@@ -90,7 +90,7 @@ namespace Gry_Słownikowe.Controllers
 
         public IActionResult Krzyzowka()
         {
-            CrosswordBuilder crosswordBuilder = new CrosswordBuilder(4);
+            CrosswordBuilder crosswordBuilder = new CrosswordBuilder(10);
             ICrosswordModelReadOnly crosswordModel = crosswordBuilder.GenerateCrossword();
             return View(crosswordModel);
         }

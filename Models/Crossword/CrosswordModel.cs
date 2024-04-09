@@ -145,6 +145,7 @@ namespace Crossword
                         }
                     }
                 }
+                if (!wordInserted) return false;
                 _meanings.Add(meaning);
                 float bestScore = 0;
                 Dynamic2DArray<CrosswordTile> bestBoard = new Dynamic2DArray<CrosswordTile>(_crossword);
