@@ -74,6 +74,18 @@
             margin-top: 10px;
         }
 
+        #zasady {
+            position: absolute;
+            left: 600px;
+            bottom: 750px;
+        }
+
+        #tryb {
+            position: absolute;
+            left: 675px;
+            bottom: 750px;
+        }
+
         .row {
             display: flex;
             margin-bottom: 1px;
@@ -104,10 +116,50 @@
             cursor: pointer;
             
         }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+           
+        }
+
+        .overlay-content {
+            background-color: black;
+            padding: 20px;
+            border-radius: 8px;
+            color: white;
+            position: relative;
+            border: 2px solid white;
+        }
+        .overlay-content h1 {
+            margin-left: 125px;
+        }
+
+        .close-button {
+         
+            cursor: pointer;
+            color:white;
+            background-color: black;
+            position: absolute;
+            top: 2px;
+            right: 10px;
+            font-size: 36px;
+            border: 0;
+           
+        }
     </style>
 </head>
 <body>
     <h1>WORDLE</h1>
+    <button id="zasady">Zasady</button>
+    <button id="tryb">Tryb gry</button>
     <div class="container">
     <div id="grid-container">
         <div class="row">
@@ -382,6 +434,27 @@
 
             
              
+        });
+        document.getElementById('zasady').addEventListener('click', function () {
+            var overlay = document.createElement('div');
+            overlay.className = 'overlay';
+
+            var content = document.createElement('div');
+            content.className = 'overlay-content';
+            var closeButton = document.createElement('button');
+            closeButton.textContent = 'x';
+            closeButton.className = 'close-button';
+            closeButton.addEventListener('click', function () {
+
+                document.body.removeChild(overlay);
+            });
+
+           
+            content.innerHTML = '<h1>ZASADY GRY</h1><p>W 6 próbach spróbuj odgadnąć wylosowane słowo.</p><p>Po każdej próbie otrzymasz wskazówki w postaci kolorowych liter.</p><p>Szara litera - Nie znajduje się w słowie</p><p>Żółta litera - Znajduje się w słowie, ale na innej pozycji</p><p>Zielona litera - Jest na dobrej pozycji</p>';
+            content.appendChild(closeButton);
+            overlay.appendChild(content);
+
+            document.body.appendChild(overlay);
         });
     </script> 
 </body>
