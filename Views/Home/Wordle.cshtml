@@ -24,12 +24,31 @@
         body {
             background-color: black;
         }
+
+        .container {
+            position: relative;
+        }
+
         #grid-container {
             display: grid;
             column-rule: 1px;
             column-gap: 1px;
            
            
+        }
+
+        #klawiatura {
+            display: grid;
+            position: absolute;
+            left: 520px;
+            bottom: 1px;
+           
+        }
+
+        .litera {
+            background-color: gray ; 
+            text-transform: uppercase;
+            color: white;
         }
         
         .input {
@@ -89,6 +108,7 @@
 </head>
 <body>
     <h1>WORDLE</h1>
+    <div class="container">
     <div id="grid-container">
         <div class="row">
         <input type="text" class="input" value="" maxlength="1">
@@ -138,6 +158,59 @@
             <input type="text" class="input" value="" maxlength="1" disabled>
         </div>
     </div>
+
+    <div id="klawiatura">
+        <div class="key-row">
+            <button type="button" class="litera">a</button>
+            <button type="button" class="litera">ą</button>
+            <button type="button" class="litera">b</button>
+            <button type="button" class="litera">c</button>
+            <button type="button" class="litera">ć</button>
+
+            <button type="button" class="litera">d</button>
+            <button type="button" class="litera">e</button>
+            <button type="button" class="litera">ę</button>
+            <button type="button" class="litera">f</button>
+            <button type="button" class="litera">g</button>
+            <button type="button" class="litera">h</button>
+            <button type="button" class="litera">i</button>
+        </div>
+
+        <div class="key-row">
+            <button type="button" class="litera">j</button>
+            <button type="button" class="litera">k</button>
+            <button type="button" class="litera">l</button>
+
+            <button type="button" class="litera">ł</button>
+            <button type="button" class="litera">m</button>
+            <button type="button" class="litera">n</button>
+            <button type="button" class="litera">ń</button>
+            <button type="button" class="litera">o</button>
+            <button type="button" class="litera">ó</button>
+            <button type="button" class="litera">p</button>
+            <button type="button" class="litera">q</button>
+            <button type="button" class="litera">r</button>
+        </div>
+
+        <div class="key-row">
+
+            
+            <button type="button" class="litera">s</button>
+            <button type="button" class="litera">ś</button>
+
+            <button type="button" class="litera">t</button>
+            <button type="button" class="litera">u</button>
+            <button type="button" class="litera">v</button>
+            <button type="button" class="litera">w</button>
+            <button type="button" class="litera">x</button>
+            <button type="button" class="litera">y</button>
+            <button type="button" class="litera">z</button>
+            <button type="button" class="litera">ź</button>
+            <button type="button" class="litera">ż</button>
+        </div>
+    </div>
+    </div>
+
     <button id="enable-next-row">Zgadnij</button>
     <div id="wynik">
        
@@ -149,8 +222,10 @@
     </form>
    
     <script>
+        var idx = 0;
         document.addEventListener("DOMContentLoaded", function () {
             var inputs = document.querySelectorAll("#grid-container .row .input");
+            
 
           
             inputs[0].focus();
@@ -160,15 +235,38 @@
                     if (input.value.length >= input.maxLength && index < inputs.length - 1) {
                         
                         inputs[index + 1].focus();
+                        
+                            idx = index + 1;
+                        
+                    }
+                });
+                input.addEventListener("keydown", function (event) {
+                    if (event.key === "Backspace" && input.value === "" && index > 0) {
+
+                        inputs[index - 1].focus();
+                        
+                            idx = index - 1;
+                        
+                        
                     }
                 });
             });
-            input.addEventListener("keydown", function (event) {
-                if (event.key === "Backspace" && input.value === "" && index > 0) {
-                   
-                    inputs[index - 1].focus();
-                }
-            });
+
+            var buttons = document.getElementsByClassName("litera");
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].addEventListener("click", function () {
+
+                    inputs[idx].value = this.textContent;
+                    
+                        
+                        idx += 1;
+                    inputs[idx].focus();
+                    
+                    
+                    
+                });
+            }
+            
         });
         var enabledRowIndex = -1;
         var words = ["karta", "brzeg", "domek", "melon", "trasa", "mango", "bekon", "sklep", "kiosk", "kogut"];
@@ -182,7 +280,8 @@
         var textSet = new Set(text);
         var wynikwypisany = false;
         var restarted = false;
-       
+        var colors = ["A", "A", "A", "A", "A"];
+        
         
         document.getElementById("enable-next-row").addEventListener("click", function () {
            
@@ -197,52 +296,81 @@
                 }
                 var concatenatedText = ""
                 if (enabledRowIndex > -1 && enabledRowIndex < 6) {
-                    rows[enabledRowIndex].querySelectorAll(".input").forEach(function (input) {
-                        input.disabled = true;
-                    });
                     concatenatedText = Array.from(rows[enabledRowIndex].querySelectorAll(".input")).map(input => input.value).join('');
-                    if (concatenatedText === text && wynikwypisany === false) {
+                    if (concatenatedText.length === text.length) {
+                        rows[enabledRowIndex].querySelectorAll(".input").forEach(function (input) {
+                            input.disabled = true;
+                        });
+                        
+                        if (concatenatedText === text && wynikwypisany === false) {
 
 
-                        correct = true;
-                        var paragraph = document.createElement("p");
-                        paragraph.textContent = "Gratulacje! Odgadles poprawnie za " + (enabledRowIndex + 1) + " razem!" + "\n" + "Znaczenie slowa: "+ znaczenie;
-                        var wynikDiv = document.getElementById("wynik");
-                        wynikDiv.appendChild(paragraph);
-                        wynikwypisany = true;
-                        var button = document.getElementById("restart");
-                        button.style.display = "block";
-                        button.style.pointerEvents = "auto";
-                    }
-
-
-                    for (var j = 0; j < concatenatedText.length; j++) {
-                        var currentChar = concatenatedText[j];
-                        if (currentChar === text[j]) {
-
-                            rows[enabledRowIndex].querySelectorAll(".input")[j].style.backgroundColor = "green";
-                        }
-                        else if (textSet.has(currentChar)) {
-
-                            rows[enabledRowIndex].querySelectorAll(".input")[j].style.backgroundColor = "#b8860b";
-                        }
-                        else {
-                            rows[enabledRowIndex].querySelectorAll(".input")[j].style.backgroundColor = "#444";
+                            correct = true;
+                            var paragraph = document.createElement("p");
+                            paragraph.textContent = "Gratulacje! Odgadłes poprawnie za " + (enabledRowIndex + 1) + " razem!" + "\n" + "Znaczenie słowa: " + znaczenie;
+                            var wynikDiv = document.getElementById("wynik");
+                            wynikDiv.appendChild(paragraph);
+                            wynikwypisany = true;
+                            var button = document.getElementById("restart");
+                            button.style.display = "block";
+                            button.style.pointerEvents = "auto";
                         }
 
+
+                        for (var j = 0; j < concatenatedText.length; j++) {
+                            var currentChar = concatenatedText[j];
+                            if (currentChar === text[j]) {
+
+                                rows[enabledRowIndex].querySelectorAll(".input")[j].style.backgroundColor = "green";
+                                colors[j] = "G";
+                            }
+                            else if (textSet.has(currentChar)) {
+
+                                rows[enabledRowIndex].querySelectorAll(".input")[j].style.backgroundColor = "#b8860b";
+                                colors[j] = "Y";
+                            }
+                            else {
+                                rows[enabledRowIndex].querySelectorAll(".input")[j].style.backgroundColor = "#444";
+                                colors[j] = "B";
+                            }
+
+                            
+                             
+                        }
+                        
+                        var buttons = document.getElementsByClassName("litera");
+                        for (var i = 0; i < buttons.length; i++) {
+                            for (var j = 0; j < concatenatedText.length; j++) {
+                                if (buttons[i].textContent === concatenatedText[j]) {
+                                    if (colors[j] === "G") {
+                                        buttons[i].style.backgroundColor = "green";
+                                    }
+                                    else if (colors[j] === "Y") {
+                                        buttons[i].style.backgroundColor = "#b8860b";
+                                    }
+                                    else if (colors[j] === "B") {
+                                        buttons[i].style.backgroundColor = "#444";
+                                        buttons[i].disabled = true;
+                                    }
+                                }
+                            }
+
+
+                        }
+                    
                     }
 
                 }
 
-                if (enabledRowIndex < 5 && correct === false) {
+                if (enabledRowIndex < 5 && correct === false && concatenatedText.length===text.length) {
                     rows[enabledRowIndex + 1].querySelectorAll(".input").forEach(function (input) {
                         input.disabled = false;
                     });
                 }
 
-                if (enabledRowIndex === 5 && correct === false && wynikwypisany === false) {
+            if (enabledRowIndex === 5 && correct === false && wynikwypisany === false && concatenatedText.length === text.length) {
                     var paragraph = document.createElement("p");
-                    paragraph.textContent = "Niestety nie zgadles :( Wynikiem bylo slowo: " + text.toUpperCase() + "\n" + "Znaczenie slowa: "+znaczenie;
+                    paragraph.textContent = "Niestety nie zgadłeś :( Wynikiem było słowo: " + text.toUpperCase() + "\n" + "Znaczenie słowa: "+znaczenie;
                     var wynikDiv = document.getElementById("wynik");
                     wynikDiv.appendChild(paragraph);
                     wynikwypisany = true;
