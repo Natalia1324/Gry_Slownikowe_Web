@@ -65,7 +65,7 @@ namespace CrosswordComponents
                 // wczytywanie słów
                 word = HttpUtility.HtmlEncode(wordAPI.getSlowo());
                 //word = wordAPI.getSlowo();
-                meaning = HttpUtility.HtmlAttributeEncode(meanings.ElementAt(random.Next(meanings.Count)));
+                meaning = HttpUtility.HtmlAttributeEncode(meanings.ElementAt(random.Next(meanings.Count-1)));
                 //meaning = meanings.ElementAt(random.Next(meanings.Count));
 
                 if (word.Length < 1 || word.Length > 32 || !ContainsOnlyPolishLetters(word)) { continue; }
