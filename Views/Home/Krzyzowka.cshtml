@@ -1,7 +1,48 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Gry_Słownikowe.Models.ICrosswordModelReadOnly
+
 @{
+    int crosswordColumns = Model.Columns;
+    int crosswordRows = Model.Rows;
+
+    ViewData["Title"] = "Krzyżówki";
 }
 
-<h1>SIEMA</h1>
+<style>
+    .cell {
+        width: 50px; /* ustaw odpowiednią szerokość */
+        height: 50px; /* ustaw odpowiednią wysokość */
+        margin: 0; /* ustaw marginesy na 0 */
+        padding: 0; /* ustaw wypełnienie na 0 */
+        display: inline-block; /* aby elementy układały się obok siebie */
+        text-align: center; /* wycentruj tekst wewnątrz diva */
+    }
+
+    .container{
+        gap: 0px;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
+<h1>TEST - działa, czasem dostaje mega długi ciąg znaków i generuje haos -> do poprawy</h1>
+
+<div class="container">
+    @for (int y = 0; y < crosswordRows; y++)
+    {
+        <div>
+            @for (int x = 0; x < crosswordColumns; x++)
+            {
+                string cellId = $"{x}_{y}";
+                if (Model[y, x] != null)
+                {
+                    <div id="@cellId" class="cell" style="background-color: yellow;">@Model[y, x].Value</div>
+                }
+                else
+                {
+                    <div id="@cellId" class="cell"></div>
+                }
+            }
+        </div>
+    }
+</div>
+

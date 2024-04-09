@@ -1,11 +1,12 @@
 ﻿using Crossword;
+using CrosswordComponents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CrosswordComponents
+namespace Gry_Słownikowe.Models
 {
     public interface ICrosswordModelReadOnly
     {

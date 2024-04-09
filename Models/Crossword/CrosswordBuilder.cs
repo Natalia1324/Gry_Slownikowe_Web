@@ -55,15 +55,19 @@ namespace CrosswordComponents
             List<string> meanings;
             while (_words.Count < MaxWords)
             {
+                wordAPI = new SJP_API();
+                if (!wordAPI.getDopuszczalnosc()) continue;
+
                 Random random = new Random();
                 meanings = wordAPI.getZnaczenia();
 
                 // wczytywanie słów
                 word = HttpUtility.HtmlEncode(wordAPI.getSlowo());
+                //word = wordAPI.getSlowo();
                 meaning = HttpUtility.HtmlAttributeEncode(meanings.ElementAt(random.Next(meanings.Count)));
+                //meaning = meanings.ElementAt(random.Next(meanings.Count));
 
-                // nowe słowo
-                wordAPI = new SJP_API();
+                if (word.Length < 2 ) { continue; }
 
                 if (_words.Contains(word))
                 {

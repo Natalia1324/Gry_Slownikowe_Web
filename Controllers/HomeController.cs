@@ -1,3 +1,4 @@
+using CrosswordComponents;
 using Gry_Słownikowe.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -89,7 +90,9 @@ namespace Gry_Słownikowe.Controllers
 
         public IActionResult Krzyzowka()
         {
-            return View();
+            CrosswordBuilder crosswordBuilder = new CrosswordBuilder(4);
+            ICrosswordModelReadOnly crosswordModel = crosswordBuilder.GenerateCrossword();
+            return View(crosswordModel);
         }
 
         public IActionResult Privacy()
