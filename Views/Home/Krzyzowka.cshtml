@@ -11,39 +11,42 @@
     .cell {
         width: 50px; /* ustaw odpowiednią szerokość */
         height: 50px; /* ustaw odpowiednią wysokość */
-        margin: 0; /* ustaw marginesy na 0 */
+        margin: 1px; /* ustaw marginesy na 0 */
+        padding: 0; /* ustaw wypełnienie na 0 */
+        display: inline-block; /* aby elementy układały się obok siebie */
+        text-align: center; /* wycentruj tekst wewnątrz diva */
+        border: 1px solid black;
+    }
+
+    .cell_noBoreder{
+        width: 50px; /* ustaw odpowiednią szerokość */
+        height: 50px; /* ustaw odpowiednią wysokość */
+        margin: 1px; /* ustaw marginesy na 0 */
         padding: 0; /* ustaw wypełnienie na 0 */
         display: inline-block; /* aby elementy układały się obok siebie */
         text-align: center; /* wycentruj tekst wewnątrz diva */
     }
 
+    .row{
+        margin: 0;
+        padding: 0;
+    }
+
     .container{
-        gap: 0px;
         margin: 0;
         padding: 0;
     }
 </style>
 
-<h1>TEST - działa :DDDDDDDDDD (chyba)</h1>
+<h1>!TEST!</h1>
 
 <h2>
-    Definicje
-</h2>
-
-<ol>
-    @for (int i = 0; i < Model.GetDescriptions().Count; i++)
-    {
-        <li>@Model.GetDescriptions()[i]</li>
-    }
-</ol>
-
-<h3>
     Krzyzówka
-</h3>
+</h2>
 <div class="container">
     @for (int y = 0; y < crosswordRows; y++)
     {
-        <div>
+        <div class="row">
             @for (int x = 0; x < crosswordColumns; x++)
             {
                 string cellId = $"{x}_{y}";
@@ -53,6 +56,7 @@
                     {
                         <div id="@cellId" class="cell" style="background-color:darkgoldenrod;">
                             @Model[y, x].WordNumber
+                            .
                             @Model[y, x].Value
                            </div>
                     }
@@ -64,10 +68,21 @@
                 }
                 else
                 {
-                    <div id="@cellId" class="cell"></div>
+                    <div id="@cellId" class="cell_noBoreder"></div>
                 }
             }
         </div>
     }
 </div>
+
+<h2>
+    Definicje
+</h2>
+
+<ol>
+    @for (int i = 0; i < Model.GetDescriptions().Count; i++)
+    {
+        <li>@Model.GetDescriptions()[i]</li>
+    }
+</ol>
 
