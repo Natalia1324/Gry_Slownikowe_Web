@@ -64,18 +64,18 @@ namespace DynamicArray
                 {             
                     colShift = Math.Abs(x);
                     nRows = Math.Max(y + 1, Rows);
-                    nColumns = Columns + colShift + 1;
+                    nColumns = Columns + colShift;
                 }else if(y < 0)
                 {
                     rowShift = Math.Abs(y);
-                    nRows = Rows + rowShift + 1;
+                    nRows = Rows + rowShift;
                     nColumns = Math.Max(x + 1, Columns);
                 }else if(x < 0 && y < 0)
                 {
                     colShift = Math.Abs(x);
                     rowShift = Math.Abs(y);
-                    nColumns = Columns + colShift + 1;
-                    nRows = Rows + rowShift + 1;
+                    nColumns = Columns + colShift;
+                    nRows = Rows + rowShift;
                 }
                 else
                 {
