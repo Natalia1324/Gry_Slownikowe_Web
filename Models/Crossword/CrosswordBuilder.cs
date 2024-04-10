@@ -62,6 +62,8 @@ namespace CrosswordComponents
                 Random random = new Random();
                 meanings = wordAPI.getZnaczenia();
 
+                if (meanings.Count <= 0) continue;
+
                 // wczytywanie słów
                 word = HttpUtility.HtmlEncode(wordAPI.getSlowo());
                 //word = wordAPI.getSlowo();

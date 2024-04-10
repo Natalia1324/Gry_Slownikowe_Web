@@ -234,7 +234,7 @@ namespace Crossword
             //w tym miejscu na pewno jesteśmy po prawej od lewej strony krawędzi.
             for (; letterIndex < word.Length; letterIndex++)
             {
-                if (startX >= _crossword.Columns)
+                if (startX >= _crossword.Columns) //continue;
                     return true; 
 
                 if (_crossword[letterY, startX] != null && _crossword[letterY, startX].Value != word[letterIndex])
@@ -252,8 +252,8 @@ namespace Crossword
                 startX++;
             }
 
-            //wycinek startx = word.Length za pętlą
-            if (startX + 1 < _crossword.Columns && _crossword[letterY, startX + 1] != null)
+            //wycinek startx = word.Length za pętlą, startx w tym miejscu jest równe word.Length, zatem nie inkrementuje 
+            if (startX < _crossword.Columns && _crossword[letterY, startX] != null)
             {
                 return false;
             }
@@ -284,7 +284,7 @@ namespace Crossword
 
             for (; letterIndex < word.Length; letterIndex++)
             {
-                if (startY >= _crossword.Rows)
+                if (startY >= _crossword.Rows) //continue;
                     return true; 
 
                 if (_crossword[startY, letterX] != null && _crossword[startY, letterX].Value != word[letterIndex])
@@ -303,7 +303,7 @@ namespace Crossword
                 startY++;
             }
 
-            if (startY + 1 < _crossword.Rows && _crossword[startY, letterX] != null)
+            if (startY < _crossword.Rows && _crossword[startY, letterX] != null)
             {
                 return false;
             }
