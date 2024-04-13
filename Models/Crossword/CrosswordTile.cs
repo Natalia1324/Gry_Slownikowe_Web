@@ -20,7 +20,7 @@ namespace CrosswordComponents
 
         private int? _wordNumber = null;
 
-        private bool _visible = true; 
+        private bool _visible = false; 
 
         private readonly char _letter;
 

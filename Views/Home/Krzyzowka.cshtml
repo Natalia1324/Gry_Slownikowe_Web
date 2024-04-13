@@ -57,12 +57,29 @@
                         <div id="@cellId" class="cell" style="background-color:darkgoldenrod;">
                             @Model[y, x].WordNumber
                             .
-                            @Model[y, x].Value
+                            @if(Model[y,x].Visible){
+                                @Model[y, x].Value
+                            }
+                            else
+                            {
+                                <p>?</p>
+                            }
+                            
+                            
                            </div>
                     }
                     else
                     {
-                        <div id="@cellId" class="cell" style="background-color: yellow;">@Model[y, x].Value</div>
+                        <div id="@cellId" class="cell" style="background-color: yellow;">
+                            @if (Model[y, x].Visible)
+                            {
+                                @Model[y, x].Value
+                            }
+                            else
+                            {
+                                <p>?</p>
+                            } 
+                        </div>
                     }
 
                 }
