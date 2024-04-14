@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,9 +17,9 @@ namespace DynamicArray
         /**
          * Konstruktor tablicy o rozmiarze [y:x] -> [0:0]
          */
-        public Dynamic2DArray() 
+        public Dynamic2DArray()
         {
-            _array = new T[0,0];
+            _array = new T[0, 0];
         }
         /**
          * Konstruktor tablicy o zadanym rozmiarze [y:x]
@@ -52,30 +53,46 @@ namespace DynamicArray
         public T this[int y, int x]
         {
             get
-            { 
-                return _array[y, x]; 
+            {
+                return _array[y, x];
             }
             set
             {
                 int nRows, nColumns;
                 int rowShift = 0, colShift = 0;
 
-                if (x < 0)
-                {             
+                if (x < 0 && y < 0)
+                {
                     colShift = Math.Abs(x);
+                    rowShift = Math.Abs(y);
+                    if (Columns == 0 || Rows == 0)
+                    {
+                        rowShift += 1;
+                        colShift += 1;
+                    }
+                    nColumns = Columns + colShift;
+                    nRows = Rows + rowShift;
+                }
+                else if (x < 0)
+                {
+
+                    colShift = Math.Abs(x);
+                    if (Columns == 0)
+                    {
+                        colShift += 1;
+                    }
                     nRows = Math.Max(y + 1, Rows);
                     nColumns = Columns + colShift;
-                }else if(y < 0)
+                }
+                else if (y < 0)
                 {
                     rowShift = Math.Abs(y);
+                    if (Rows == 0)
+                    {
+                        rowShift += 1;
+                    }
                     nRows = Rows + rowShift;
                     nColumns = Math.Max(x + 1, Columns);
-                }else if(x < 0 && y < 0)
-                {
-                    colShift = Math.Abs(x);
-                    rowShift = Math.Abs(y);
-                    nColumns = Columns + colShift;
-                    nRows = Rows + rowShift;
                 }
                 else
                 {
@@ -102,20 +119,19 @@ namespace DynamicArray
             }
         }
 
-
         /**
          * Ilość rzędów
          */
         public int Rows
         {
-            get { return _array.GetLength(0);}
+            get { return _array.GetLength(0); }
         }
         /**
          * Ilość kolumn
          */
         public int Columns
         {
-            get { return _array.GetLength(1);}
+            get { return _array.GetLength(1); }
         }
     }
 }
