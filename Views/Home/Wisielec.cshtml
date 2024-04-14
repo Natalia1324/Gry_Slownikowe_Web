@@ -5,7 +5,7 @@
     ViewData["Title"] = "Wisielec";
     char[] alfabet = { 'a', 'ą', 'b', 'c', 'ć', 'd', 'e', 'ę', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'ł', 'm', 'n', 'o', 'ó', 'p', 'r', 's', 'ś', 't', 'u', 'w', 'y', 'z', 'ź', 'ż', 'q', 'v', 'x' };
 }
-
+<!-- <link rel="stylesheet" type="text/css" href="~/css/privacy.css">-->
 <div class="WelcomeToWisielca">
     <!--text-center-->
 
@@ -19,7 +19,7 @@
     </div>
     <div class="Kontener_Wisielec_Prawy">
         <p id="attemptsCount"></p>
-        <img id="wisielecImg" src="Graphics/wisielec0.png" alt="Wisielec">
+        <img id="wisielecImg" src="~/Graphics/wisielec0.png" alt="Wisielec">
      </div>
 </div>
 
@@ -115,8 +115,11 @@
 
         // Funkcja aktualizująca obrazek wisielca
         function updateWisielecImage() {
-            var currentImageNumber = currentAttempts;
-            document.getElementById("wisielecImg").src = "Graphics/wisielec" + currentImageNumber + ".png";
+            var currentImageNumber = currentAttempts; // Przyjmując, że currentAttempts zawiera aktualną liczbę prób
+            var imagePath = "Graphics/wisielec" + currentImageNumber + ".png"; // Ścieżka do obrazka
+            document.getElementById("wisielecImg").src = imagePath; // Ustawienie nowej ścieżki obrazka
+            // var currentImageNumber = currentAttempts;
+            // document.getElementById("wisielecImg").src = "~/Graphics/wisielec" + currentImageNumber + ".png";
         }
 
         // Funkcja sprawdzająca, czy gra się zakończyła
