@@ -9,10 +9,11 @@ namespace Gry_Słownikowe.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
+        private SlownikowoModel _smodel;
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            
         }
 
         public IActionResult Index()
@@ -62,8 +63,28 @@ namespace Gry_Słownikowe.Controllers
             return View(model);
         }
 
+        SlownikowoModel _slownikowoModel;
+
+        [HttpGet]
+        public IActionResult Slownikowo()
+        {
+            SJP_API random = new SJP_API();
+            SJP_API api = new SJP_API("3D");
+            _slownikowoModel = new SlownikowoModel(random.getSlowo(), api);
+            return View(_slownikowoModel);
+        }
+
+        [HttpPost]
+        public IActionResult Slownikowo(string slowo)
+        {
+            SJP_API api = new SJP_API(slowo);
+           _slownikowoModel.changeApi(api);
+            return View(_slownikowoModel);
+        }
+
         public IActionResult ZgadywankiMenu ()
         {
+
             return View();
         }
 

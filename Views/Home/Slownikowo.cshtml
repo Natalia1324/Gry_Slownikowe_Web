@@ -1,0 +1,57 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model Gry_Słownikowe.Models.SlownikowoModel
+@{
+    ViewData["Title"] = "Slownikowo";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gra: Zgadnij Słowo</title>
+</head>
+<body>
+    <h1>Witaj w grze: Zgadnij Słowo!</h1>
+    <p>Wpisz słowo (lub 'q' aby zakończyć):</p>
+    <input type="text" id="wpisaneSlowo">
+    <button type="button" id="sprawdzButton">Sprawdź</button>
+    <p id="wynik"></p>
+        
+</div>
+    <script type="text/javascript">
+        document.getElementById("sprawdzButton").addEventListener("click", function () {
+            sprawdzSlowo();
+        });
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     checkWord();
+        //     console.log("wywołano event listenera");
+        //}
+        
+        // Funkcja sprawdzająca relację alfabetyczną między słowami
+        function porownaj(slowo1, slowo2) {
+            return slowo1.localeCompare(slowo2, 'pl', { sensitivity: 'base' });
+        }
+        // Funkcja sprawdzająca wprowadzone słowo
+        function sprawdzSlowo() {            
+            var wpisaneSlowo = document.getElementById("wpisaneSlowo").value.toLowerCase();
+            var wynik = document.getElementById("wynik");
+
+            document.getElementById("wynik").value = @Model.WylosowaneSlowo;
+
+            if (wpisaneSlowo === 'q') {
+                wynik.textContent = "Koniec gry. Wylosowane słowo to: " + @Model.WylosowaneSlowo;
+                return;
+            }
+
+            if (wpisaneSlowo === @Model.WylosowaneSlowo) {
+                wynik.textContent = "Gratulacje! Zgadłeś wylosowane słowo!";
+            } else if (wpisaneSlowo < @Model.WylosowaneSlowo) {
+                wynik.textContent = "Podane słowo znajduje się niżej w alfabecie.";
+            } else {
+                wynik.textContent = "Podane słowo znajduje się wyżej w alfabecie.";
+            }
+        }
+
+</script>
+</body>
+</html>
