@@ -16,6 +16,11 @@
         display: inline-block; /* aby elementy układały się obok siebie */
         text-align: center; /* wycentruj tekst wewnątrz diva */
         border: 1px solid black;
+        background-color: yellow;
+    }
+
+    .cell:hover{
+        background-color: darkgoldenrod;
     }
 
     .cell_noBoreder{
@@ -28,13 +33,35 @@
     }
 
     .row{
+        width: @crosswordColumns * 50px;
+        display: flex;
+        max-height: 52px;
         margin: 0;
         padding: 0;
+        gap: 0;
     }
 
-    .container{
+    .letterInput {
+        border: none; /* Usunięcie ramki */
+        background-color: transparent; /* Przezroczyste tło */
+        padding: 0; /* Usunięcie wewnętrznego odstępu */
+        width: 100%; /* Pełna szerokość */
+        height: 100%; /* Pełna wysokość */
+        outline: none; /* Usunięcie podświetlenia na focusie */
+        box-sizing: border-box; /* Model pudełka */
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .container{  
+        width: @crosswordColumns * 50px;
+        height: @crosswordRows * 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         margin: 0;
         padding: 0;
+        gap: 0;
     }
 </style>
 
@@ -43,49 +70,33 @@
 <h2>
     Krzyzówka
 </h2>
+
 <div class="container">
     @for (int y = 0; y < crosswordRows; y++)
     {
         <div class="row">
             @for (int x = 0; x < crosswordColumns; x++)
             {
-                string cellId = $"{x}_{y}";
+                string inputId = $"{y}_{x}";
                 if (Model[y, x] != null)
                 {
                     if (@Model[y, x].FirstLetter)
                     {
-                        <div id="@cellId" class="cell" style="background-color:darkgoldenrod;">
-                            @Model[y, x].WordNumber
-                            .
-                            @if(Model[y,x].Visible){
-                                @Model[y, x].Value
-                            }
-                            else
-                            {
-                                <p>?</p>
-                            }
-                            
-                            
-                           </div>
+                        <div class="cell" onclick="handleClick('@inputId')">
+                            <input id="@inputId" class="letterInput" type="text" maxlength="1" />
+                        </div>
                     }
                     else
                     {
-                        <div id="@cellId" class="cell" style="background-color: yellow;">
-                            @if (Model[y, x].Visible)
-                            {
-                                @Model[y, x].Value
-                            }
-                            else
-                            {
-                                <p>?</p>
-                            } 
+                        <div class="cell" onclick="handleClick('@inputId')">
+                            <input id="@inputId" class="letterInput" type="text" maxlength="1" />
                         </div>
                     }
 
                 }
                 else
                 {
-                    <div id="@cellId" class="cell_noBoreder"></div>
+                    <div class="cell_noBoreder"></div>
                 }
             }
         </div>
@@ -102,4 +113,16 @@
         <li>@Model.GetDescriptions()[i]</li>
     }
 </ol>
+
+<script>
+    function handleClick(inputId) {
+        var coords = id.split("_");
+        var row = coords[0];
+        var column = coords[1];
+        var input = document.getElementById(inputId);
+    }
+
+</script>
+
+
 

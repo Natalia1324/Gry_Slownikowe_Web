@@ -154,26 +154,6 @@ namespace Crossword
                     Dynamic2DArray<CrosswordTile> newBoard = new Dynamic2DArray<CrosswordTile>(_crossword);
                     PlaceWord(newBoard, placement, word);
                     float newScore = GetCrosswordScore(newBoard);
-                    if(word == "koooka")
-                    {
-                        Console.WriteLine(newScore);
-                        for (int y = 0; y < newBoard.Rows; y++)
-                        {
-                            for (int x = 0; x < newBoard.Columns; x++)
-                            {
-                                if (newBoard[y, x] == null)
-                                {
-                                    Console.Write($"[ ]");
-                                }
-                                else
-                                {
-                                    Console.Write($"[{newBoard[y, x].Value}]");
-                                }
-
-                            }
-                            Console.WriteLine("");
-                        }
-                    }
                     if(newScore > bestScore) 
                     {
                         bestScore = newScore;
