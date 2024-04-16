@@ -83,13 +83,13 @@
                     if (@Model[y, x].FirstLetter)
                     {
                         <div class="cell" onclick="handleClick('@inputId')">
-                            <input id="@inputId" class="letterInput" type="text" maxlength="1" />
+                            <input id="@inputId" class="letterInput" type="text" maxlength="1"  />
                         </div>
                     }
                     else
                     {
                         <div class="cell" onclick="handleClick('@inputId')">
-                            <input id="@inputId" class="letterInput" type="text" maxlength="1" />
+                            <input id="@inputId" class="letterInput" type="text" maxlength="1"  />
                         </div>
                     }
 
@@ -116,10 +116,27 @@
 
 <script>
     function handleClick(inputId) {
-        var coords = id.split("_");
+        var input = document.getElementById(inputId);
+        var letter = inputId.value;
+        var coords = inputId.split("_");
         var row = coords[0];
         var column = coords[1];
-        var input = document.getElementById(inputId);
+        $.ajax({
+            url: '/Home/GuessLetter',
+            type: 'POST',
+            data: { row: row, column: column, letter: letter },
+            success: function (response) {
+                if (response.success) {
+                    input.setAttribute("disabled");
+                } else {
+  
+                    input.value = "";
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Błąd:', error);
+            }
+        });
     }
 
 </script>

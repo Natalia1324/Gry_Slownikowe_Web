@@ -10,10 +10,13 @@ namespace Gry_Słownikowe.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private SlownikowoModel _smodel;
+        private ICrosswordModelReadOnly _crosswordModel;
+        CrosswordBuilder _crosswordBuilder;
+
         public HomeController(ILogger<HomeController> logger)
         {
+            _crosswordBuilder = new CrosswordBuilder();
             _logger = logger;
-            
         }
 
         public IActionResult Index()
@@ -109,11 +112,21 @@ namespace Gry_Słownikowe.Controllers
             return View();
         }
 
+ 
         public IActionResult Krzyzowka()
         {
-            CrosswordBuilder crosswordBuilder = new CrosswordBuilder(10);
-            ICrosswordModelReadOnly crosswordModel = crosswordBuilder.GenerateCrossword();
-            return View(crosswordModel);
+            _crosswordModel = _crosswordBuilder.GenerateCrossword(10);
+            return View(_crosswordModel);
+        }
+
+        /**
+         * Obsługa literek
+         */
+        [HttpPost]
+        public IActionResult GuessLetter(int row, int column, char letter)
+        {
+            bool success = _crosswordModel[row, column].GuessLetter(letter);
+            return Json(new { success = success });
         }
 
         public IActionResult Privacy()

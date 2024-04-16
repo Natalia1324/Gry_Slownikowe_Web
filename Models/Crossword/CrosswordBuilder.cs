@@ -36,10 +36,8 @@ namespace CrosswordComponents
         /**
          * Konstruktor pobiera referencje na pewien zbiór danych 
          */
-        public CrosswordBuilder(int maxWords)
+        public CrosswordBuilder()
         {
-            MaxWords = maxWords;
-
             wordAPI = new SJP_API();
 
             _words = new List<string>();
@@ -49,8 +47,10 @@ namespace CrosswordComponents
         /**
          * Metoda generująca krzyżówkę
          */
-        public ICrosswordModelReadOnly GenerateCrossword()
+        public ICrosswordModelReadOnly GenerateCrossword(int maxWords)
         {
+            _crosswordModel = new CrosswordModel();
+            MaxWords = maxWords;
             string word;
             string meaning;
             List<string> meanings;
