@@ -1,8 +1,12 @@
+using Crossword;
 using CrosswordComponents;
 using Gry_Słownikowe.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Web;
 
 namespace Gry_Słownikowe.Controllers
@@ -10,11 +14,21 @@ namespace Gry_Słownikowe.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+
+        private readonly IMemoryCache _memoryCache;
+
+        private readonly CrosswordBuilder _crosswordBuilder;
+
         private SlownikowoModel _smodel;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IMemoryCache memoryCache)
         {
             _logger = logger;
+
+            _memoryCache = memoryCache;
+
+            _crosswordBuilder = new CrosswordBuilder();
+
         }
 
         public IActionResult Index()
@@ -110,32 +124,11 @@ namespace Gry_Słownikowe.Controllers
             return View();
         }
 
-        private CrosswordBuilder CrosswordBuilder
-        {
-            get
-            {
-                if (HttpContext.Session.TryGetValue("CrosswordBuilder", out byte[] serializedBuilder))
-                {
-                    return JsonSerializer.Deserialize<CrosswordBuilder>(serializedBuilder);
-                }
-                else
-                {
-                    var crosswordBuilder = new CrosswordBuilder();
-                    HttpContext.Session.Set("CrosswordBuilder", JsonSerializer.SerializeToUtf8Bytes(crosswordBuilder));
-                    return crosswordBuilder;
-                }
-            }
-            set
-            {
-                HttpContext.Session.Set("CrosswordBuilder", JsonSerializer.SerializeToUtf8Bytes(value));
-            }
-        }
-
         public IActionResult Krzyzowka()
         {
-            CrosswordBuilder = new CrosswordBuilder();
-            ICrosswordModelReadOnly crossword = CrosswordBuilder.GenerateCrossword(10).Get();
-            return View(crossword);
+            ICrosswordModelReadOnly crosswordModel = _crosswordBuilder.GenerateCrossword(10).Get();
+            _memoryCache.Set("CrosswordModel", crosswordModel);
+            return View(crosswordModel);
         }
 
         /**
@@ -145,9 +138,10 @@ namespace Gry_Słownikowe.Controllers
         public IActionResult GuessLetter(int row, int column, char letter)
         {
             bool success = false;
-            if(CrosswordBuilder != null)
+            ICrosswordModelReadOnly crossword = _memoryCache.Get<ICrosswordModelReadOnly>("CrosswordModel");
+            var col = crossword.Columns; //zawsze jest zero, mimo, że crossword nie jest nullem
+            if (crossword != null)
             {
-                ICrosswordModelReadOnly crossword = CrosswordBuilder.Get();
                 success = crossword[row, column].GuessLetter(letter);
             }
             
