@@ -84,8 +84,8 @@
                 {
                     if (@Model[y, x].FirstLetter)
                     {
-                        <div id="@divID" class="cell" oninput="handleWrite('@inputId', '@Model[y,x].WordNumber')" onclick="removeNumber('@inputId')">
-                            <input id="@inputId" class="letterInput" type="text" maxlength="1" value="@Model[y,x].WordNumber" />
+                        <div id="@divID" class="cell" oninput="handleWrite('@inputId', '@Model[y,x].WordNumber')" >
+                            <input id="@inputId" onblur="restoreNumber('@inputId', '@Model[y,x].WordNumber')" onfocus="removeNumber('@inputId')" class="letterInput" type="text" maxlength="1" value="@Model[y,x].WordNumber" />
                         </div>
                     }
                     else
@@ -118,6 +118,14 @@
 
 <script>
 
+    function restoreNumber(inputId, wordNumber){
+        var input = document.getElementById(inputId);
+        var div = document.getElementById("div_" + inputId);
+        if (!input.disabled) {
+            input.value = wordNumber;
+        }
+    }
+
     function removeNumber(inputId) {
         var input = document.getElementById(inputId);
         input.value = "";
@@ -148,15 +156,12 @@
                     div.classList.add(".guessed-cell");
                 } else {
                     if (wordNumber == undefined) {
-                        input.value = "";
-                        input.setAttribute("disabled", true);
-                        input.removeAttribute("disabled");
+                        input.value = "";               
                     }else{
                         input.value = wordNumber;
-                        input.setAttribute("disabled", true);
-                        input.removeAttribute("disabled");
                     }
-                    
+                    input.setAttribute("disabled", true);
+                    input.removeAttribute("disabled");
                 }
             },
             error: function (xhr, status, error) {
