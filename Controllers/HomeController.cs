@@ -139,12 +139,10 @@ namespace Gry_Słownikowe.Controllers
         {
             bool success = false;
             ICrosswordModelReadOnly crossword = _memoryCache.Get<ICrosswordModelReadOnly>("CrosswordModel");
-            var col = crossword.Columns; //zawsze jest zero, mimo, że crossword nie jest nullem
             if (crossword != null)
             {
-                success = crossword[row, column].GuessLetter((char)letter);
+                success = crossword[row, column].GuessLetter(letter);
             }
-            
             return Json(new { success = success });
         }
 
