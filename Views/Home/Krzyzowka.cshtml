@@ -23,9 +23,19 @@
         border-radius: 15%;
     }
 
-    .cell:not(.guessed-cell):hover {
-            border-color: #586f7c;
-            background-color: #f4f4f9;
+    .cell:not(.guessed-cell):not(.first_letter):hover {
+        border-color: #586f7c;
+        background-color: #f4f4f9;
+    }
+
+    .first_letter:not(.guessed-cell):hover {
+        border-color: #586f7c;
+        background-color: #b8dbd9;
+        color: #f4f4f9;
+    }
+
+    .first_letter{
+        background-color: #f4f4f9
     }
 
     .cell_noBoreder{
@@ -43,6 +53,7 @@
         box-sizing: border-box; /* Model pudełka */
         text-align: center;
         text-transform: uppercase;
+        color: inherit;
     }
 
     .grid_container {
@@ -106,7 +117,7 @@
                     {
                         if (@Model[y, x].FirstLetter)
                         {
-                            <div id="@divID" class="cell" oninput="handleWrite('@inputId', '@Model[y,x].WordNumber')" style="background-color: #f4f4f9" >
+                            <div id="@divID" class="cell first_letter" oninput="handleWrite('@inputId', '@Model[y,x].WordNumber')" >
                                 <input autocomplete="off" id="@inputId" onblur="restoreNumber('@inputId', '@Model[y,x].WordNumber')" onfocus="removeNumber('@inputId')" class="letterInput" type="text" maxlength="1" value="@Model[y,x].WordNumber" />
                             </div>
                         }
