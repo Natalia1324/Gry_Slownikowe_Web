@@ -3,42 +3,34 @@
 @{
     int crosswordColumns = Model.Columns;
     int crosswordRows = Model.Rows;
-
+    int wordsCount = Model.Words;
+    double generationTime = Model.GetGenerationTimeInMils();
     ViewData["Title"] = "Krzyżówki";
 }
 
 <style>
     .cell {
-        width: 50px; /* ustaw odpowiednią szerokość */
-        height: 50px; /* ustaw odpowiednią wysokość */
-        margin: 1px; /* ustaw marginesy na 0 */
-        padding: 0; /* ustaw wypełnienie na 0 */
-        display: inline-block; /* aby elementy układały się obok siebie */
-        text-align: center; /* wycentruj tekst wewnątrz diva */
-        border: 1px solid black;
-        background-color: yellow;
+        font-size: 1.5vw;
+        font-weight: bold;
+        width: 100%; /* 100% szerokości komórki */
+        height: 100%; /* 100% wysokości komórki */
+        text-align: center; /* Wyśrodkowanie zawartości w poziomie */
+        display: flex; /* Ustawienie na flex, aby umożliwić wyśrodkowanie zawartości w pionie */
+        align-items: center; /* Wyśrodkowanie zawartości w pionie */
+        justify-content: center; /* Wyśrodkowanie zawartości w poziomie */
+        border: 0.15vw solid black; /* Obramowanie */
+        background-color: #b8dbd9; /* Kolor tła */
+        border-radius: 15%;
     }
 
     .cell:not(.guessed-cell):hover {
-        background-color: deepskyblue;
+            border-color: #586f7c;
+            background-color: #f4f4f9;
     }
 
     .cell_noBoreder{
-        width: 50px; /* ustaw odpowiednią szerokość */
-        height: 50px; /* ustaw odpowiednią wysokość */
-        margin: 1px; /* ustaw marginesy na 0 */
-        padding: 0; /* ustaw wypełnienie na 0 */
-        display: inline-block; /* aby elementy układały się obok siebie */
-        text-align: center; /* wycentruj tekst wewnątrz diva */
-    }
-
-    .row{
-        width: @crosswordColumns * 50px;
-        display: flex;
-        max-height: 52px;
-        margin: 0;
-        padding: 0;
-        gap: 0;
+        width: 100%; /* 100% szerokości komórki */
+        height: 100%; /* 100% wysokości komórki */
     }
 
     .letterInput {
@@ -53,68 +45,104 @@
         text-transform: uppercase;
     }
 
-    .container{  
-        user-select: none;
-        width: @crosswordColumns * 50px;
-        height: @crosswordRows * 50px;
-        display: flex;
+    .grid_container {
+        display: grid;
+        grid-template-columns: repeat(@crosswordColumns, 3vw); /* Powtarzaj kolumny o szerokości 50px */
+        grid-template-rows: repeat(@crosswordRows, 3vw); /* Powtarzaj rzędy o wysokości 50px */
+        gap: 0.15vw; /* Odstęp między komórkami */
+        justify-content: center; /* Wyśrodkowanie zawartości w poziomie */
+        align-content: center; /* Wyśrodkowanie zawartości w pionie */
+    }
+
+    .header{
+        text-align: center; /* Wyśrodkowanie zawartości w poziomie */
+        display: flex; /* Ustawienie na flex, aby umożliwić wyśrodkowanie zawartości w pionie */
+        width: 100%;
         flex-direction: column;
-        justify-content: center;
-        margin: 0;
+        justify-content: center; /* Wyśrodkowanie zawartości w poziomie */
+        align-content: center; /* Wyśrodkowanie zawartości w pionie */
+    }
+
+    .main_container{
         padding: 0;
-        gap: 0;
+        margin: 0;
+        width: 100%;
+        display: flex;
+        row-gap: 20px;
+        flex-direction: column;
+    }
+
+    .descriptions_container{
+        width: 100%;
+    }
+
+    .crossword_container{
+        width: 100%;
     }
 </style>
 
-<h1>Krzyżówki beta - 10 wyrazow</h1>
+<main class="main_container">
+    <section class="header">
+        <h1>
+            Rozwiążmy krzyżówkę!
+        </h1>
+        <h3>
+            Czas generacji: @generationTime ms
+        </h3>
+        <h3>
+            Słów: @wordsCount
+        </h3>
+    </section>
 
-<h2>
-    Krzyzówka @crosswordColumns
-</h2>
-
-<div class="container">
-    @for (int y = 0; y < crosswordRows; y++)
-    {
-        <div class="row">
-            @for (int x = 0; x < crosswordColumns; x++)
+    <section class="crossword_container">
+        <div class="grid_container">
+            @for (int y = 0; y < crosswordRows; y++)
             {
-                string inputId = $"{y}_{x}";
-                string divID = "div_"+inputId;
-                if (Model[y, x] != null)
+                @for (int x = 0; x < crosswordColumns; x++)
                 {
-                    if (@Model[y, x].FirstLetter)
+                    string inputId = $"{y}_{x}";
+                    string divID = "div_" + inputId;
+                    if (Model[y, x] != null)
                     {
-                        <div id="@divID" class="cell" oninput="handleWrite('@inputId', '@Model[y,x].WordNumber')" style="background-color: red" >
-                            <input id="@inputId" onblur="restoreNumber('@inputId', '@Model[y,x].WordNumber')" onfocus="removeNumber('@inputId')" class="letterInput" type="text" maxlength="1" value="@Model[y,x].Value" />
-                        </div>
+                        if (@Model[y, x].FirstLetter)
+                        {
+                            <div id="@divID" class="cell" oninput="handleWrite('@inputId', '@Model[y,x].WordNumber')" style="background-color: #f4f4f9" >
+                                <input autocomplete="off" id="@inputId" onblur="restoreNumber('@inputId', '@Model[y,x].WordNumber')" onfocus="removeNumber('@inputId')" class="letterInput" type="text" maxlength="1" value="@Model[y,x].WordNumber" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div id="@divID" class="cell" oninput="handleWrite('@inputId')">
+                                <input autocomplete="off" id="@inputId" class="letterInput" type="text" maxlength="1" />
+                            </div>
+                        }
+
                     }
                     else
                     {
-                        <div id="@divID" class="cell" oninput="handleWrite('@inputId')">
-                            <input id="@inputId" class="letterInput" type="text" maxlength="1" value="@Model[y,x].Value" />
-                        </div>
+                        <div class="cell_noBoreder"></div>
                     }
-
-                }
-                else
-                {
-                    <div class="cell_noBoreder"></div>
                 }
             }
         </div>
-    }
-</div>
+    </section>
 
-<h2>
-    Definicje
-</h2>
+    <section class="descriptions_container">
 
-<ol>
-    @for (int i = 0; i < Model.GetDescriptions().Count; i++)
-    {
-        <li>@Model.GetDescriptions()[i]</li>
-    }
-</ol>
+        <h2>
+            Definicje
+        </h2>
+
+        <ol>
+            @for (int i = 0; i < Model.GetDescriptions().Count; i++)
+            {
+                <li>@Model.GetDescriptions()[i]</li>
+            }
+        </ol>
+
+    </section>
+
+</main>
 
 <script>
 

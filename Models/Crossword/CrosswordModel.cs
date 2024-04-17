@@ -2,6 +2,7 @@
 using CrosswordComponents;
 using Gry_Słownikowe.Models;
 using DynamicArray;
+using System.Diagnostics;
 
 
 namespace Crossword
@@ -18,9 +19,11 @@ namespace Crossword
         private readonly List<string> _meanings;
 
         /**
-         * Obiekt krzyżówki jako dynamiczna tablica 2d
+         * Obiekt krzyżówki jako dynamiczna macierz mxn
          */
         private DynamicMatrix<CrosswordLetterModel> _crossword;
+
+        private Stopwatch _stopwatch;
 
         /**
          * Ilość słów w krzyżówce
@@ -51,6 +54,18 @@ namespace Crossword
         {
             get { return _crossword.Columns; }
         }
+
+        /**
+         * Dostęp do ilości słów
+         */
+        public int Words
+        {
+            get
+            {
+                return _wordsNumber;
+            }
+        }
+
         /**
          * Dostęp do odczytu komórki
          */
@@ -75,6 +90,7 @@ namespace Crossword
         {
             _crossword = new DynamicMatrix<CrosswordLetterModel>();
             _meanings = new List<string>();
+            _stopwatch = new Stopwatch();
         }
         /**
          * Metoda zwracająca ilość odgadniętych liter
@@ -91,13 +107,24 @@ namespace Crossword
             }
             return count;
         }
+
+        /**
+         * Otrzymaj czas wygenerowania krzyżówki
+         */
+        public double GetGenerationTimeInMils()
+        {
+            return Math.Round(_stopwatch.Elapsed.TotalMilliseconds, 2);
+        }
+
         /**
          * Metoda wstawiająca słowo
          */
         internal bool InsertWord(string word, string meaning)
         {
-            if(word == null || word.Length == 0 || meaning == null || meaning.Length == 0)
+            _stopwatch.Start();
+            if (word == null || word.Length == 0 || meaning == null || meaning.Length == 0)
             {
+                _stopwatch.Stop();
                 return false;
             }
 
@@ -133,6 +160,7 @@ namespace Crossword
                 if (!anyWordInserted)
                 {
                     _wordsNumber--;
+                    _stopwatch.Stop();
                     return false;
                 }
                 else
@@ -141,6 +169,7 @@ namespace Crossword
                 }
             }
             _meanings.Add(meaning);
+            _stopwatch.Stop();
             return true;
         }
 
