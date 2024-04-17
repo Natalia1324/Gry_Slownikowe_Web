@@ -11,12 +11,6 @@ namespace CrosswordComponents
      */
     public class CrosswordTile
     {
-        /**
-         * Typ wyliczeniowy określający
-         */
-        public enum WordDirection{
-            HORIZONTAL, VERTICAL
-        }
 
         private int? _wordNumber = null;
 
@@ -25,11 +19,6 @@ namespace CrosswordComponents
         private readonly char _letter;
 
         private bool _isFirstLetter = false;
-
-        /**
-         * Położenie krzyżówki
-         */
-        public WordDirection Direction {  get; set; }
 
         /**
          * Konstruktor

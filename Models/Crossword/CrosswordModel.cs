@@ -302,7 +302,6 @@ namespace Crossword
             firstLetter.WordNumber = _meanings.Count;
             if (placement.IsHorizontal)
             {
-                firstLetter.Direction = CrosswordTile.WordDirection.HORIZONTAL;
 
                 if (x < 0)
                 {
@@ -322,7 +321,6 @@ namespace Crossword
             }
             else
             {
-                firstLetter.Direction = CrosswordTile.WordDirection.VERTICAL;
                 if (y < 0)
                 {
                     crossword[y, x] = firstLetter;
