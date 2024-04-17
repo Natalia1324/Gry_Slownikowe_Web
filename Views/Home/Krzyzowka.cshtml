@@ -19,7 +19,7 @@
         background-color: yellow;
     }
 
-    .cell:hover{
+    .cell:not(.guessed-cell):hover {
         background-color: darkgoldenrod;
     }
 
@@ -54,6 +54,7 @@
     }
 
     .container{  
+        user-select: none;
         width: @crosswordColumns * 50px;
         height: @crosswordRows * 50px;
         display: flex;
@@ -65,7 +66,7 @@
     }
 </style>
 
-<h1>!TEST!</h1>
+<h1>Krzyżówki beta - 10 wyrazow</h1>
 
 <h2>
     Krzyzówka @crosswordColumns
@@ -78,17 +79,18 @@
             @for (int x = 0; x < crosswordColumns; x++)
             {
                 string inputId = $"{y}_{x}";
+                string divID = "div_"+inputId;
                 if (Model[y, x] != null)
                 {
                     if (@Model[y, x].FirstLetter)
                     {
-                        <div class="cell" onclick="handleClick('@inputId')">
-                            <input id="@inputId" class="letterInput" type="text" maxlength="1"  />
+                        <div id="@divID" class="cell" oninput="handleWrite('@inputId', '@Model[y,x].WordNumber')" onclick="removeNumber('@inputId')">
+                            <input id="@inputId" class="letterInput" type="text" maxlength="1" value="@Model[y,x].WordNumber" />
                         </div>
                     }
                     else
                     {
-                        <div class="cell" onclick="handleClick('@inputId')">
+                        <div id="@divID" class="cell" oninput="handleWrite('@inputId')">
                             <input id="@inputId" class="letterInput" type="text" maxlength="1"  />
                         </div>
                     }
@@ -115,9 +117,22 @@
 </ol>
 
 <script>
-    function handleClick(inputId) {
+
+    function removeNumber(inputId) {
         var input = document.getElementById(inputId);
-        var letter = inputId.value;
+        input.value = "";
+    }
+
+    function handleWriteFirstLetter(inputId, wordNumber) {
+        if (!handleWrite(inputId)) {
+            var input = document.getElementById(inputId);
+            input.value = wordNumber;
+        }
+    }
+
+    function handleWrite(inputId, wordNumber) {
+        var input = document.getElementById(inputId);
+        var letter = input.value;
         var coords = inputId.split("_");
         var row = coords[0];
         var column = coords[1];
@@ -127,10 +142,21 @@
             data: { row: row, column: column, letter: letter },
             success: function (response) {
                 if (response.success) {
-                    input.setAttribute("disabled");
+                    input.setAttribute("disabled", true);
+                    var div = document.getElementById("div_" + inputId);
+                    div.style.backgroundColor = "lightgreen";
+                    div.classList.add(".guessed-cell");
                 } else {
-  
-                    input.value = "";
+                    if (wordNumber == undefined) {
+                        input.value = "";
+                        input.setAttribute("disabled", true);
+                        input.removeAttribute("disabled");
+                    }else{
+                        input.value = wordNumber;
+                        input.setAttribute("disabled", true);
+                        input.removeAttribute("disabled");
+                    }
+                    
                 }
             },
             error: function (xhr, status, error) {

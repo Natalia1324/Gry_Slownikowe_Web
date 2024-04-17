@@ -142,7 +142,7 @@ namespace Gry_Słownikowe.Controllers
             var col = crossword.Columns; //zawsze jest zero, mimo, że crossword nie jest nullem
             if (crossword != null)
             {
-                success = crossword[row, column].GuessLetter(letter);
+                success = crossword[row, column].GuessLetter((char)letter);
             }
             
             return Json(new { success = success });
