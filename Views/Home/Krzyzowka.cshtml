@@ -84,14 +84,14 @@
                 {
                     if (@Model[y, x].FirstLetter)
                     {
-                        <div id="@divID" class="cell" oninput="handleWrite('@inputId', '@Model[y,x].WordNumber')" >
-                            <input id="@inputId" onblur="restoreNumber('@inputId', '@Model[y,x].WordNumber')" onfocus="removeNumber('@inputId')" class="letterInput" type="text" maxlength="1" value="@Model[y,x].WordNumber" />
+                        <div id="@divID" class="cell" oninput="handleWrite('@inputId', '@Model[y,x].WordNumber')" style="background-color: red" >
+                            <input id="@inputId" onblur="restoreNumber('@inputId', '@Model[y,x].WordNumber')" onfocus="removeNumber('@inputId')" class="letterInput" type="text" maxlength="1" value="@Model[y,x].Value" />
                         </div>
                     }
                     else
                     {
                         <div id="@divID" class="cell" oninput="handleWrite('@inputId')">
-                            <input id="@inputId" class="letterInput" type="text" maxlength="1"  />
+                            <input id="@inputId" class="letterInput" type="text" maxlength="1" value="@Model[y,x].Value" />
                         </div>
                     }
 

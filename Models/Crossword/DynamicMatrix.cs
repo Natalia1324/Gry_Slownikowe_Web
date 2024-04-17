@@ -1,9 +1,9 @@
-﻿namespace Gry_Słownikowe.Models.Crossword
+﻿namespace DynamicMatrix
 {
     /**
      * Implementacja tablicy dwuwymiarowej automatycznie się rozszerzającej
-     */
-    public class DynamicMatrix<T>
+    */
+    public class DynamicMatrix<T> where T : class
     {
         private T[] _data;
 
@@ -81,7 +81,7 @@
         /**
          * Obliczenie indexu rzędu
          */
-        private int CalculateRowIndex(int index)
+        public int CalculateRowIndex(int index)
         {
             if (_numberOfColumns == 0) return 0;
             return index / _numberOfColumns;
@@ -90,7 +90,7 @@
         /**
          * Obliczenie indexu kolumny
          */
-        private int CalculateColumnIndex(int index)
+        public int CalculateColumnIndex(int index)
         {
             if (_numberOfColumns == 0) return 0;
             return (index % _numberOfColumns);
@@ -115,13 +115,13 @@
         /**
          * Dostęp do elementu według indexu (bez poszerzania)
          */
-        public T this[int index]
+        public T? this[int index]
         {
             get
             {
                 if (index < 0 || index >= _data.Length)
                 {
-                    throw new NullReferenceException("Index out of range.");
+                    return null;
                 }
                 return _data[index];
             }

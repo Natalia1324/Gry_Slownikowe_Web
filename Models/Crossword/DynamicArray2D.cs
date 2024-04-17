@@ -10,28 +10,28 @@ namespace DynamicArray
     /**
      * Implementacja tablicy dwuwymiarowej automatycznie się rozszerzającej
      */
-    public class Dynamic2DArray<T>
+    public class DynamicArray2D<T>
     {
         private T[,] _array;
 
         /**
          * Konstruktor tablicy o rozmiarze [y:x] -> [0:0]
          */
-        public Dynamic2DArray()
+        public DynamicArray2D()
         {
             _array = new T[0, 0];
         }
         /**
          * Konstruktor tablicy o zadanym rozmiarze [y:x]
          */
-        public Dynamic2DArray(int rows, int columns)
+        public DynamicArray2D(int rows, int columns)
         {
             _array = new T[rows, columns];
         }
         /**
          * Konstruktor kopiujący
          */
-        public Dynamic2DArray(Dynamic2DArray<T> other)
+        public DynamicArray2D(DynamicArray2D<T> other)
         {
 
             int rows = other.Rows;

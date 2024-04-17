@@ -35,7 +35,7 @@ namespace Gry_Słownikowe.Models
         /**
          * Dostęp do odczytu komórki
          */
-        public CrosswordTile this[int y, int x] { get; }
+        public CrosswordLetterModel this[int y, int x] { get; }
 
         /**
          * Otrzymaj listę opisów słów
