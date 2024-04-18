@@ -1,5 +1,7 @@
 ﻿using Crossword;
 using Gry_Słownikowe.Models;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Web;
 
@@ -31,26 +33,32 @@ namespace CrosswordComponents
         /**
         * Obiekt krzyżówki
         */
-        private CrosswordModel _crosswordModel;
+        private CrosswordModel? _crosswordModel;
 
         /**
          * Konstruktor pobiera referencje na pewien zbiór danych 
          */
-        public CrosswordBuilder(int maxWords)
+        public CrosswordBuilder()
         {
-            MaxWords = maxWords;
-
             wordAPI = new SJP_API();
 
             _words = new List<string>();
-
-            _crosswordModel = new CrosswordModel();
         }
+
+        public ICrosswordModelReadOnly Get()
+        {
+            if (_crosswordModel == null) throw new NullReferenceException("The crossword has not been inicialized.");
+            return _crosswordModel;
+        }
+
         /**
          * Metoda generująca krzyżówkę
          */
-        public ICrosswordModelReadOnly GenerateCrossword()
+        public CrosswordBuilder GenerateCrossword(int maxWords)
         {
+            _crosswordModel = new CrosswordModel();
+            _words.RemoveAll(word => true);
+            MaxWords = maxWords;
             string word;
             string meaning;
             List<string> meanings;
@@ -64,12 +72,9 @@ namespace CrosswordComponents
 
                 if (meanings.Count <= 0) continue;
 
-                // wczytywanie słów
                 word = HttpUtility.HtmlEncode(wordAPI.getSlowo());
-                //word = wordAPI.getSlowo();
                 meaning = HttpUtility.HtmlAttributeEncode(meanings.ElementAt(random.Next(meanings.Count-1)));
-                //meaning = meanings.ElementAt(random.Next(meanings.Count));
-
+ 
                 if (word.Length < 1 || word.Length > 32 || !ContainsOnlyPolishLetters(word)) { continue; }
 
                 if (_words.Contains(word))
@@ -82,7 +87,7 @@ namespace CrosswordComponents
                     _words.Add(word);
                 }
             }
-            return _crosswordModel;
+            return this;
         }
         /**
          * Sprawdzenie czy zawiera polskie litery

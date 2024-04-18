@@ -3,103 +3,213 @@
 @{
     int crosswordColumns = Model.Columns;
     int crosswordRows = Model.Rows;
-
+    int wordsCount = Model.Words;
+    double generationTime = Model.GetGenerationTimeInMils();
     ViewData["Title"] = "Krzyżówki";
 }
 
 <style>
     .cell {
-        width: 50px; /* ustaw odpowiednią szerokość */
-        height: 50px; /* ustaw odpowiednią wysokość */
-        margin: 1px; /* ustaw marginesy na 0 */
-        padding: 0; /* ustaw wypełnienie na 0 */
-        display: inline-block; /* aby elementy układały się obok siebie */
-        text-align: center; /* wycentruj tekst wewnątrz diva */
-        border: 1px solid black;
+        font-size: 1.5vw;
+        font-weight: bold;
+        width: 100%; /* 100% szerokości komórki */
+        height: 100%; /* 100% wysokości komórki */
+        text-align: center; /* Wyśrodkowanie zawartości w poziomie */
+        display: flex; /* Ustawienie na flex, aby umożliwić wyśrodkowanie zawartości w pionie */
+        align-items: center; /* Wyśrodkowanie zawartości w pionie */
+        justify-content: center; /* Wyśrodkowanie zawartości w poziomie */
+        border: 0.15vw solid black; /* Obramowanie */
+        background-color: #b8dbd9; /* Kolor tła */
+        border-radius: 15%;
+    }
+
+    .cell:not(.guessed-cell):not(.first_letter):hover {
+        border-color: #586f7c;
+        background-color: #f4f4f9;
+    }
+
+    .first_letter:not(.guessed-cell):hover {
+        border-color: #586f7c;
+        background-color: #b8dbd9;
+        color: #f4f4f9;
+    }
+
+    .first_letter{
+        background-color: #f4f4f9
     }
 
     .cell_noBoreder{
-        width: 50px; /* ustaw odpowiednią szerokość */
-        height: 50px; /* ustaw odpowiednią wysokość */
-        margin: 1px; /* ustaw marginesy na 0 */
-        padding: 0; /* ustaw wypełnienie na 0 */
-        display: inline-block; /* aby elementy układały się obok siebie */
-        text-align: center; /* wycentruj tekst wewnątrz diva */
+        width: 100%; /* 100% szerokości komórki */
+        height: 100%; /* 100% wysokości komórki */
     }
 
-    .row{
-        margin: 0;
-        padding: 0;
+    .letterInput {
+        border: none; /* Usunięcie ramki */
+        background-color: transparent; /* Przezroczyste tło */
+        padding: 0; /* Usunięcie wewnętrznego odstępu */
+        width: 100%; /* Pełna szerokość */
+        height: 100%; /* Pełna wysokość */
+        outline: none; /* Usunięcie podświetlenia na focusie */
+        box-sizing: border-box; /* Model pudełka */
+        text-align: center;
+        text-transform: uppercase;
+        color: inherit;
     }
 
-    .container{
-        margin: 0;
+    .grid_container {
+        display: grid;
+        grid-template-columns: repeat(@crosswordColumns, 3vw); /* Powtarzaj kolumny o szerokości 50px */
+        grid-template-rows: repeat(@crosswordRows, 3vw); /* Powtarzaj rzędy o wysokości 50px */
+        gap: 0.15vw; /* Odstęp między komórkami */
+        justify-content: center; /* Wyśrodkowanie zawartości w poziomie */
+        align-content: center; /* Wyśrodkowanie zawartości w pionie */
+    }
+
+    .header{
+        text-align: center; /* Wyśrodkowanie zawartości w poziomie */
+        display: flex; /* Ustawienie na flex, aby umożliwić wyśrodkowanie zawartości w pionie */
+        width: 100%;
+        flex-direction: column;
+        justify-content: center; /* Wyśrodkowanie zawartości w poziomie */
+        align-content: center; /* Wyśrodkowanie zawartości w pionie */
+    }
+
+    .main_container{
         padding: 0;
+        margin: 0;
+        width: 100%;
+        display: flex;
+        row-gap: 20px;
+        flex-direction: column;
+    }
+
+    .descriptions_container{
+        width: 100%;
+    }
+
+    .crossword_container{
+        width: 100%;
     }
 </style>
 
-<h1>!TEST!</h1>
+<main class="main_container">
+    <section class="header">
+        <h1>
+            Rozwiążmy krzyżówkę!
+        </h1>
+        <h3>
+            Czas generacji: @generationTime ms
+        </h3>
+        <h3>
+            Słów: @wordsCount
+        </h3>
+    </section>
 
-<h2>
-    Krzyzówka
-</h2>
-<div class="container">
-    @for (int y = 0; y < crosswordRows; y++)
-    {
-        <div class="row">
-            @for (int x = 0; x < crosswordColumns; x++)
+    <section class="crossword_container">
+        <div class="grid_container">
+            @for (int y = 0; y < crosswordRows; y++)
             {
-                string cellId = $"{x}_{y}";
-                if (Model[y, x] != null)
+                @for (int x = 0; x < crosswordColumns; x++)
                 {
-                    if (@Model[y, x].FirstLetter)
+                    string inputId = $"{y}_{x}";
+                    string divID = "div_" + inputId;
+                    if (Model[y, x] != null)
                     {
-                        <div id="@cellId" class="cell" style="background-color:darkgoldenrod;">
-                            @Model[y, x].WordNumber
-                            .
-                            @if(Model[y,x].Visible){
-                                @Model[y, x].Value
-                            }
-                            else
-                            {
-                                <p>?</p>
-                            }
-                            
-                            
-                           </div>
+                        if (@Model[y, x].FirstLetter)
+                        {
+                            <div id="@divID" class="cell first_letter" oninput="handleWrite('@inputId', '@Model[y,x].WordNumber')" >
+                                <input autocomplete="off" id="@inputId" onblur="restoreNumber('@inputId', '@Model[y,x].WordNumber')" onfocus="removeNumber('@inputId')" class="letterInput" type="text" maxlength="1" value="@Model[y,x].WordNumber" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div id="@divID" class="cell" oninput="handleWrite('@inputId')">
+                                <input autocomplete="off" id="@inputId" class="letterInput" type="text" maxlength="1" />
+                            </div>
+                        }
+
                     }
                     else
                     {
-                        <div id="@cellId" class="cell" style="background-color: yellow;">
-                            @if (Model[y, x].Visible)
-                            {
-                                @Model[y, x].Value
-                            }
-                            else
-                            {
-                                <p>?</p>
-                            } 
-                        </div>
+                        <div class="cell_noBoreder"></div>
                     }
-
-                }
-                else
-                {
-                    <div id="@cellId" class="cell_noBoreder"></div>
                 }
             }
         </div>
-    }
-</div>
+    </section>
 
-<h2>
-    Definicje
-</h2>
+    <section class="descriptions_container">
 
-<ol>
-    @for (int i = 0; i < Model.GetDescriptions().Count; i++)
-    {
-        <li>@Model.GetDescriptions()[i]</li>
+        <h2>
+            Definicje
+        </h2>
+
+        <ol>
+            @for (int i = 0; i < Model.GetDescriptions().Count; i++)
+            {
+                <li>@Model.GetDescriptions()[i]</li>
+            }
+        </ol>
+
+    </section>
+
+</main>
+
+<script>
+
+    function restoreNumber(inputId, wordNumber){
+        var input = document.getElementById(inputId);
+        var div = document.getElementById("div_" + inputId);
+        if (!input.disabled) {
+            input.value = wordNumber;
+        }
     }
-</ol>
+
+    function removeNumber(inputId) {
+        var input = document.getElementById(inputId);
+        input.value = "";
+    }
+
+    function handleWriteFirstLetter(inputId, wordNumber) {
+        if (!handleWrite(inputId)) {
+            var input = document.getElementById(inputId);
+            input.value = wordNumber;
+        }
+    }
+
+    function handleWrite(inputId, wordNumber) {
+        var input = document.getElementById(inputId);
+        var letter = input.value;
+        var coords = inputId.split("_");
+        var row = coords[0];
+        var column = coords[1];
+        $.ajax({
+            url: '/Home/GuessLetter',
+            type: 'POST',
+            data: { row: row, column: column, letter: letter },
+            success: function (response) {
+                if (response.success) {
+                    input.setAttribute("disabled", true);
+                    var div = document.getElementById("div_" + inputId);
+                    div.style.backgroundColor = "lightgreen";
+                    div.classList.add(".guessed-cell");
+                } else {
+                    if (wordNumber == undefined) {
+                        input.value = "";               
+                    }else{
+                        input.value = wordNumber;
+                    }
+                    input.setAttribute("disabled", true);
+                    input.removeAttribute("disabled");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Błąd:', error);
+            }
+        });
+    }
+
+</script>
+
+
 

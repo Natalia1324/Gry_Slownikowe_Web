@@ -1,22 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CrosswordComponents
+﻿namespace CrosswordComponents
 {
     /**
      * Klasa reprezentująca kafelek (literkę) krzyżówki
      */
-    public class CrosswordTile
+    public class CrosswordLetterModel
     {
-        /**
-         * Typ wyliczeniowy określający
-         */
-        public enum WordDirection{
-            HORIZONTAL, VERTICAL
-        }
 
         private int? _wordNumber = null;
 
@@ -27,14 +15,9 @@ namespace CrosswordComponents
         private bool _isFirstLetter = false;
 
         /**
-         * Położenie krzyżówki
-         */
-        public WordDirection Direction {  get; set; }
-
-        /**
          * Konstruktor
          */
-        public CrosswordTile(char letter) 
+        public CrosswordLetterModel(char letter) 
         {
             _letter = char.ToUpper(letter);
         }

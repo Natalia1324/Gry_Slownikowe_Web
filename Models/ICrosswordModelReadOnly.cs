@@ -33,13 +33,23 @@ namespace Gry_Słownikowe.Models
         public int Letters { get; }
 
         /**
+         * Dostęp do ilości słów w krzyżówce
+         */
+        public int Words { get;  }
+
+        /**
          * Dostęp do odczytu komórki
          */
-        public CrosswordTile this[int y, int x] { get; }
+        public CrosswordLetterModel this[int y, int x] { get; }
 
         /**
          * Otrzymaj listę opisów słów
          */
         public List<string> GetDescriptions();
+
+        /**
+         * Otrzymaj czas wygenerowania krzyżówki
+         */
+        public double GetGenerationTimeInMils();
     }
 }

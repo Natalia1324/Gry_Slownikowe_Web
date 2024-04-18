@@ -1,7 +1,12 @@
+using Crossword;
 using CrosswordComponents;
 using Gry_Słownikowe.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Web;
 
 namespace Gry_Słownikowe.Controllers
@@ -9,11 +14,21 @@ namespace Gry_Słownikowe.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+
+        private readonly IMemoryCache _memoryCache;
+
+        private readonly CrosswordBuilder _crosswordBuilder;
+
         private SlownikowoModel _smodel;
-        public HomeController(ILogger<HomeController> logger)
+
+        public HomeController(ILogger<HomeController> logger, IMemoryCache memoryCache)
         {
             _logger = logger;
-            
+
+            _memoryCache = memoryCache;
+
+            _crosswordBuilder = new CrosswordBuilder();
+
         }
 
         public IActionResult Index()
@@ -111,9 +126,24 @@ namespace Gry_Słownikowe.Controllers
 
         public IActionResult Krzyzowka()
         {
-            CrosswordBuilder crosswordBuilder = new CrosswordBuilder(10);
-            ICrosswordModelReadOnly crosswordModel = crosswordBuilder.GenerateCrossword();
+            ICrosswordModelReadOnly crosswordModel = _crosswordBuilder.GenerateCrossword(10).Get();
+            _memoryCache.Set("CrosswordModel", crosswordModel);
             return View(crosswordModel);
+        }
+
+        /**
+         * Obsługa literek
+         */
+        [HttpPost]
+        public IActionResult GuessLetter(int row, int column, char letter)
+        {
+            bool success = false;
+            ICrosswordModelReadOnly crossword = _memoryCache.Get<ICrosswordModelReadOnly>("CrosswordModel");
+            if (crossword != null)
+            {
+                success = crossword[row, column].GuessLetter(letter);
+            }
+            return Json(new { success = success });
         }
 
         public IActionResult Privacy()
