@@ -15,12 +15,12 @@
     <p>Wpisz słowo (lub 'q' aby zakończyć):</p>
     <input type="text" id="wpisaneSlowo">
     <button type="button" id="sprawdzButton">Sprawdź</button>
-    <p id="wynik"></p>
+    <p id="wynik">kozak</p>
         
-</div>
     <script type="text/javascript">
         document.getElementById("sprawdzButton").addEventListener("click", function () {
-            sprawdzSlowo();
+            //sprawdzSlowo();
+            document.getElementById("wynik").value = "1121";
         });
         // document.addEventListener("DOMContentLoaded", function () {
         //     checkWord();
@@ -31,12 +31,13 @@
         function porownaj(slowo1, slowo2) {
             return slowo1.localeCompare(slowo2, 'pl', { sensitivity: 'base' });
         }
+
         // Funkcja sprawdzająca wprowadzone słowo
         function sprawdzSlowo() {            
             var wpisaneSlowo = document.getElementById("wpisaneSlowo").value.toLowerCase();
             var wynik = document.getElementById("wynik");
 
-            document.getElementById("wynik").value = @Model.WylosowaneSlowo;
+            
 
             if (wpisaneSlowo === 'q') {
                 wynik.textContent = "Koniec gry. Wylosowane słowo to: " + @Model.WylosowaneSlowo;
