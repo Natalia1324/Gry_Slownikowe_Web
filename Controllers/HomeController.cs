@@ -2,9 +2,11 @@ using Crossword;
 using CrosswordComponents;
 using Gry_Słownikowe.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
@@ -124,9 +126,14 @@ namespace Gry_Słownikowe.Controllers
             return View();
         }
 
+        public IActionResult KrzyzowkaMenu()
+        {
+            return View();
+        }
+
         public IActionResult Krzyzowka()
         {
-            ICrosswordModelReadOnly crosswordModel = _crosswordBuilder.GenerateCrossword(10).Get();
+            ICrosswordModelReadOnly crosswordModel = _crosswordBuilder.GenerateCrossword(1).Get();
             _memoryCache.Set("CrosswordModel", crosswordModel);
             return View(crosswordModel);
         }
@@ -144,6 +151,20 @@ namespace Gry_Słownikowe.Controllers
                 success = crossword[row, column].GuessLetter(letter);
             }
             return Json(new { success = success });
+        }
+
+        [HttpPost]
+        public IActionResult CheckIfFinished()
+        {
+            int time = 5;
+            bool success = false;
+            ICrosswordModelReadOnly crossword = _memoryCache.Get<ICrosswordModelReadOnly>("CrosswordModel");
+            if (crossword != null)
+            {
+                success = crossword.Letters == crossword.GetGuessedLetters();
+            }
+            var response = new { success = success, time = time };
+            return Json(response);
         }
 
         public IActionResult Privacy()

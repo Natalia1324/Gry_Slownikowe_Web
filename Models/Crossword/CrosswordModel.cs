@@ -31,15 +31,21 @@ namespace Crossword
 
         private int _wordsNumber = 0;
 
-        /**
-         * Ilość liter krzyżówki
-         */
-        private int _lettersTotal = 0;
         
         /**
          * Dostęp do ilości liter w krzyżowce
          */
-        public int Letters {  get { return _lettersTotal; } }
+        public int Letters {  
+            get {
+                int letters = 0;
+                for(int i = 0; i < _crossword.Size; i++)
+                {
+                    if (_crossword[i] != null)
+                        letters++;
+                }
+                return letters;
+            } 
+        }
         /**
          * Wiersze krzyżówki
          */
