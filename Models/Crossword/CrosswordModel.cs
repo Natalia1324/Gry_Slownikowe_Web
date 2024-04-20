@@ -122,6 +122,24 @@ namespace Crossword
             return Math.Round(_stopwatch.Elapsed.TotalMilliseconds, 2);
         }
 
+        public void StartTimer()
+        {
+            _stopwatch.Restart();
+        }
+
+        /**
+         * Otrzymaj czas rozwiązywania krzyżówki
+         */
+        public double GetTime()
+        {
+            double elapsedSeconds = _stopwatch.Elapsed.TotalSeconds;
+
+            double roundedSeconds = Math.Round(elapsedSeconds, 2);
+
+            return roundedSeconds;
+        }
+
+
         /**
          * Metoda wstawiająca słowo
          */

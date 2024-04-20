@@ -51,5 +51,15 @@ namespace Gry_Słownikowe.Models
          * Otrzymaj czas wygenerowania krzyżówki
          */
         public double GetGenerationTimeInMils();
+
+        /**
+         * Zacznij liczyć czas rozwiązywania
+         */
+        public void StartTimer();
+
+        /**
+         * Otrzymaj czas rozwiązywania krzyżówki
+         */
+        public double GetTime();
     }
 }

@@ -131,9 +131,11 @@ namespace Gry_Słownikowe.Controllers
             return View();
         }
 
-        public IActionResult Krzyzowka()
+        public IActionResult Krzyzowka(int crosswordSize = 10)
         {
-            ICrosswordModelReadOnly crosswordModel = _crosswordBuilder.GenerateCrossword(1).Get();
+            if (crosswordSize < 0) crosswordSize = 5;
+            ICrosswordModelReadOnly crosswordModel = _crosswordBuilder.GenerateCrossword(crosswordSize).Get();
+            crosswordModel.StartTimer();
             _memoryCache.Set("CrosswordModel", crosswordModel);
             return View(crosswordModel);
         }
@@ -156,15 +158,15 @@ namespace Gry_Słownikowe.Controllers
         [HttpPost]
         public IActionResult CheckIfFinished()
         {
-            int time = 5;
-            bool success = false;
             ICrosswordModelReadOnly crossword = _memoryCache.Get<ICrosswordModelReadOnly>("CrosswordModel");
-            if (crossword != null)
+            if (crossword != null && crossword.Letters == crossword.GetGuessedLetters())
             {
-                success = crossword.Letters == crossword.GetGuessedLetters();
+                return Json(new { success = true, time = crossword.GetTime() });
             }
-            var response = new { success = success, time = time };
-            return Json(response);
+            else
+            {
+                return Json(new { success = false, time = 0 });
+            }
         }
 
         public IActionResult Privacy()

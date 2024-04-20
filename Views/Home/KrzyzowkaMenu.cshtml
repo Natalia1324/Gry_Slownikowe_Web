@@ -2,6 +2,138 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    ViewData["Title"] = "Kreator krzyżówki";
 }
 
-<h1></h1>
+<style>
+    .main_container{
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        min-height: 100%;
+        display: flex;
+        row-gap: 10px;
+        flex-direction: column;
+    }
+
+    .header{
+        background-color: #b8dbd9;
+        border-radius: 30px;
+        text-align: center; /* Wyśrodkowanie zawartości w poziomie */
+        display: flex; /* Ustawienie na flex, aby umożliwić wyśrodkowanie zawartości w pionie */
+        width: 100%;
+        flex-direction: column;
+        justify-content: center; /* Wyśrodkowanie zawartości w poziomie */
+        align-content: center; /* Wyśrodkowanie zawartości w pionie */
+        row-gap: 15px;
+        padding: 30px;
+    }
+
+    .creator_container {
+        width: 100%;
+        background-color: #f4f4f9;
+        border-radius: 30px;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 15px;
+        justify-content: center;
+        align-content: center;
+        text-align: center;
+    }
+
+    .radio_button_container{
+        display: flex;
+        flex-direction: column;
+        row-gap: 15px;
+        justify-content: center; 
+        align-content: center;
+    }
+
+    button {
+        margin-left: auto;
+        margin-right: auto;
+        padding: 5px;
+        width: max-content;
+        border-radius: 5px;
+        border: 0.15vw solid #586f7c;
+        background-color: #b8dbd9;
+        min-width: 10%;
+    }
+
+    input, label{
+        cursor: pointer;
+    }
+
+    button:hover {
+        color: #f4f4f9;
+        border-color: #586f7c;
+    }
+</style>
+
+<main class="main_container">
+    <section class="header">
+        <h1>
+            Witaj w kreatorze krzyżówki!
+        </h1>
+    </section>
+
+    <section class="creator_container">
+        <h3>
+            Wybierz rozmiar i kliknij Start
+        </h3>
+
+        <div class="radio-item">
+            <input type="radio" name="options" id="option0" value=1 onclick="handleRadioChange(this)"> <label for="option0">1 słowo (testy)</label>
+        </div>
+
+        <div class="radio-item">
+            <input type="radio" name="options" id="option1" value=5 onclick="handleRadioChange(this)"> <label for="option1">5 słów</label>
+        </div>
+
+        <div class="radio-item">
+            <input type="radio" name="options" id="option1" value=10 onclick="handleRadioChange(this)" > <label for="option1">10 słów</label>
+        </div>
+
+        <div class="radio-item">
+            <input type="radio" name="options" id="option2" value=15 onclick="handleRadioChange(this)"> <label for="option2">15 słów</label>
+        </div>
+
+        <div class="radio-item">
+            <input type="radio" name="options" id="option3" value=20 onclick="handleRadioChange(this)"> <label for="option3">20 słów</label>
+        </div>
+        <div class="radio-item">
+            <button onclick="handleStart()">Start</button>
+        </div>
+    </section>
+    <section class="header">
+        Tutaj może jakiś opis wleci nw
+    </section>
+</main>
+
+<script>
+    function handleRadioChange(clickedRadio) {
+        var radios = document.getElementsByName('options');
+
+        for (var i = 0; i < radios.length; i++) {
+            if (radios[i] !== clickedRadio) {
+                radios[i].checked = false;
+            }
+        }
+    }
+
+    function handleStart() {
+        var selectedValue;
+        var radios = document.getElementsByName('options');
+
+        for (var i = 0; i < radios.length; i++) {
+            if (radios[i].checked) {
+                selectedValue = radios[i].value;
+                break;
+            }
+        }
+
+        // Przekierowanie z odpowiednią wartością int
+        window.location.href = '/Home/Krzyzowka?crosswordSize=' + selectedValue;
+    }
+</script>
