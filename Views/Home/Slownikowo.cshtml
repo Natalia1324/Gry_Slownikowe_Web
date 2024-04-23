@@ -67,10 +67,22 @@
         var wylosowaneSlowo = '@Model.WylosowaneSlowo';
         var znalezionoCzarnaLitere = false;
 
-        document.getElementById("sprawdzButton").addEventListener("click", function () {
+        document.getElementById("sprawdzButton").addEventListener("click", function () { 
+            check();
+        });
+
+        document.getElementById("wpisaneSlowo").addEventListener("keydown", function (event) {
+            if (event.keyCode === 13) { // Sprawdza, czy naciśnięty klawisz to Enter (keyCode 13)
+                event.preventDefault(); // Zapobiega domyślnej akcji klawisza Enter (np. wysyłanie formularza)
+                check(); // Wywołuje funkcję sprawdzającą słowo
+            }
+        });
+
+
+        function check() {
             var wpisaneSlowo = document.getElementById("wpisaneSlowo").value.toLowerCase();
             var wynik = document.getElementById("wynik");
-            
+
 
             var porownanie = porownaj(wpisaneSlowo, wylosowaneSlowo);
 
@@ -85,60 +97,59 @@
 
             sprawdz().then(function (result) {
 
-            if (result === false) {
-                wynik.textContent = "Takie slowo nie istnieje";
-            }
-
-            else if (porownanie === 0) {
-                wynik.textContent = "Gratulacje! Zgadłeś wylosowane słowo!";
-            } else {
-                if (porownanie < 0) {
-                    wyzejSlowa.push(wpisaneSlowo);
-                } else {
-                    nizejSlowa.push(wpisaneSlowo);
+                if (result === false) {
+                    wynik.textContent = "Takie slowo nie istnieje";
                 }
 
-                // Sortujemy tablice alfabetycznie
-                wyzejSlowa.sort();
-                nizejSlowa.sort();
+                else if (porownanie === 0) {
+                    wynik.textContent = "Gratulacje! Zgadłeś wylosowane słowo!";
+                } else {
+                    if (porownanie < 0) {
+                        wyzejSlowa.push(wpisaneSlowo);
+                    } else {
+                        nizejSlowa.push(wpisaneSlowo);
+                    }
 
-                // Aktualizujemy zawartość divów "wyzej" i "nizej"
-                var wyzejDiv = document.getElementById("wyzej");
-                var nizejDiv = document.getElementById("nizej");
+                    // Sortujemy tablice alfabetycznie
+                    wyzejSlowa.sort();
+                    nizejSlowa.sort();
 
-                wyzejDiv.innerHTML = "";
-                nizejDiv.innerHTML = "";
+                    // Aktualizujemy zawartość divów "wyzej" i "nizej"
+                    var wyzejDiv = document.getElementById("wyzej");
+                    var nizejDiv = document.getElementById("nizej");
 
-                wyzejSlowa.forEach(function (slowo) {
-                    var slowoDiv = document.createElement("div");
-                    slowoDiv.className = "wpisane-slowo";
-                    znalezionoCzarnaLitere = false;
-                    slowo.split('').forEach(function (litera, index) {
-                        var literaP = document.createElement("p");
-                        literaP.innerHTML = podzielSlowo(litera, index);
-                        slowoDiv.appendChild(literaP);
+                    wyzejDiv.innerHTML = "";
+                    nizejDiv.innerHTML = "";
+
+                    wyzejSlowa.forEach(function (slowo) {
+                        var slowoDiv = document.createElement("div");
+                        slowoDiv.className = "wpisane-slowo";
+                        znalezionoCzarnaLitere = false;
+                        slowo.split('').forEach(function (litera, index) {
+                            var literaP = document.createElement("p");
+                            literaP.innerHTML = podzielSlowo(litera, index);
+                            slowoDiv.appendChild(literaP);
+                        });
+                        wyzejDiv.appendChild(slowoDiv);
                     });
-                    wyzejDiv.appendChild(slowoDiv);
-                });
 
-                nizejSlowa.forEach(function (slowo) {
-                    var slowoDiv = document.createElement("div");
-                    slowoDiv.className = "wpisane-slowo";
-                    znalezionoCzarnaLitere = false;
-                    slowo.split('').forEach(function (litera, index) {
-                        var literaP = document.createElement("p");
-                        literaP.innerHTML = podzielSlowo(litera, index);
-                        slowoDiv.appendChild(literaP);
+                    nizejSlowa.forEach(function (slowo) {
+                        var slowoDiv = document.createElement("div");
+                        slowoDiv.className = "wpisane-slowo";
+                        znalezionoCzarnaLitere = false;
+                        slowo.split('').forEach(function (litera, index) {
+                            var literaP = document.createElement("p");
+                            literaP.innerHTML = podzielSlowo(litera, index);
+                            slowoDiv.appendChild(literaP);
+                        });
+                        nizejDiv.appendChild(slowoDiv);
                     });
-                    nizejDiv.appendChild(slowoDiv);
-                });
                 }
 
             }).catch(function (error) {
                 console.log("Wystąpił błąd: " + error);
             });
-
-        });
+        }
 
         function sprawdz() {
             return new Promise(function (resolve, reject) {

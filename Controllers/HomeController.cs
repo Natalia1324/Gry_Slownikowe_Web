@@ -11,6 +11,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
 
+
 namespace Gry_Słownikowe.Controllers
 {
     public class HomeController : Controller
@@ -21,7 +22,6 @@ namespace Gry_Słownikowe.Controllers
 
         private readonly CrosswordBuilder _crosswordBuilder;
 
-        private SlownikowoModel _smodel;
 
         public HomeController(ILogger<HomeController> logger, IMemoryCache memoryCache)
         {
@@ -80,14 +80,22 @@ namespace Gry_Słownikowe.Controllers
             return View(model);
         }
 
-        SlownikowoModel _slownikowoModel;
+
+        //znaki unicode
 
         [HttpGet]
         public IActionResult Slownikowo()
         {
-            SJP_API random = new SJP_API();
-            SJP_API api = new SJP_API("3D");
-            _slownikowoModel = new SlownikowoModel(random.getSlowo(), api);
+            SJP_API random;
+
+            do
+            {
+                random = new SJP_API();
+            } while (!random.getDopuszczalnosc());
+
+            SlownikowoModel _slownikowoModel = new(random.getSlowo());
+
+            Console.WriteLine(_slownikowoModel.WylosowaneSlowo);
             return View(_slownikowoModel);
         }
 
