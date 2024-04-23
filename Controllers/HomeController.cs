@@ -92,11 +92,15 @@ namespace Gry_Słownikowe.Controllers
         }
 
         [HttpPost]
-        public IActionResult Slownikowo(string slowo)
+        public IActionResult SprawdzSlowo(string wpisaneSlowo)
         {
-            SJP_API api = new SJP_API(slowo);
-           _slownikowoModel.changeApi(api);
-            return View(_slownikowoModel);
+            // Tutaj dodaj logikę sprawdzania słowa
+            SJP_API api = new SJP_API(wpisaneSlowo);
+
+            bool isCorrect = api.getDopuszczalnosc();
+
+            // Zwracamy wynik sprawdzenia w formie JSON
+            return Json(new { IsCorrect = isCorrect });
         }
 
         public IActionResult ZgadywankiMenu ()
