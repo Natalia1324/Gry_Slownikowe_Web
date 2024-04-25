@@ -23,15 +23,27 @@ namespace Crossword
          */
         private DynamicMatrix<CrosswordLetterModel> _crossword;
 
+        /**
+         * Obiekt do pomiaru czasu
+         */
         private Stopwatch _stopwatch;
 
         /**
          * Ilość słów w krzyżówce
          */
-
         private int _wordsNumber = 0;
 
-        
+
+        /**
+         * Hasło krzyżówkii
+         */
+        private string? _clueWord;
+
+        /**
+         * Definicja hasła krzyżówki
+         */
+        private string? _clueDefinition;
+
         /**
          * Dostęp do ilości liter w krzyżowce
          */
@@ -70,6 +82,22 @@ namespace Crossword
             {
                 return _wordsNumber;
             }
+        }
+
+        /**
+         * Dostęp do hasła krzyżówki
+         */
+        public string? ClueWord
+        {
+            get => _clueWord;
+        }
+
+        /**
+         * Dostęp do definicji hasła krzyżówki
+         */
+        public string? ClueDefinition
+        {
+            get => _clueDefinition;
         }
 
         /**
@@ -137,6 +165,15 @@ namespace Crossword
             double roundedSeconds = Math.Round(elapsedSeconds, 2);
 
             return roundedSeconds;
+        }
+
+
+        /**
+         * Metoda wstawiająca hasło krzyżówki
+         */
+        internal bool tryToInsertClueLetter(string word, string meaning)
+        {
+            throw new NotImplementedException("Try to insert clue letter method is not implemented yet");
         }
 
 

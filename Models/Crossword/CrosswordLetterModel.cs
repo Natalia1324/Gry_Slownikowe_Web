@@ -14,6 +14,8 @@
 
         private bool _isFirstLetter = false;
 
+        private bool _isClueLetter = false;
+
         /**
          * Konstruktor
          */
@@ -54,7 +56,30 @@
         public bool FirstLetter
         {
             get { return _isFirstLetter; }
-            set { _isFirstLetter = value; }
+            set {
+
+                if (_isClueLetter)
+                {
+                    throw new InvalidOperationException("First letter can not be clue letter");
+                }
+
+                _isFirstLetter = value; 
+            
+            }
+        }
+
+        public bool ClueLetter
+        {
+            get { return _isClueLetter; }
+            set {
+
+                if (_isFirstLetter)
+                {
+                    throw new InvalidOperationException("Clue letter can not be first letter");
+                }
+                _isClueLetter = value; 
+            
+            }
         }
 
         /**

@@ -38,6 +38,16 @@ namespace Gry_Słownikowe.Models
         public int Words { get;  }
 
         /**
+         * Dostęp do hasła krzyżówki
+         */
+        public string? ClueWord {  get; }
+
+        /**
+         * Dostęp do definicji hasła krzyżówki
+         */
+        public string? ClueDefinition {  get; }
+
+        /**
          * Dostęp do odczytu komórki
          */
         public CrosswordLetterModel this[int y, int x] { get; }
