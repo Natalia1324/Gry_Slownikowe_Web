@@ -68,6 +68,13 @@
             }
         }
 
+        public void ResetFirstOrClueLetter()
+        {
+            _isClueLetter = false;
+            _isFirstLetter = false;
+            _wordNumber = null;
+        }
+
         public bool ClueLetter
         {
             get { return _isClueLetter; }
