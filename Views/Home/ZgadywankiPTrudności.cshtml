@@ -1,7 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Poziom Trudności";
 }
+ @model Gry_Słownikowe.Models.ZgadywankiModel
 
+<!DOCTYPE html>
+<html lang="pl">
 <style>
     .con {
         display: flex;
@@ -39,7 +42,7 @@
 
 </style>
 
-
+<body>
 <div class="con">
     <div class="frame" id="ramkaPoziomu">
         <h1>Wybierz poziom trudności:</h1>
@@ -64,15 +67,68 @@
         <button id="przyciskSprawdz" onclick="sprawdz()">Sprawdź</button>
 
         <div id="klawiatura" style="margin-top: 10px;">
-            <button onclick="wybierzLitere('K')">K</button>
-            <button onclick="wybierzLitere('O')">O</button>
-            <button onclick="wybierzLitere('T')">T</button>
-            <button onclick="wybierzLitere('A')">A</button>
-        </div>
+            </div>
+
+            <script>
+                // Funkcja inicjująca klawiaturę
+                function inicjujKlawiature() {
+                    var slowo = document.getElementById('wylosowaneSlowo').value.toLowerCase(); // Pobieramy wylosowane słowo
+                    var unikalneLitery = [...new Set(slowo)]; // Usuwamy duplikaty liter
+                    var drugieSlowoInput = document.getElementById('drugieWylosowaneSlowo');
+                    var drugieSlowo = "";
+
+                    var klawiaturaDiv = document.getElementById('klawiatura');
+
+
+
+                    // Tworzymy przyciski dla każdej litery w słowie
+                    unikalneLitery.forEach(function (litera) {
+                        var button = document.createElement('button');
+                        button.textContent = litera.toUpperCase(); // Wielkie litery na przyciskach
+                        button.onclick = function () {
+                            wybierzLitere(litera);
+                        };
+                        klawiaturaDiv.appendChild(button); 
+                    });
+
+                    for (var i = 0; i < slowo.length; i++) {
+                        if (slowo[i].match(/[a-zA-Z]/)) { // Sprawdzamy czy litera jest alfabetem
+                            drugieSlowo += slowo[i]; // Dodajemy literę do drugiego słowa
+                        }
+                    }
+
+                    // Jeśli drugie słowo jest takie samo jak pierwsze(rozwijane)
+                    if (drugieSlowo === slowo) {
+                       
+                            drugieSlowo = losujSłowoZLiterami(pierwszeSlowo);
+                       
+                    }
+
+
+                    drugieSlowoInput.value = drugieSlowo;
+                }
+
+                // Wywołujemy funkcję inicjującą klawiaturę po załadowaniu strony
+                document.addEventListener('DOMContentLoaded', inicjujKlawiature);
+
+                // Funkcja wybierająca literę
+                function wybierzLitere(litera) {
+                    wybraneLitery.push(litera); // Dodajemy wybraną literę do tablicy wybranych liter
+                    aktualizujWpisywaneSłowo(); // Aktualizujemy wpisywane słowo
+                }
+
+                // Funkcja aktualizująca wpisywane słowo
+                function aktualizujWpisywaneSłowo() {
+                    var wpisywaneSłowo = document.getElementById('wpisywaneSłowo');
+                    wpisywaneSłowo.value = wybraneLitery.join('');
+                }
+            </script>
+
 
 
         <script>
             var wybraneLitery = [];
+                var text = '@Html.Raw(Model.slowo)';
 
             function wybierzLitere(litera) {
                 wybraneLitery.push(litera);
@@ -83,18 +139,44 @@
                 var wpisywaneSłowo = document.getElementById('wpisywaneSłowo');
                 wpisywaneSłowo.value = wybraneLitery.join('');
             }
+
+                // Funkcja sprawdzająca, czy słowo zawiera tylko litery z pierwszego słowa
+                function sprawdzCzyZawieraTylkoLitery(slowo) {
+                    var slowo1 = document.getElementById('wylosowaneSlowo').value.toLowerCase();
+                    var slowo2 = slowo.toLowerCase();
+                    for (var i = 0; i < slowo2.length; i++) {
+                        if (!slowo1.includes(slowo2[i])) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+
+               
+
         </script>
-
-
 
         <div id="ramkaPonumerowanychSlow" style="margin-top: 20px;">
             <h2 class="tytul">Słowa do odgadnięcia:</h2>
 
+                <!-- Pierwsze wylosowane słowo -->
+            <div class="slowo" id="slowo1">
+                    <input type="text" id="wylosowaneSlowo" value="@Html.Raw(Model.slowo)" readonly>
+                </div>
+
+                <!-- Drugie wylosowane słowo -->
+                <div class="slowo" id="slowo2">
+                    <input type="text" id="drugieWylosowaneSlowo" readonly>
+                </div>
+
         </div>
+
+
         <div id="error" class="error" style="display: none;">Błędne słowo!</div>
     </div>
 </div>
 
+ 
 
 <script>
     var wybraneLitery = [];
@@ -163,5 +245,6 @@
 
 
 </script>
-
+</body>
+</html>
 
