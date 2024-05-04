@@ -63,7 +63,7 @@ namespace Gry_Słownikowe.Models
                         // Wczytywanie zawartości strony
                         htmlDoc.Load(response.GetResponseStream());
 
-                        slowo = getWord(htmlDoc.DocumentNode.InnerText);
+                        
 
                         string input = getDefinitions(htmlDoc.DocumentNode.InnerText);
 
@@ -153,7 +153,7 @@ namespace Gry_Słownikowe.Models
             string newinput = removeComments(input);
             //sprawdzenie czy slowo jest dopuszczalne
             getInformation(newinput);
-
+            slowo = getWord(newinput);
             //slowa klucze po ktorych szukam definicji
             string startWord = "znaczenie";
             string endWord1 = "POWIĄZANE";

@@ -4,11 +4,14 @@
     int crosswordColumns = Model.Columns;
     int crosswordRows = Model.Rows;
     int wordsCount = Model.Words;
+    int letters = Model.Letters;
+    int words = Model.Words;
     double generationTime = Model.GetGenerationTimeInMils();
     ViewData["Title"] = "Krzyżówki";
 }
 
 <style>
+
     .cell {
         font-size: 1.5vw;
         font-weight: bold;
@@ -18,18 +21,16 @@
         display: flex; /* Ustawienie na flex, aby umożliwić wyśrodkowanie zawartości w pionie */
         align-items: center; /* Wyśrodkowanie zawartości w pionie */
         justify-content: center; /* Wyśrodkowanie zawartości w poziomie */
-        border: 0.15vw solid black; /* Obramowanie */
+        border: 0.15vw solid #586f7c; /* Obramowanie */
         background-color: #b8dbd9; /* Kolor tła */
         border-radius: 15%;
     }
 
     .cell:not(.guessed-cell):not(.first_letter):hover {
-        border-color: #586f7c;
         background-color: #f4f4f9;
     }
 
     .first_letter:not(.guessed-cell):hover {
-        border-color: #586f7c;
         background-color: #b8dbd9;
         color: #f4f4f9;
     }
@@ -63,49 +64,132 @@
         gap: 0.15vw; /* Odstęp między komórkami */
         justify-content: center; /* Wyśrodkowanie zawartości w poziomie */
         align-content: center; /* Wyśrodkowanie zawartości w pionie */
+        z-index: 1;
+        top: 0;
+        left: 0;
     }
 
     .header{
+        width: 100%;
+        position: relative;
+    }
+
+    .start_container{
+        background-color: #b8dbd9;
+        border-radius: 30px;
         text-align: center; /* Wyśrodkowanie zawartości w poziomie */
         display: flex; /* Ustawienie na flex, aby umożliwić wyśrodkowanie zawartości w pionie */
         width: 100%;
         flex-direction: column;
         justify-content: center; /* Wyśrodkowanie zawartości w poziomie */
         align-content: center; /* Wyśrodkowanie zawartości w pionie */
+        row-gap: 15px;
+        padding: 30px;
     }
 
     .main_container{
         padding: 0;
         margin: 0;
         width: 100%;
+        min-height: 100%;
         display: flex;
-        row-gap: 20px;
+        row-gap: 10px;
         flex-direction: column;
+
     }
 
     .descriptions_container{
         width: 100%;
+        background-color: #b8dbd9;
+        border-radius: 30px;
+        padding: 30px;
     }
 
     .crossword_container{
         width: 100%;
+        background-color: #f4f4f9;
+        border-radius: 30px;
+        padding: 30px;
+        overflow-x: auto;
+        overflow-y: auto;
     }
+
+    .result_container{
+        width: 100%;
+        min-height: 100%;
+        top: 0;
+        left: 0;
+        position: absolute;
+        background-color: #b8dbd9;
+        border-radius: 30px;
+        row-gap: 10px;
+        z-index: 2;
+        text-align: center;
+        display: flex; 
+        justify-content: center;
+        flex-direction: column;
+        align-content: center;
+        transition: 0.3s ease;
+        padding: 30px;
+    }
+
+    .slide{
+        left: -100vw;  
+    }
+
+    button{
+        margin-left: auto;
+        margin-right: auto;
+        padding: 5px;
+        width: max-content;
+        border-radius: 5px;
+        border: 0.15vw solid #586f7c;
+        background-color: #f4f4f9;
+    }
+
+    a {
+        text-decoration: none; /* Usuwa podkreślenie */
+        color: inherit;
+        cursor: pointer;
+    }
+
+    a:hover{
+        color: #f4f4f9;
+    }
+
+    button:hover {
+        border-color: #f4f4f9;
+    }
+    
 </style>
 
 <main class="main_container">
     <section class="header">
-        <h1>
-            Rozwiążmy krzyżówkę!
-        </h1>
-        <h3>
-            Czas generacji: @generationTime ms
-        </h3>
-        <h3>
-            Słów: @wordsCount
-        </h3>
+        <div class="start_container">
+            <h1>
+                Rozwiążmy krzyżówkę!
+            </h1>
+            <h3>
+                Czas generacji: @generationTime ms
+            </h3>
+            <h3>
+                <a href="#defnicje">
+                    Do defincji...
+                </a>
+            </h3> 
+            <button onclick ="newCrossword()">Inna krzyżówka</button>
+        </div>
+
+        <div id="result_div" class="result_container slide">
+            <h1>Gratulacje!</h1>
+            <h3>Twój wynik: @letters odgadniętych liter! (@words słów)</h3>
+            <h3 id="time_h"></h3>
+            <button onclick="window.location.href='@Url.Action("KrzyzowkaMenu", "Home")'">Powrót do menu</button>
+        </div>
     </section>
 
     <section class="crossword_container">
+
         <div class="grid_container">
             @for (int y = 0; y < crosswordRows; y++)
             {
@@ -140,7 +224,7 @@
 
     <section class="descriptions_container">
 
-        <h2>
+        <h2 id="defnicje">
             Definicje
         </h2>
 
@@ -157,32 +241,50 @@
 
 <script>
 
+    function newCrossword(){
+        let result = confirm("Czy na pewno chcesz zmienić krzyżówkę?");
+        if (result === true) {
+            location.reload();
+        } 
+    }
+
     function restoreNumber(inputId, wordNumber){
-        var input = document.getElementById(inputId);
-        var div = document.getElementById("div_" + inputId);
+        let input = document.getElementById(inputId);
         if (!input.disabled) {
             input.value = wordNumber;
         }
     }
 
     function removeNumber(inputId) {
-        var input = document.getElementById(inputId);
+        let input = document.getElementById(inputId);
         input.value = "";
     }
 
-    function handleWriteFirstLetter(inputId, wordNumber) {
-        if (!handleWrite(inputId)) {
-            var input = document.getElementById(inputId);
-            input.value = wordNumber;
-        }
+    function checkIfIsFinished() {
+        $.ajax({
+            url: '/Home/CheckIfFinished',
+            type: 'POST',
+            data: {},
+            success: function (response) {
+                if (response.success) {
+                    let resultDiv = document.getElementById("result_div");
+                    let timeH = document.getElementById("time_h");
+                    resultDiv.classList.remove("slide");
+                    timeH.innerText = "Czas rozwiązania: " + response.time + " sekund(y)";
+                } 
+            },
+            error: function (xhr, status, error) {
+                console.error('Błąd:', error);
+            }
+        });
     }
 
     function handleWrite(inputId, wordNumber) {
-        var input = document.getElementById(inputId);
-        var letter = input.value;
-        var coords = inputId.split("_");
-        var row = coords[0];
-        var column = coords[1];
+        let input = document.getElementById(inputId);
+        let letter = input.value;
+        let coords = inputId.split("_");
+        let row = coords[0];
+        let column = coords[1];
         $.ajax({
             url: '/Home/GuessLetter',
             type: 'POST',
@@ -190,9 +292,14 @@
             success: function (response) {
                 if (response.success) {
                     input.setAttribute("disabled", true);
-                    var div = document.getElementById("div_" + inputId);
-                    div.style.backgroundColor = "lightgreen";
+                    let div = document.getElementById("div_" + inputId);
                     div.classList.add(".guessed-cell");
+                    if(wordNumber == undefined){
+                        div.style.backgroundColor = "#badbb8";
+                    }else{
+                        div.style.backgroundColor = "#ccdbb8";
+                    }
+                    checkIfIsFinished();
                 } else {
                     if (wordNumber == undefined) {
                         input.value = "";               

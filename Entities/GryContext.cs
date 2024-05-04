@@ -5,11 +5,12 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
+
 namespace Gry_Słownikowe.Entities
 {
     public class GryContext : DbContext
     {
-       
+
         public GryContext(DbContextOptions<GryContext> options) : base(options)
         {
 
@@ -23,7 +24,7 @@ namespace Gry_Słownikowe.Entities
             // DbContextOptionsBuilder.EnableSensitiveDataLogging();
 
         }
-       
+
         public DbSet<User>          User                { get; set; }
         public DbSet<Krzyzowki>     Krzyzowki           { get; set; }
         public DbSet<Wisielec>      Wisielecs           { get; set; }
@@ -202,7 +203,7 @@ namespace Gry_Słownikowe.Entities
             //     Nick = "User3",
             //     Login = "user3@example.com",
             //     Password = "hashed_password3",
-            //     Ranks = 69,
+            //     
                  
             // }
             

@@ -2,12 +2,15 @@ using Crossword;
 using CrosswordComponents;
 using Gry_Słownikowe.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
+
 
 namespace Gry_Słownikowe.Controllers
 {
@@ -19,7 +22,6 @@ namespace Gry_Słownikowe.Controllers
 
         private readonly CrosswordBuilder _crosswordBuilder;
 
-        private SlownikowoModel _smodel;
 
         public HomeController(ILogger<HomeController> logger, IMemoryCache memoryCache)
         {
@@ -78,23 +80,35 @@ namespace Gry_Słownikowe.Controllers
             return View(model);
         }
 
-        SlownikowoModel _slownikowoModel;
+
+        //znaki unicode
 
         [HttpGet]
         public IActionResult Slownikowo()
         {
-            SJP_API random = new SJP_API();
-            SJP_API api = new SJP_API("3D");
-            _slownikowoModel = new SlownikowoModel(random.getSlowo(), api);
+            SJP_API random;
+
+            do
+            {
+                random = new SJP_API();
+            } while (!random.getDopuszczalnosc());
+
+            SlownikowoModel _slownikowoModel = new(random.getSlowo());
+
+            Console.WriteLine(_slownikowoModel.WylosowaneSlowo);
             return View(_slownikowoModel);
         }
 
         [HttpPost]
-        public IActionResult Slownikowo(string slowo)
+        public IActionResult SprawdzSlowo(string wpisaneSlowo)
         {
-            SJP_API api = new SJP_API(slowo);
-           _slownikowoModel.changeApi(api);
-            return View(_slownikowoModel);
+            // Tutaj dodaj logikę sprawdzania słowa
+            SJP_API api = new SJP_API(wpisaneSlowo);
+
+            bool isCorrect = api.getDopuszczalnosc();
+
+            // Zwracamy wynik sprawdzenia w formie JSON
+            return Json(new { IsCorrect = isCorrect });
         }
 
         public IActionResult ZgadywankiMenu ()
@@ -124,9 +138,16 @@ namespace Gry_Słownikowe.Controllers
             return View();
         }
 
-        public IActionResult Krzyzowka()
+        public IActionResult KrzyzowkaMenu()
         {
-            ICrosswordModelReadOnly crosswordModel = _crosswordBuilder.GenerateCrossword(10).Get();
+            return View();
+        }
+
+        public IActionResult Krzyzowka(int crosswordSize = 10)
+        {
+            if (crosswordSize < 0) crosswordSize = 5;
+            ICrosswordModelReadOnly crosswordModel = _crosswordBuilder.GenerateCrossword(crosswordSize).Get();
+            crosswordModel.StartTimer();
             _memoryCache.Set("CrosswordModel", crosswordModel);
             return View(crosswordModel);
         }
@@ -144,6 +165,20 @@ namespace Gry_Słownikowe.Controllers
                 success = crossword[row, column].GuessLetter(letter);
             }
             return Json(new { success = success });
+        }
+
+        [HttpPost]
+        public IActionResult CheckIfFinished()
+        {
+            ICrosswordModelReadOnly crossword = _memoryCache.Get<ICrosswordModelReadOnly>("CrosswordModel");
+            if (crossword != null && crossword.Letters == crossword.GetGuessedLetters())
+            {
+                return Json(new { success = true, time = crossword.GetTime() });
+            }
+            else
+            {
+                return Json(new { success = false, time = 0 });
+            }
         }
 
         public IActionResult Privacy()
