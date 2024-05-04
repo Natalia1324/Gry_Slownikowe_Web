@@ -1,57 +1,208 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model Gry_Słownikowe.Models.SlownikowoModel
+
 @{
     ViewData["Title"] = "Slownikowo";
 }
+
+@model Gry_Słownikowe.Models.SlownikowoModel
+
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Gra: Zgadnij Słowo</title>
-</head>
-<body>
-    <h1>Witaj w grze: Zgadnij Słowo!</h1>
-    <p>Wpisz słowo (lub 'q' aby zakończyć):</p>
-    <input type="text" id="wpisaneSlowo">
-    <button type="button" id="sprawdzButton">Sprawdź</button>
-    <p id="wynik">kozak</p>
-        
-    <script type="text/javascript">
-        document.getElementById("sprawdzButton").addEventListener("click", function () {
-            //sprawdzSlowo();
-            document.getElementById("wynik").value = "1121";
-        });
-        // document.addEventListener("DOMContentLoaded", function () {
-        //     checkWord();
-        //     console.log("wywołano event listenera");
-        //}
-        
-        // Funkcja sprawdzająca relację alfabetyczną między słowami
-        function porownaj(slowo1, slowo2) {
-            return slowo1.localeCompare(slowo2, 'pl', { sensitivity: 'base' });
+    <style>
+        #container {
+            text-align: center;
+            margin-top: 100px;
         }
 
-        // Funkcja sprawdzająca wprowadzone słowo
-        function sprawdzSlowo() {            
+        #wpisaneSlowo {
+            margin-bottom: 10px;
+        }
+
+        #wyzej, #nizej {
+            margin-top: 20px;
+        }
+
+        .wpisane-slowo {
+            margin-bottom: 5px;
+        }
+
+        .zielona-litra {
+            color: green;
+        }
+
+        .czarna-litra {
+            color: black;
+        }
+
+        .wpisane-slowo p {
+            display: inline-block;
+            margin: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Witaj w grze: Zgadnij Słowo!</h1>
+        <p>Wpisz słowo (lub 'q' aby zakończyć):</p>
+        <div id="wyzej"></div>
+        <input type="text" id="wpisaneSlowo">
+        <button type="button" id="sprawdzButton">Sprawdź</button>
+        <div id="wynik"></div>
+        <div id="nizej"></div> 
+        </div>
+
+    <script type="text/javascript">
+
+
+
+
+        var wyzejSlowa = [];
+        var nizejSlowa = [];
+        var wylosowaneSlowo = '@Model.WylosowaneSlowo';
+        var znalezionoCzarnaLitere = false;
+
+        document.getElementById("sprawdzButton").addEventListener("click", function () { 
+            check();
+        });
+
+        document.getElementById("wpisaneSlowo").addEventListener("keydown", function (event) {
+            if (event.keyCode === 13) { // Sprawdza, czy naciśnięty klawisz to Enter (keyCode 13)
+                event.preventDefault(); // Zapobiega domyślnej akcji klawisza Enter (np. wysyłanie formularza)
+                check(); // Wywołuje funkcję sprawdzającą słowo
+            }
+        });
+
+
+        function check() {
             var wpisaneSlowo = document.getElementById("wpisaneSlowo").value.toLowerCase();
             var wynik = document.getElementById("wynik");
 
-            
+
+            var porownanie = porownaj(wpisaneSlowo, wylosowaneSlowo);
+
+            wynik.textContent = "";
 
             if (wpisaneSlowo === 'q') {
-                wynik.textContent = "Koniec gry. Wylosowane słowo to: " + @Model.WylosowaneSlowo;
+                wynik.textContent = "Koniec gry. Wylosowane słowo to: " + '@Model.WylosowaneSlowo';
                 return;
             }
 
-            if (wpisaneSlowo === @Model.WylosowaneSlowo) {
-                wynik.textContent = "Gratulacje! Zgadłeś wylosowane słowo!";
-            } else if (wpisaneSlowo < @Model.WylosowaneSlowo) {
-                wynik.textContent = "Podane słowo znajduje się niżej w alfabecie.";
-            } else {
-                wynik.textContent = "Podane słowo znajduje się wyżej w alfabecie.";
-            }
+            console.log('@Model.WylosowaneSlowo');
+
+            sprawdz().then(function (result) {
+
+                if (result === false) {
+                    wynik.textContent = "Takie slowo nie istnieje";
+                }
+
+                else if (porownanie === 0) {
+                    wynik.textContent = "Gratulacje! Zgadłeś wylosowane słowo!";
+                } else {
+                    if (porownanie < 0) {
+                        wyzejSlowa.push(wpisaneSlowo);
+                    } else {
+                        nizejSlowa.push(wpisaneSlowo);
+                    }
+
+                    // Sortujemy tablice alfabetycznie
+                    wyzejSlowa.sort();
+                    nizejSlowa.sort();
+
+                    // Aktualizujemy zawartość divów "wyzej" i "nizej"
+                    var wyzejDiv = document.getElementById("wyzej");
+                    var nizejDiv = document.getElementById("nizej");
+
+                    wyzejDiv.innerHTML = "";
+                    nizejDiv.innerHTML = "";
+
+                    wyzejSlowa.forEach(function (slowo) {
+                        var slowoDiv = document.createElement("div");
+                        slowoDiv.className = "wpisane-slowo";
+                        znalezionoCzarnaLitere = false;
+                        slowo.split('').forEach(function (litera, index) {
+                            var literaP = document.createElement("p");
+                            literaP.innerHTML = podzielSlowo(litera, index);
+                            slowoDiv.appendChild(literaP);
+                        });
+                        wyzejDiv.appendChild(slowoDiv);
+                    });
+
+                    nizejSlowa.forEach(function (slowo) {
+                        var slowoDiv = document.createElement("div");
+                        slowoDiv.className = "wpisane-slowo";
+                        znalezionoCzarnaLitere = false;
+                        slowo.split('').forEach(function (litera, index) {
+                            var literaP = document.createElement("p");
+                            literaP.innerHTML = podzielSlowo(litera, index);
+                            slowoDiv.appendChild(literaP);
+                        });
+                        nizejDiv.appendChild(slowoDiv);
+                    });
+                }
+
+            }).catch(function (error) {
+                console.log("Wystąpił błąd: " + error);
+            });
         }
+
+        function sprawdz() {
+            return new Promise(function (resolve, reject) {
+                var wpisaneSlowo = document.getElementById("wpisaneSlowo").value.toLowerCase();
+                //console.log("Jestem w sprawdzeniu ");
+                if (wpisaneSlowo.trim() !== "") {
+                    $.ajax({
+                        url: '@Url.Action("SprawdzSlowo", "Home")',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { wpisaneSlowo: wpisaneSlowo },
+                        success: function (response) {
+                            if (response.isCorrect) {
+                                // Jeśli słowo jest poprawne, wyświetlamy odpowiednią informację na stronie
+                                //console.log("slowo jest");
+                                resolve(true);
+                            } else {
+                                // Jeśli słowo jest niepoprawne, wyświetlamy inną informację
+                                //console.log("slowa nie ma");
+                                resolve(false);
+                            }
+                        },
+                        error: function () {
+                            // Obsługa błędu AJAX
+                            console.log("Wystąpił błąd podczas wysyłania żądania AJAX.");
+                            reject(false);
+                        }
+                    });
+                } else {
+                    resolve(false);
+                }
+            });
+        }
+
+        function porownaj(slowo1, slowo2) {
+            return slowo1.localeCompare(slowo2, 'pl', { sensitivity: 'base', localeMatcher: 'best fit' });
+        }
+        
+
+        function podzielSlowo(litera, index) {
+            var wynik = '';
+            console.log(!znalezionoCzarnaLitere);
+            console.log(wylosowaneSlowo[index] === litera);
+            console.log(wylosowaneSlowo[index] + litera);
+            if (!znalezionoCzarnaLitere && wylosowaneSlowo[index] === litera) {
+                wynik += '<span class="zielona-litra">' + litera + '</span>';
+            } else {
+                wynik += '<span class="czarna-litra">' + litera + '</span>';
+                znalezionoCzarnaLitere = true;
+            }
+            return wynik;
+        }
+
 
 </script>
 </body>

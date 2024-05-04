@@ -68,7 +68,7 @@ namespace Gry_Słownikowe.Controllers
                 {
                     znaczenia.Clear();
                 }
-                SJP_API api = new SJP_API();
+                SJP_API api = new SJP_API(); 
                 slowo = api.getSlowo();
                 znaczenia= api.getZnaczenia();
 
@@ -111,16 +111,28 @@ namespace Gry_Słownikowe.Controllers
             return Json(new { IsCorrect = isCorrect });
         }
 
+        public IActionResult ZgadywankiPTrudności()
+        {
+            string slowo = "";
+            SJP_API api = new SJP_API();
+            slowo = api.getSlowo();
+            string polskieZnaki = HttpUtility.HtmlEncode(slowo);
+
+            ZgadywankiModel model = new ZgadywankiModel(polskieZnaki);
+            return View(model);
+        }
+
+
         public IActionResult ZgadywankiMenu ()
         {
 
             return View();
         }
 
-        public IActionResult ZgadywankiPTrudności()
-        {
-            return View();
-        }
+       // public IActionResult ZgadywankiPTrudności()
+       // {
+        //    return View();
+       // }
 
         public IActionResult ZgadywankiSlowotok(string poziom)
         {
