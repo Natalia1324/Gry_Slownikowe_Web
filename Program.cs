@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using Gry_S³ownikowe.Entities;
+using Gry_Slownikowe.Entities;
 using Microsoft.Extensions.Configuration;
 
 

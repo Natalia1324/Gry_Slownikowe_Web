@@ -1,6 +1,6 @@
 using Crossword;
 using CrosswordComponents;
-using Gry_Słownikowe.Models;
+using Gry_Slownikowe.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Memory;
@@ -12,7 +12,7 @@ using System.Text.Json.Serialization;
 using System.Web;
 
 
-namespace Gry_Słownikowe.Controllers
+namespace Gry_Slownikowe.Controllers
 {
     public class HomeController : Controller
     {

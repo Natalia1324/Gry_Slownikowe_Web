@@ -1,7 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System.Net;
 
-namespace Gry_Słownikowe.Models
+namespace Gry_Slownikowe.Models
 {
     public class SJP_API
     {

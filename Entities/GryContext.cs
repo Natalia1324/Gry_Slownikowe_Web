@@ -1,4 +1,4 @@
-﻿using Gry_Słownikowe.Entions;
+﻿using Gry_Slownikowe.Entions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 
 
-namespace Gry_Słownikowe.Entities
+namespace Gry_Slownikowe.Entities
 {
     public class GryContext : DbContext
     {
