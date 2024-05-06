@@ -1,5 +1,12 @@
 ﻿using HtmlAgilityPack;
 using System.Net;
+using System.Diagnostics;
+using System.Text;
+using System.Web;
+using System;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Gry_Slownikowe.Models
 {
@@ -63,9 +70,10 @@ namespace Gry_Slownikowe.Models
                         // Wczytywanie zawartości strony
                         htmlDoc.Load(response.GetResponseStream());
 
-                        
 
+                        
                         string input = getDefinitions(htmlDoc.DocumentNode.InnerText);
+                        
 
                         if (input != null)
                         {
@@ -112,6 +120,7 @@ namespace Gry_Slownikowe.Models
 
         private string getWord(string input)
         {
+            Console.OutputEncoding = Encoding.UTF8;
             string startWord = "sprawdź";
             string endWord = "niedopuszczalne";
             string endWord2 = "dopuszczalne";
@@ -120,14 +129,51 @@ namespace Gry_Slownikowe.Models
             int startIndex = input.IndexOf(startWord, firstIndex + 1); // Drugie wystąpienie, szukamy od indeksu po pierwszym wystąpieniu + 1
             int endIndex = input.IndexOf(endWord);
             if (endIndex == -1) endIndex = input.IndexOf(endWord2);
-
+            
             if (startIndex != -1 && endIndex != -1)
             {
                 //zwroc definicje
+
+                //Console.WriteLine(input.Substring(startIndex + 13, endIndex - startIndex - 14));
+                //Console.WriteLine(input);
+                //Console.WriteLine(input.Substring(startIndex + 13, endIndex - startIndex - 14));
+                //var temp = HttpUtility.HtmlEncode(input);
+                //var temp2 = temp.Substring(startIndex + 13, endIndex - startIndex - 14);
+                //Console.WriteLine("HERE IS THE SHIT");
+                //Console.WriteLine(HttpUtility.HtmlDecode(temp2));
+                Console.WriteLine(CustomSubstring(input, startIndex + 13, endIndex - startIndex - 14));
+                //return CustomSubstring(input, startIndex + 13, endIndex - startIndex - 14);
                 return input.Substring(startIndex + 13, endIndex - startIndex - 14);
             }
             else return null;
         }
+        public string CustomSubstring(string text, int startIndex, int endIndex)
+        {
+            Console.WriteLine(text);
+            // Sprawdzamy, czy indeksy są poprawne
+            if (startIndex < 0)
+            {
+                startIndex = 0;
+            }
+            if (endIndex > text.Length)
+            {
+                endIndex = text.Length;
+            }
+
+            // Inicjalizujemy zmienną przechowującą wynik
+            string result = "";
+
+            // Pobieramy podciąg tekstu pomiędzy indeksami
+            for (int i = startIndex; i < endIndex; i++)
+            {
+                Console.WriteLine(text[i]);
+                result += text[i];
+            }
+
+            // Zwracamy wynik
+            return result;
+        }
+
 
         private string removeComments(string input)
         {

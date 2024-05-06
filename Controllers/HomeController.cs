@@ -39,23 +39,6 @@ namespace Gry_Slownikowe.Controllers
         }
         public IActionResult MainMenu()
         {
-            //SJP_API api = new SJP_API("półlok");
-            //Console.WriteLine(api.getCzyIstnieje());
-            //Console.WriteLine(api.getDopuszczalnosc());
-            //Console.WriteLine(api.getSlowo());
-            //foreach (var def in api.getZnaczenia())
-            //{
-            //    Console.WriteLine(def);
-            //}
-
-            //SJP_API api2 = new SJP_API();
-            //Console.WriteLine(api2.getCzyIstnieje());
-            //Console.WriteLine(api2.getDopuszczalnosc());
-            //Console.WriteLine(api2.getSlowo());
-            //foreach (var def in api2.getZnaczenia())
-            //{
-            //    Console.WriteLine(def);
-            //}
             return View();
         }
         public IActionResult Wordle()
@@ -93,8 +76,11 @@ namespace Gry_Slownikowe.Controllers
                 random = new SJP_API();
             } while (!random.getDopuszczalnosc());
 
+            //SlownikowoModel _slownikowoModel = new(random.getSlowo());
+            //random = new SJP_API("żółć");
+            
+            //string slowo = HttpUtility.HtmlEncode(random.getSlowo());
             SlownikowoModel _slownikowoModel = new(random.getSlowo());
-
             Console.WriteLine(_slownikowoModel.WylosowaneSlowo);
             return View(_slownikowoModel);
         }

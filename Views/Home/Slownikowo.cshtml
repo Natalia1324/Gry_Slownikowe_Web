@@ -12,11 +12,54 @@
 <html>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <title>Gra: Zgadnij Słowo</title>
+    <title>Slownikowo</title>
+
     <style>
+
+        body {
+            background-color: #212529;
+        }
+
+        footer{
+            background-color: white
+        }
+        .kolo {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-bottom: 5px;
+        }
+
+        .szare {
+            background-color: gray;
+        }
+
+        .zolte {
+            background-color: #DDA448;
+        }
+
+        .zielone {
+            background-color: green;
+        }
+
+        .czerwone {
+            background-color: #BB342F;
+        }
+
         #container {
+            font-family: Helvetica;
+            display: flex; 
+            align-items: center;
+        }
+        #maingame {
+            color: #F7F7FF;
+            flex: 1;
             text-align: center;
             margin-top: 100px;
+        }
+
+        #circles{
+            margin-left: 20px;
         }
 
         #wpisaneSlowo {
@@ -27,16 +70,12 @@
             margin-top: 20px;
         }
 
-        .wpisane-slowo {
-            margin-bottom: 5px;
-        }
-
         .zielona-litra {
             color: green;
         }
 
         .czarna-litra {
-            color: black;
+            color: #F7F7FF;
         }
 
         .wpisane-slowo p {
@@ -46,83 +85,130 @@
 
     </style>
 </head>
+
 <body>
     <div id="container">
-        <h1>Witaj w grze: Zgadnij Słowo!</h1>
-        <p>Wpisz słowo (lub 'q' aby zakończyć):</p>
-        <div id="wyzej"></div>
-        <input type="text" id="wpisaneSlowo">
-        <button type="button" id="sprawdzButton">Sprawdź</button>
-        <div id="wynik"></div>
-        <div id="nizej"></div> 
+        <div id="circles">
+            <div class="kolo szare"></div>
+            <div class="kolo szare"></div>
+            <div class="kolo szare"></div>
+            <div class="kolo szare"></div>
+            <div class="kolo szare"></div>
+            <div class="kolo szare"></div>
+            <div class="kolo szare"></div>
+            <div class="kolo szare"></div>
+            <div class="kolo szare"></div>
+            <div class="kolo szare"></div>
         </div>
 
+        <div id="maingame">
+            <meta charset="UTF-8">
+            <h1 style="font-size: 50px">Słownikowo</h1>
+            <p>Wpisz słowo (lub 'q' aby zakończyć):</p>
+            <div id="wyzej" style=" font-weight: 600"></div>
+            <input type="text" id="wpisaneSlowo">
+            @* <div id="debug"></div> *@
+            <div id="wynik" style="font-weight: 600"></div>
+            <div id="nizej" style="font-weight: 600"></div>
+        </div>
+
+        
+    </div>
     <script type="text/javascript">
-
-
-
-
+       
+        //kontenery słów
         var wyzejSlowa = [];
         var nizejSlowa = [];
+        //pobranie wylosowanego słowa
         var wylosowaneSlowo = '@Model.WylosowaneSlowo';
+        //przekształcenie go na Raw, by zapobiec problemom ze znakami diakrytycznymi
+        var text = @Html.Raw(Json.Serialize(@Model.WylosowaneSlowo));
+
+        //zmienna globalna
         var znalezionoCzarnaLitere = false;
 
-        document.getElementById("sprawdzButton").addEventListener("click", function () { 
-            check();
-        });
+        //zapis do kontenera debug
+        //var debug = document.getElementById("debug");
+        //debug.textContent = text;
 
+        //zmienna globalna, liczba prób
+        var liczbaProb = 0;
+
+        //koła - znaczniki prób
+        var kola = document.querySelectorAll('.kolo');
+
+        //nasłuchiwacz kliknięcia entera
         document.getElementById("wpisaneSlowo").addEventListener("keydown", function (event) {
-            if (event.keyCode === 13) { // Sprawdza, czy naciśnięty klawisz to Enter (keyCode 13)
-                event.preventDefault(); // Zapobiega domyślnej akcji klawisza Enter (np. wysyłanie formularza)
-                check(); // Wywołuje funkcję sprawdzającą słowo
+            if (event.keyCode === 13) { 
+                event.preventDefault(); 
+                check(); 
             }
         });
 
-
+        //główna funkcja sprawdzająca
         function check() {
+
+            //pobiera wpisane słowo
             var wpisaneSlowo = document.getElementById("wpisaneSlowo").value.toLowerCase();
+            
+            //wyswietlanie wyniku
             var wynik = document.getElementById("wynik");
+           
+            //porownanie wpisanego slowa z wylosowanym
+            var porownanie = porownaj(wpisaneSlowo, text);
 
-
-            var porownanie = porownaj(wpisaneSlowo, wylosowaneSlowo);
-
+            //czyszczenie pola tekstowego
             wynik.textContent = "";
 
-            if (wpisaneSlowo === 'q') {
-                wynik.textContent = "Koniec gry. Wylosowane słowo to: " + '@Model.WylosowaneSlowo';
+           //czy to koniec gry?
+            if (wpisaneSlowo === 'q' || liczbaProb === 10) {
+                wynik.textContent = "Koniec gry. Wylosowane słowo to: " + text;
+                //uniemożliw dalsze zgadywanie
+                document.getElementById("wpisaneSlowo").disabled = true;
                 return;
             }
 
-            console.log('@Model.WylosowaneSlowo');
-
+            //sprawdz czy slowo jest poprawne
             sprawdz().then(function (result) {
 
+                //jesli nie jest
                 if (result === false) {
                     wynik.textContent = "Takie slowo nie istnieje";
                 }
-
+                //odgadnięto słowo
                 else if (porownanie === 0) {
+                    //zakoloruj probe na zielono
+                    kolorujKola('zielone', liczbaProb + 1);
+                    //uniemozliw dalsze zgadywanie
+                    document.getElementById("wpisaneSlowo").disabled = true;
                     wynik.textContent = "Gratulacje! Zgadłeś wylosowane słowo!";
                 } else {
+                    //jesli proba była niepoprawna
+
+                    //wpisz slowa do odpowiedniego kontenera
                     if (porownanie < 0) {
                         wyzejSlowa.push(wpisaneSlowo);
                     } else {
                         nizejSlowa.push(wpisaneSlowo);
                     }
 
-                    // Sortujemy tablice alfabetycznie
+                    //posortuj kontenery
                     wyzejSlowa.sort();
                     nizejSlowa.sort();
 
-                    // Aktualizujemy zawartość divów "wyzej" i "nizej"
+                    //pobierz kontenery do wypisywania slow
                     var wyzejDiv = document.getElementById("wyzej");
                     var nizejDiv = document.getElementById("nizej");
 
+                    //wyczysc je
                     wyzejDiv.innerHTML = "";
                     nizejDiv.innerHTML = "";
 
+                    //wypisz slowa do kontenerow jako pojedyncze litery
                     wyzejSlowa.forEach(function (slowo) {
+                        //kontener na slowo
                         var slowoDiv = document.createElement("div");
+
                         slowoDiv.className = "wpisane-slowo";
                         znalezionoCzarnaLitere = false;
                         slowo.split('').forEach(function (litera, index) {
@@ -144,6 +230,15 @@
                         });
                         nizejDiv.appendChild(slowoDiv);
                     });
+
+                    liczbaProb++;
+                    if (liczbaProb < kola.length) {
+                        kolorujKola('zolte', liczbaProb);
+                    }
+                    else {
+                        kolorujKola('czerwone', liczbaProb);
+                    }
+
                 }
 
             }).catch(function (error) {
@@ -191,16 +286,35 @@
 
         function podzielSlowo(litera, index) {
             var wynik = '';
-            console.log(!znalezionoCzarnaLitere);
-            console.log(wylosowaneSlowo[index] === litera);
-            console.log(wylosowaneSlowo[index] + litera);
-            if (!znalezionoCzarnaLitere && wylosowaneSlowo[index] === litera) {
+            console.log(text[index] + litera);
+            if (!znalezionoCzarnaLitere && text[index] === litera) {
                 wynik += '<span class="zielona-litra">' + litera + '</span>';
             } else {
                 wynik += '<span class="czarna-litra">' + litera + '</span>';
                 znalezionoCzarnaLitere = true;
             }
             return wynik;
+        }
+
+        function kolorujKola(kolor, liczba = 0) {
+            if (kolor === 'zielone') {
+                kola[liczba - 1].classList.remove('szare', 'zolte');
+                kola[liczba - 1].classList.add('zielone')
+            }
+            else if (liczba === 10) {
+                for (var i = 0; i < kola.length; i++) {
+                    kola[i].classList.remove('szare', 'zolte', 'zielone');
+                    kola[i].classList.add('czerwone');
+                }
+            }
+            else {
+                for (var i = 0; i < kola.length; i++) {
+                    if (i <liczba) {
+                        kola[i].classList.remove('szare', 'zolte', 'zielone');
+                        kola[i].classList.add(kolor);
+                    }
+                }
+            }
         }
 
 
