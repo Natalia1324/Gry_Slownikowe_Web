@@ -59,6 +59,7 @@
         }
 
         #circles{
+            padding-top: 30px;
             margin-left: 20px;
         }
 
@@ -71,7 +72,7 @@
         }
 
         .zielona-litra {
-            color: green;
+            color: lightgreen;
         }
 
         .czarna-litra {
@@ -89,6 +90,11 @@
 <body>
     <div id="container">
         <div id="circles">
+            <div class="kolo szare"></div>
+            <div class="kolo szare"></div>
+            <div class="kolo szare"></div>
+            <div class="kolo szare"></div>
+            <div class="kolo szare"></div>
             <div class="kolo szare"></div>
             <div class="kolo szare"></div>
             <div class="kolo szare"></div>
@@ -136,7 +142,7 @@
 
         //koła - znaczniki prób
         var kola = document.querySelectorAll('.kolo');
-
+        console.log(kola.length);
         //nasłuchiwacz kliknięcia entera
         document.getElementById("wpisaneSlowo").addEventListener("keydown", function (event) {
             if (event.keyCode === 13) { 
@@ -160,11 +166,9 @@
             //czyszczenie pola tekstowego
             wynik.textContent = "";
 
-           //czy to koniec gry?
-            if (wpisaneSlowo === 'q' || liczbaProb === 10) {
-                wynik.textContent = "Koniec gry. Wylosowane słowo to: " + text;
-                //uniemożliw dalsze zgadywanie
-                document.getElementById("wpisaneSlowo").disabled = true;
+           //czy gracz się poddał?
+            if (wpisaneSlowo === 'q') {
+                koniecGry();
                 return;
             }
 
@@ -235,15 +239,19 @@
                     if (liczbaProb < kola.length) {
                         kolorujKola('zolte', liczbaProb);
                     }
-                    else {
-                        kolorujKola('czerwone', liczbaProb);
-                    }
+                    else koniecGry();
 
                 }
 
             }).catch(function (error) {
                 console.log("Wystąpił błąd: " + error);
             });
+        }
+
+        function koniecGry(){
+            kolorujKola('czerwone', liczbaProb);
+            wynik.textContent = "Koniec gry. Wylosowane słowo to: " + text;
+            document.getElementById("wpisaneSlowo").disabled = true;
         }
 
         function sprawdz() {
@@ -286,7 +294,6 @@
 
         function podzielSlowo(litera, index) {
             var wynik = '';
-            console.log(text[index] + litera);
             if (!znalezionoCzarnaLitere && text[index] === litera) {
                 wynik += '<span class="zielona-litra">' + litera + '</span>';
             } else {
@@ -300,12 +307,6 @@
             if (kolor === 'zielone') {
                 kola[liczba - 1].classList.remove('szare', 'zolte');
                 kola[liczba - 1].classList.add('zielone')
-            }
-            else if (liczba === 10) {
-                for (var i = 0; i < kola.length; i++) {
-                    kola[i].classList.remove('szare', 'zolte', 'zielone');
-                    kola[i].classList.add('czerwone');
-                }
             }
             else {
                 for (var i = 0; i < kola.length; i++) {

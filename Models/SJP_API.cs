@@ -25,26 +25,21 @@ namespace Gry_Slownikowe.Models
         {
             GetMeaning(baseUrl + Uri.EscapeUriString(word));
         }
-
         public SJP_API() {
             GetMeaning("https://sjp.pl/sl/los/");
         }
-
         public bool getDopuszczalnosc()
         {
             return czy_dopuszczalne;
         }
-
         public bool getCzyIstnieje()
         {
             return czy_wystepuje;
         }
-
         public List<string> getZnaczenia()
         {
             return znaczenia;
         }
-
         public string getSlowo()
         {
             return slowo;
@@ -70,14 +65,13 @@ namespace Gry_Slownikowe.Models
                         // Wczytywanie zawartości strony
                         htmlDoc.Load(response.GetResponseStream());
 
+                        //string input = _getDefinitions(htmlDoc.DocumentNode.InnerText);
 
-                        
-                        string input = getDefinitions(htmlDoc.DocumentNode.InnerText);
-                        
+                        string input = _manager(htmlDoc.DocumentNode.InnerText);
 
                         if (input != null)
                         {
-                            znaczenia = splitDefinitions(input);
+                            znaczenia = _splitDefinitions(input);
                         }
 
                     }
@@ -93,7 +87,16 @@ namespace Gry_Slownikowe.Models
             }
         }
 
-        private void getInformation (string input)
+        private string _manager(string input)
+        {
+            input = _removeDoubleDef(input);
+            input = _removeComments(input);
+            _getInformation(input);
+            slowo = _getWord(input);
+            input = _getDefinitions(input);
+            return input;
+        }
+        private void _getInformation(string input)
         {
             //czy slowo jest dopuszczalne w grze
             if (!(input.Contains("niedopuszczalne w grach")))
@@ -102,7 +105,8 @@ namespace Gry_Slownikowe.Models
             }
 
         }
-        private string removeDoubleDef(string input)
+
+        private string _removeDoubleDef(string input)
         {
             //czy slowo posiada podwojona definicje (np. slowo i nazwisko, slowo i stara definicja)
             if (input.Contains("\n-\n"))
@@ -118,7 +122,7 @@ namespace Gry_Slownikowe.Models
             }
         }
 
-        private string getWord(string input)
+        private string _getWord(string input)
         {
             Console.OutputEncoding = Encoding.UTF8;
             string startWord = "sprawdź";
@@ -126,28 +130,17 @@ namespace Gry_Slownikowe.Models
             string endWord2 = "dopuszczalne";
 
             int firstIndex = input.IndexOf(startWord); // Pierwsze wystąpienie
-            int startIndex = input.IndexOf(startWord, firstIndex + 1); // Drugie wystąpienie, szukamy od indeksu po pierwszym wystąpieniu + 1
+            int startIndex = input.IndexOf(startWord, firstIndex + 1); 
             int endIndex = input.IndexOf(endWord);
             if (endIndex == -1) endIndex = input.IndexOf(endWord2);
             
             if (startIndex != -1 && endIndex != -1)
             {
-                //zwroc definicje
-
-                //Console.WriteLine(input.Substring(startIndex + 13, endIndex - startIndex - 14));
-                //Console.WriteLine(input);
-                //Console.WriteLine(input.Substring(startIndex + 13, endIndex - startIndex - 14));
-                //var temp = HttpUtility.HtmlEncode(input);
-                //var temp2 = temp.Substring(startIndex + 13, endIndex - startIndex - 14);
-                //Console.WriteLine("HERE IS THE SHIT");
-                //Console.WriteLine(HttpUtility.HtmlDecode(temp2));
-                Console.WriteLine(CustomSubstring(input, startIndex + 13, endIndex - startIndex - 14));
-                //return CustomSubstring(input, startIndex + 13, endIndex - startIndex - 14);
                 return input.Substring(startIndex + 13, endIndex - startIndex - 14);
             }
             else return null;
         }
-        public string CustomSubstring(string text, int startIndex, int endIndex)
+        private string CustomSubstring(string text, int startIndex, int endIndex)
         {
             Console.WriteLine(text);
             // Sprawdzamy, czy indeksy są poprawne
@@ -166,7 +159,7 @@ namespace Gry_Slownikowe.Models
             // Pobieramy podciąg tekstu pomiędzy indeksami
             for (int i = startIndex; i < endIndex; i++)
             {
-                Console.WriteLine(text[i]);
+                //Console.WriteLine(text[i]);
                 result += text[i];
             }
 
@@ -175,10 +168,10 @@ namespace Gry_Slownikowe.Models
         }
 
 
-        private string removeComments(string input)
+        private string _removeComments(string input)
         {
             //najpierw usun podwojne definicje
-            input = removeDoubleDef(input);
+            //input = _removeDoubleDef(input);
             string komentarzeWord = "KOMENTARZE";
             int komentarzeIndex = input.IndexOf(komentarzeWord);
             //czy jest sekcja komentarzy
@@ -193,14 +186,12 @@ namespace Gry_Slownikowe.Models
             }
         }
 
-        private string getDefinitions(string input)
+        private string _getDefinitions(string input)
         {
-            //usuwanie komentarzy (niepotrzebne)
-            string newinput = removeComments(input);
-            //sprawdzenie czy slowo jest dopuszczalne
-            getInformation(newinput);
-            slowo = getWord(newinput);
-            //slowa klucze po ktorych szukam definicji
+            string newinput = input;
+            //string newinput = _removeComments(input);
+            //_getInformation(newinput);
+            //slowo = _getWord(newinput);
             string startWord = "znaczenie";
             string endWord1 = "POWIĄZANE";
             string endWord2 = "KOMENTARZE";
@@ -226,7 +217,7 @@ namespace Gry_Slownikowe.Models
             }
         }
 
-        private List<string> splitDefinitions(string input)
+        private List<string> _splitDefinitions(string input)
         {
             List<string> definitions = new List<string>();
 
