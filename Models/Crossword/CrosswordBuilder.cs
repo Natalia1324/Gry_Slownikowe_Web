@@ -11,8 +11,6 @@ namespace CrosswordComponents
 {
     /**
      * Klasa reprezentująca manager i generator krzyżówki
-     * 
-     * TODO - połączyć z API
      */
     public class CrosswordBuilder
     {
@@ -30,6 +28,7 @@ namespace CrosswordComponents
          * Lista słów do określania, czy się nie powtarzają
          */
         public List<string> _words;
+
         /**
         * Obiekt krzyżówki
         */
