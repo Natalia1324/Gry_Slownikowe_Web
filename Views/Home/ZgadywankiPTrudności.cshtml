@@ -1,22 +1,250 @@
 ﻿@{
     ViewData["Title"] = "Poziom Trudności";
 }
+ @model Gry_Slownikowe.Models.ZgadywankiModel
 
+<!DOCTYPE html>
+<html lang="pl">
 <style>
-    h1.title {
-        margin-top: 100px;
+    .con {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        height: 100vh;
     }
+
+    .frame {
+        border: 2px solid #000;
+        padding: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    h1.title {
+        margin-top: 20px;
+        font-size: 2em;
+    }
+
+    .poziom-buttons {
+        display: flex;
+        justify-content: center;
+    }
+
+        .poziom-buttons .btn {
+            margin: 10px;
+        }
+
+    .frame h1 {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
 </style>
 
-<div class="text-center d-flex flex-column align-items-center justify-content-center">
-    <h1 class="display-1 title" style="height: 15vh;">Wybierz poziom trudności:</h1>
-    <div class="mt-3">
-        <a href="@Url.Action("ZgadywankiSlowotok", "Home", new { poziom = "Łatwy" })" class="btn btn-primary">Łatwy</a>
+<body>
+<div class="con">
+    <div class="frame" id="ramkaPoziomu">
+        <h1>Wybierz poziom trudności:</h1>
+
+        <div class="poziom-buttons">
+            <button id="latwy" class="btn btn-primary" onclick="wybierzPoziom('latwy')">Łatwy</button>
+            <button id="sredni" class="btn btn-primary" onclick="wybierzPoziom('sredni')">Średni</button>
+            <button id="trudny" class="btn btn-primary" onclick="wybierzPoziom('trudny')">Trudny</button>
+        </div>
     </div>
-    <div class="mt-3">
-        <a href="@Url.Action("ZgadywankiSlowotok", "Home", new { poziom = "Średni" })" class="btn btn-primary">Średni</a>
-    </div>
-    <div class="mt-3">
-        <a href="@Url.Action("ZgadywankiSlowotok", "Home", new { poziom = "Trudny" })" class="btn btn-primary">Trudny</a>
+
+    <div id="licznik"></div>
+
+    <div id="kontener">
+        <div id="ramkaWybranychSlow" style="margin-bottom: 10px;">
+            <h2 class="tytul">Wpisywane słowa:</h2>
+            <div id="wybraneLitery" style="margin-bottom: 10px;"></div>
+        </div>
+
+        <div id="wybraneLitery"></div>
+        <input type="text" id="wpisywaneSłowo" readonly style="margin-bottom: 10px;">
+        <button id="przyciskSprawdz" onclick="sprawdz()">Sprawdź</button>
+
+        <div id="klawiatura" style="margin-top: 10px;">
+            </div>
+
+            <script>
+                // Funkcja inicjująca klawiaturę
+                function inicjujKlawiature() {
+                    var slowo = document.getElementById('wylosowaneSlowo').value.toLowerCase(); // Pobieramy wylosowane słowo
+                    var unikalneLitery = [...new Set(slowo)]; // Usuwamy duplikaty liter
+                    var drugieSlowoInput = document.getElementById('drugieWylosowaneSlowo');
+                    var drugieSlowo = "";
+
+                    var klawiaturaDiv = document.getElementById('klawiatura');
+
+
+
+                    // Tworzymy przyciski dla każdej litery w słowie
+                    unikalneLitery.forEach(function (litera) {
+                        var button = document.createElement('button');
+                        button.textContent = litera.toUpperCase(); // Wielkie litery na przyciskach
+                        button.onclick = function () {
+                            wybierzLitere(litera);
+                        };
+                        klawiaturaDiv.appendChild(button); 
+                    });
+
+                    for (var i = 0; i < slowo.length; i++) {
+                        if (slowo[i].match(/[a-zA-Z]/)) { // Sprawdzamy czy litera jest alfabetem
+                            drugieSlowo += slowo[i]; // Dodajemy literę do drugiego słowa
+                        }
+                    }
+
+                    // Jeśli drugie słowo jest takie samo jak pierwsze(rozwijane)
+                    if (drugieSlowo === slowo) {
+                       
+                            drugieSlowo = losujSłowoZLiterami(pierwszeSlowo);
+                       
+                    }
+
+
+                    drugieSlowoInput.value = drugieSlowo;
+                }
+
+                // Wywołujemy funkcję inicjującą klawiaturę po załadowaniu strony
+                document.addEventListener('DOMContentLoaded', inicjujKlawiature);
+
+                // Funkcja wybierająca literę
+                function wybierzLitere(litera) {
+                    wybraneLitery.push(litera); // Dodajemy wybraną literę do tablicy wybranych liter
+                    aktualizujWpisywaneSłowo(); // Aktualizujemy wpisywane słowo
+                }
+
+                // Funkcja aktualizująca wpisywane słowo
+                function aktualizujWpisywaneSłowo() {
+                    var wpisywaneSłowo = document.getElementById('wpisywaneSłowo');
+                    wpisywaneSłowo.value = wybraneLitery.join('');
+                }
+            </script>
+
+
+
+        <script>
+            var wybraneLitery = [];
+                var text = '@Html.Raw(Model.slowo)';
+
+            function wybierzLitere(litera) {
+                wybraneLitery.push(litera);
+                aktualizujWpisywaneSłowo();
+            }
+
+            function aktualizujWpisywaneSłowo() {
+                var wpisywaneSłowo = document.getElementById('wpisywaneSłowo');
+                wpisywaneSłowo.value = wybraneLitery.join('');
+            }
+
+                // Funkcja sprawdzająca, czy słowo zawiera tylko litery z pierwszego słowa
+                function sprawdzCzyZawieraTylkoLitery(slowo) {
+                    var slowo1 = document.getElementById('wylosowaneSlowo').value.toLowerCase();
+                    var slowo2 = slowo.toLowerCase();
+                    for (var i = 0; i < slowo2.length; i++) {
+                        if (!slowo1.includes(slowo2[i])) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+
+               
+
+        </script>
+
+        <div id="ramkaPonumerowanychSlow" style="margin-top: 20px;">
+            <h2 class="tytul">Słowa do odgadnięcia:</h2>
+
+                <!-- Pierwsze wylosowane słowo -->
+            <div class="slowo" id="slowo1">
+                    <input type="text" id="wylosowaneSlowo" value="@Html.Raw(Model.slowo)" readonly>
+                </div>
+
+                <!-- Drugie wylosowane słowo -->
+                <div class="slowo" id="slowo2">
+                    <input type="text" id="drugieWylosowaneSlowo" readonly>
+                </div>
+
+        </div>
+
+
+        <div id="error" class="error" style="display: none;">Błędne słowo!</div>
     </div>
 </div>
+
+ 
+
+<script>
+    var wybraneLitery = [];
+    var poziomWybrany = false;
+
+    var timer;
+    var czasStartowy;
+
+
+    function wybierzLitere(litera) {
+        if (!poziomWybrany) {
+            alert("Wybierz poziom trudności przed wprowadzeniem liter!");
+            return;
+        }
+
+        wybraneLitery.push(litera);
+        aktualizujWpisywaneSłowo();
+    }
+
+    function aktualizujWpisywaneSłowo() {
+        var wpisywaneSłowo = document.getElementById('wpisywaneSłowo');
+        wpisywaneSłowo.value = wybraneLitery.join('');
+    }
+
+
+    function wybierzPoziom(poziom) {
+        switch (poziom.toLowerCase()) {
+            case 'latwy':
+                czasStartowy = 20 * 60;
+                break;
+            case 'sredni':
+                czasStartowy = 15 * 60;
+                break;
+            case 'trudny':
+                czasStartowy = 10 * 60;
+                break;
+            default:
+                czasStartowy = 0;
+        }
+        poziomWybrany = true;
+        rozpocznijGre();
+
+        var ramkaPoziomu = document.getElementById('ramkaPoziomu');
+        ramkaPoziomu.style.display = 'none';
+    }
+
+    function rozpocznijGre() {
+        var licznik = document.getElementById('licznik');
+        var czas = czasStartowy;
+
+        function odliczanieCzasu() {
+            var minuty = Math.floor(czas / 60);
+            var sekundy = czas % 60;
+            licznik.innerHTML = minuty + 'm ' + sekundy + 's';
+            czas--;
+            if (czas <= 0) {
+                clearInterval(timer);
+                licznik.innerHTML = 'Koniec czasu!';
+            }
+        }
+
+        clearInterval(timer);
+        odliczanieCzasu();
+        timer = setInterval(odliczanieCzasu, 1000);
+    }
+
+
+</script>
+</body>
+</html>
+

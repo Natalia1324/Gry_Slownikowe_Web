@@ -1,5 +1,5 @@
 ﻿using Crossword;
-using Gry_Słownikowe.Models;
+using Gry_Slownikowe.Models;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
 using System.Text.RegularExpressions;

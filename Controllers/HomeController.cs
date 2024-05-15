@@ -1,6 +1,6 @@
 using Crossword;
 using CrosswordComponents;
-using Gry_Słownikowe.Models;
+using Gry_Slownikowe.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Memory;
@@ -12,7 +12,7 @@ using System.Text.Json.Serialization;
 using System.Web;
 
 
-namespace Gry_Słownikowe.Controllers
+namespace Gry_Slownikowe.Controllers
 {
     public class HomeController : Controller
     {
@@ -39,23 +39,6 @@ namespace Gry_Słownikowe.Controllers
         }
         public IActionResult MainMenu()
         {
-            //SJP_API api = new SJP_API("półlok");
-            //Console.WriteLine(api.getCzyIstnieje());
-            //Console.WriteLine(api.getDopuszczalnosc());
-            //Console.WriteLine(api.getSlowo());
-            //foreach (var def in api.getZnaczenia())
-            //{
-            //    Console.WriteLine(def);
-            //}
-
-            //SJP_API api2 = new SJP_API();
-            //Console.WriteLine(api2.getCzyIstnieje());
-            //Console.WriteLine(api2.getDopuszczalnosc());
-            //Console.WriteLine(api2.getSlowo());
-            //foreach (var def in api2.getZnaczenia())
-            //{
-            //    Console.WriteLine(def);
-            //}
             return View();
         }
         public IActionResult Wordle()
@@ -68,7 +51,7 @@ namespace Gry_Słownikowe.Controllers
                 {
                     znaczenia.Clear();
                 }
-                SJP_API api = new SJP_API();
+                SJP_API api = new SJP_API(); 
                 slowo = api.getSlowo();
                 znaczenia= api.getZnaczenia();
 
@@ -93,8 +76,11 @@ namespace Gry_Słownikowe.Controllers
                 random = new SJP_API();
             } while (!random.getDopuszczalnosc());
 
+            //SlownikowoModel _slownikowoModel = new(random.getSlowo());
+            //random = new SJP_API("żółć");
+            
+            //string slowo = HttpUtility.HtmlEncode(random.getSlowo());
             SlownikowoModel _slownikowoModel = new(random.getSlowo());
-
             Console.WriteLine(_slownikowoModel.WylosowaneSlowo);
             return View(_slownikowoModel);
         }
@@ -111,16 +97,28 @@ namespace Gry_Słownikowe.Controllers
             return Json(new { IsCorrect = isCorrect });
         }
 
+        public IActionResult ZgadywankiPTrudności()
+        {
+            string slowo = "";
+            SJP_API api = new SJP_API();
+            slowo = api.getSlowo();
+            string polskieZnaki = HttpUtility.HtmlEncode(slowo);
+
+            ZgadywankiModel model = new ZgadywankiModel(polskieZnaki);
+            return View(model);
+        }
+
+
         public IActionResult ZgadywankiMenu ()
         {
 
             return View();
         }
 
-        public IActionResult ZgadywankiPTrudności()
-        {
-            return View();
-        }
+       // public IActionResult ZgadywankiPTrudności()
+       // {
+        //    return View();
+       // }
 
         public IActionResult ZgadywankiSlowotok(string poziom)
         {
