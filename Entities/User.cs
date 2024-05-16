@@ -34,8 +34,8 @@ namespace Gry_Slownikowe.Entions
 
         //public ICollection<Status> Status { get; set; }
         //// Properties
-        //[NotMapped]
-        //public bool isLogged { get; set; } = false;
+        [NotMapped]
+        public bool isLogged { get; set; } = false;
 
         //[NotMapped]
         //public ListsModel lists { get; set; }

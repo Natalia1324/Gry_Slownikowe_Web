@@ -1,10 +1,14 @@
 using Crossword;
 using CrosswordComponents;
+using Gry_Slownikowe.Entions;
+using Gry_Slownikowe.Entities;
 using Gry_Slownikowe.Models;
+using Gry_Słownikowe.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Memory;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.Text.Json;
@@ -21,17 +25,95 @@ namespace Gry_Slownikowe.Controllers
         private readonly IMemoryCache _memoryCache;
 
         private readonly CrosswordBuilder _crosswordBuilder;
+        private readonly GryContext _context;
 
 
-        public HomeController(ILogger<HomeController> logger, IMemoryCache memoryCache)
+        public HomeController(ILogger<HomeController> logger, IMemoryCache memoryCache, GryContext context)
         {
             _logger = logger;
 
             _memoryCache = memoryCache;
 
             _crosswordBuilder = new CrosswordBuilder();
+            _context = context;
+        }
+
+        private User getLoggedUser()
+        {
+            return HttpContext.Session.GetObject<User>("LoggedUser");
+        }
+
+        [HttpPost]
+        public IActionResult Login(User newUser)
+        {
+            var u = _context.User
+             .FirstOrDefault(u => u.Nick == newUser.Nick && u.Password == newUser.Password);
+
+            if (u != null)
+            {
+                newUser.isLogged = true;
+                var loggedUser = newUser;
+                loggedUser.Id = u.Id;
+                loggedUser.Login = u.Login;
+                loggedUser.Ranks = u.Ranks;
+                HttpContext.Session.SetObject("LoggedUser", loggedUser);
+                return View("Index", loggedUser);
+
+            }
+            else
+            {
+                //return View("Index", getLoggedUser());
+                ModelState.AddModelError(string.Empty, "Invalid username or password");
+                return View();
+            }
+        }
+
+        [HttpPost]
+        [Route("/Home/Logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("LoggedUser");
+            return Ok();
+        }
+
+        public IActionResult Register()
+        {
+            return View(getLoggedUser());
+        }
+
+        public IActionResult Login()
+        {
+            return View(getLoggedUser());
+        }
+
+        [HttpPost]
+        public IActionResult Register(User newUser)
+        {
+
+            var u = _context.User
+            .FirstOrDefault(u => (u.Nick == newUser.Nick && u.Login == newUser.Login) || u.Login == newUser.Login);
+
+            if (u != null)
+            {
+                ModelState.AddModelError(string.Empty, "The user is already registered");
+                return View();
+
+            }
+            else
+            {
+
+                newUser.Ranks = 0;
+                _context.User.Add(newUser);
+                _context.SaveChanges();
+                newUser.isLogged = true;
+                var loggedUser = newUser;
+                HttpContext.Session.SetObject("LoggedUser", loggedUser);
+                return View("Index", loggedUser);
+
+            }
 
         }
+
 
         public IActionResult Index()
         {
@@ -41,27 +123,43 @@ namespace Gry_Slownikowe.Controllers
         {
             return View();
         }
-        public IActionResult Wordle()
+        public IActionResult Scrabble()
+        {
+            return View();
+        }
+
+
+        public IActionResult WordleGamemode()
+        {
+            return View();
+        }
+        public IActionResult Wordle(int dlugosc)
         {
             string slowo = "";
-            List<string> znaczenia= new List<string>();
-            while (slowo.Length != 5)
+            if (dlugosc == 0)
+            {
+                dlugosc = 5;
+            }
+            List<string> znaczenia = new List<string>();
+            while (slowo.Length != dlugosc)
             {
                 if (znaczenia.Count > 0)
                 {
                     znaczenia.Clear();
                 }
-                SJP_API api = new SJP_API(); 
+                SJP_API api = new SJP_API();
                 slowo = api.getSlowo();
-                znaczenia= api.getZnaczenia();
+                znaczenia = api.getZnaczenia();
 
 
             }
             string polskieZnaki = HttpUtility.HtmlEncode(slowo);
             string znaczeniePL = HttpUtility.HtmlAttributeEncode(znaczenia.First());
-            WordleModel model = new WordleModel(polskieZnaki, znaczeniePL);
+            WordleModel model = new WordleModel(polskieZnaki, znaczeniePL, dlugosc);
             return View(model);
         }
+
+
 
 
         //znaki unicode

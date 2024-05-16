@@ -1,0 +1,337 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Scrabble</title>
+    <style>
+        h1 {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-left: 150px;
+            color: white;
+        }
+
+        body {
+            background-color: black;
+        }
+
+        .input {
+            width: 100px;
+            heigth: 175px;
+            font-size: 60px;
+            background-color: gray;
+            color: white;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+
+
+        .row {
+            display: flex;
+            
+        }
+
+        #board {
+            display: grid;
+            
+        }
+
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: gray;
+
+        }
+        .dw {
+            width: 50px;
+            height: 50px;
+            background-color: pink;
+        }
+        .dl {
+            width: 50px;
+            height: 50px;
+            background-color: lightblue;
+        }
+        .tw {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+        }
+        .tl {
+            width: 50px;
+            height: 50px;
+            background-color: darkblue;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="board">
+        <div class="row">
+            <button class="tw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="tw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="tw"></button>
+        </div>
+        <div class="row">
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="tl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="tl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+        </div>
+        <div class="row">
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+        </div>
+        <div class="row">
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+        </div>
+        <div class="row">
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+        </div>
+        <div class="row">
+            <button class="cell"></button>
+            <button class="tl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="tl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="tl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="tl"></button>
+            <button class="cell"></button>
+        </div>
+        <div class="row">
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+        </div>
+        <div class="row">
+            <button class="tw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="tw"></button>
+        </div>
+        <div class="row">
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+        </div>
+        <div class="row">
+            <button class="cell"></button>
+            <button class="tl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="tl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="tl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="tl"></button>
+            <button class="cell"></button>
+        </div>
+        <div class="row">
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+        </div>
+        <div class="row">
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+        </div>
+        <div class="row">
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+        </div>
+        <div class="row">
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="tl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="tl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dw"></button>
+            <button class="cell"></button>
+        </div>
+        <div class="row">
+            <button class="tw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="tw"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="dl"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="tw"></button>
+        </div>
+
+    </div>
+    <script>
+
+    </script>
+</body>
+</html>
