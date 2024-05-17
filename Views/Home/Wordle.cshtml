@@ -419,6 +419,23 @@ wynikwypisany = true;
 var button = document.getElementById("restart");
 button.style.display = "block";
 button.style.pointerEvents = "auto";
+                        var newDiv = document.createElement("div");
+
+
+                        var newParagraph = document.createElement("p");
+
+
+                        var paragraphText = document.createTextNode("Statystki: 1 próba: " + @Model.statystki[0]+" 2 próby: " + @Model.statystki[1]+" 3 próby: " + @Model.statystki[2]+" 4 próby: "
+                            + @Model.statystki[3]+" 5 prób: " + @Model.statystki[4]+" 6 prób: " + @Model.statystki[5]+" Nie zgadnięto: " + @Model.statystki[6]);
+
+    
+                        newParagraph.appendChild(paragraphText);
+
+   
+                        newDiv.appendChild(newParagraph);
+
+
+                        document.body.appendChild(newDiv);
 }
 
 
@@ -482,6 +499,23 @@ wynikwypisany = true;
 var button = document.getElementById("restart");
 button.style.display = "block";
 button.style.pointerEvents = "auto";
+                var newDiv = document.createElement("div");
+
+
+                var newParagraph = document.createElement("p");
+
+
+                var paragraphText = document.createTextNode("Statystki: 1 próba: " + @Model.statystki[0]+" 2 próby: " + @Model.statystki[1]+" 3 próby: " + @Model.statystki[2]+" 4 próby: "
+                    + @Model.statystki[3]+" 5 prób: " + @Model.statystki[4]+" 6 prób: " + @Model.statystki[5]+" Nie zgadnięto: " + (@Model.statystki[6]+1));
+
+
+                newParagraph.appendChild(paragraphText);
+
+
+                newDiv.appendChild(newParagraph);
+
+
+                document.body.appendChild(newDiv);
 }
 
 

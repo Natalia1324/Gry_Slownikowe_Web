@@ -155,7 +155,16 @@ namespace Gry_Slownikowe.Controllers
             }
             string polskieZnaki = HttpUtility.HtmlEncode(slowo);
             string znaczeniePL = HttpUtility.HtmlAttributeEncode(znaczenia.First());
-            WordleModel model = new WordleModel(polskieZnaki, znaczeniePL, dlugosc);
+            var id = getLoggedUser().Id;
+            int[] counts = new int[7];
+            for (int i = 0; i<counts.Length; i++)
+            {
+                counts[i]= _context.Wordle.Count(entity => entity.Win == (i+1) && entity.UserId == id);
+            }
+          
+
+
+            WordleModel model = new WordleModel(polskieZnaki, znaczeniePL, dlugosc, counts);
             return View(model);
         }
 
