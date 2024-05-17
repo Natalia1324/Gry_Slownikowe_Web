@@ -50,6 +50,7 @@ namespace CrosswordComponents
             firstLetter.WordNumber = _wordNumber;
             if(Direction == DirectionType.HORIZONTAL)
             {
+                firstLetter.Horizontal = true;
                 if(_columnIndex < 0)
                 {
                     crossword[tempRowIndex, tempColumnIndex] = firstLetter;
@@ -67,12 +68,15 @@ namespace CrosswordComponents
                     }
                     else
                     {
-                        crossword[tempRowIndex, tempColumnIndex++] = new CrosswordLetterModel(_word[i]);
+                        CrosswordLetterModel tempLetter = new CrosswordLetterModel(_word[i]);
+                        tempLetter.Horizontal = true;
+                        crossword[tempRowIndex, tempColumnIndex++] = tempLetter;
                     }
                 }
             }
             else if(Direction == DirectionType.VERTICAL)
             {
+                firstLetter.Horizontal = false;
                 if(_rowIndex < 0)
                 {
                     crossword[tempRowIndex, tempColumnIndex] = firstLetter;
@@ -90,7 +94,9 @@ namespace CrosswordComponents
                     }
                     else
                     {
-                        crossword[tempRowIndex++, tempColumnIndex] = new CrosswordLetterModel(_word[i]);
+                        CrosswordLetterModel tempLetter = new CrosswordLetterModel(_word[i]);
+                        tempLetter.Horizontal = false;
+                        crossword[tempRowIndex++, tempColumnIndex] = tempLetter;
                     }
                 }
             }
