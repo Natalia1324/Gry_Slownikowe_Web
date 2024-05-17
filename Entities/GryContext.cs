@@ -32,7 +32,7 @@ namespace Gry_Slownikowe.Entities
         public DbSet<Zgadywanki>    Zgadywanki          { get; set; }
         public DbSet<Slownikowo>    Slownikowo          { get; set; }
 
-
+        /*
         private string HashPassword(string password)
         {
             using (SHA256 sha256Hash = SHA256.Create())
@@ -47,13 +47,14 @@ namespace Gry_Slownikowe.Entities
                 return builder.ToString();
             }
         }
-
+        */
         protected override void OnModelCreating(ModelBuilder modelBuilder){
             
             // W metodzie OnModelCreating:
             modelBuilder.Entity<User>(eb => {
                 eb.Property(passwd => passwd.Password)
-                    .IsRequired()
+                    .IsRequired();
+                    /*
                     .HasConversion(
                         // Konwertuje string (hasło) na zahaszowany string przed zapisaniem do bazy danych
                         // Tutaj używamy przykładowego algorytmu haszowania, w tym przypadku SHA256
@@ -62,6 +63,7 @@ namespace Gry_Slownikowe.Entities
                         // Konwersja zahaszowanego stringa z bazy danych na string
                         hashedPass => hashedPass
                     );
+                    */
             });
 
             // Konfiguruje encję Users w modelu danych

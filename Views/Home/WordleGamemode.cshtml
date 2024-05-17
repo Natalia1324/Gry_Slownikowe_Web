@@ -1,0 +1,58 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "WordleGamemode";
+
+}
+ @model Gry_Słownikowe.Models.WordleModel
+
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Wordle Gamemode</title>
+    <style>
+        h1 {
+
+            color: white;
+        }
+
+        body {
+            background-color: black;
+        }
+
+       
+
+        .guzik {
+            margin-left: 135px;
+            width: 400px;
+            height: 300px;
+            background-color: #28a745;
+            color: white;
+            border: 2px solid white;
+
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <h1>Wybierz długość zgadywanego słowa</h1>
+    <div>
+        <a href="@Url.Action("Wordle", "Home", new { dlugosc = 6 })" class="btn btn-primary">5-literowe</a>
+    </div>
+    <br />
+    <div>
+        <a href="@Url.Action("Wordle", "Home", new { dlugosc=6 })" class="btn btn-primary">6-literowe</a>
+    </div>
+    <br />
+    <div>
+        <a href="@Url.Action("Wordle", "Home", new { dlugosc=7 })" class="btn btn-primary">7-literowe</a>
+    </div>
+  
+</body>
+</html>
