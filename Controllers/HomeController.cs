@@ -241,8 +241,15 @@ namespace Gry_Slownikowe.Controllers
         public IActionResult Wisielec()
         {
             string slowo = "";
-            SJP_API api = new SJP_API();
-            slowo = api.getSlowo();
+            bool isCorrect = false;
+            do
+            {
+                SJP_API api = new SJP_API();
+                slowo = api.getSlowo();
+                isCorrect = api.getDopuszczalnosc();
+            } while (isCorrect == false);
+
+
             string polskieZnaki = HttpUtility.HtmlEncode(slowo);
 
             WisielecModel model = new WisielecModel(polskieZnaki);

@@ -148,7 +148,10 @@
         // Funkcja rozpoczynająca nową grę
         function startNewGame() {
             //wordToGuess = "Ala ma Kota  kot mam ale"; // Nowe słowo do zgadnięcia
-            wordToGuess = @Html.Raw(Json.Serialize(Model.Losuj())); // Nowe słowo do zgadnięcia
+            var kopia = wordToGuess; 
+            do {
+                wordToGuess = @Html.Raw(Json.Serialize(Model.Losuj())); // Nowe słowo do zgadnięcia
+            } while (kopia == wordToGuess)
             guessedWord = wordToGuess.replace(/[a-zA-Ząćęłńóśźż]/g, "_"); // Zakryj litery
             currentAttempts = 0; // Zresetuj liczbę prób
             updateScreen(); // Zaktualizuj ekran
