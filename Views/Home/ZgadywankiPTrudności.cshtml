@@ -1,10 +1,13 @@
 ﻿@{
     ViewData["Title"] = "Poziom Trudności";
 }
- @model Gry_Slownikowe.Models.ZgadywankiModel
+@model Gry_Slownikowe.Models.ZgadywankiModel
 
 <!DOCTYPE html>
 <html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewData["Title"]</title>
 <style>
     .con {
         display: flex;
@@ -40,7 +43,34 @@
         font-weight: bold;
     }
 
+
+    #klawiatura button {
+        margin: 5px;
+        padding: 10px;
+        font-size: 1em;
+        cursor: pointer;
+    }
+
+    #ramkaPonumerowanychSlow {
+        margin-top: 20px;
+    }
+
+    .tytul {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .slowo {
+        margin-bottom: 10px;
+    }
+
+    .slowo input {
+       font-size: 1em;
+       padding: 5px;
+    }
+
 </style>
+</head>
 
 <body>
 <div class="con">
@@ -62,54 +92,70 @@
             <div id="wybraneLitery" style="margin-bottom: 10px;"></div>
         </div>
 
-        <div id="wybraneLitery"></div>
+       
         <input type="text" id="wpisywaneSłowo" readonly style="margin-bottom: 10px;">
+            <button onclick="usunOstatniaLitere()">Backspace</button>
         <button id="przyciskSprawdz" onclick="sprawdz()">Sprawdź</button>
 
-        <div id="klawiatura" style="margin-top: 10px;">
+        <div id="klawiatura" style="margin-top: 10px;"></div>
+
+            <div id="ramkaPonumerowanychSlow" style="margin-top: 20px; display: none; ">
+                <h2 class="tytul">Słowa do odgadnięcia:</h2>
+                <div id="slowo1" class="slowo"></div>
+                <div id="slowo2" class="slowo"></div>
+                <div id="slowo3" class="slowo"></div>
+                <div id="slowo4" class="slowo"></div>
             </div>
+            <div id="error" class="error" style="display: none;">Błędne słowo!</div>
+        </div>
+    </div>
 
-            <script>
-                // Funkcja inicjująca klawiaturę
-                function inicjujKlawiature() {
-                    var slowo = document.getElementById('wylosowaneSlowo').value.toLowerCase(); // Pobieramy wylosowane słowo
-                    var unikalneLitery = [...new Set(slowo)]; // Usuwamy duplikaty liter
-                    var drugieSlowoInput = document.getElementById('drugieWylosowaneSlowo');
-                    var drugieSlowo = "";
+ <script>
+        var wybraneLitery = [];
+        var poziomWybrany = false; // Zmienna określająca, czy poziom trudności został wybrany
+        var czasStartowy;
+        var timer;
 
-                    var klawiaturaDiv = document.getElementById('klawiatura');
+        var slowo1 = @Html.Raw(Json.Serialize(@Model.Slowo1));
+        var slowo2 = @Html.Raw(Json.Serialize(@Model.Slowo2));
+        var slowo3 = @Html.Raw(Json.Serialize(@Model.Slowo3));
+        var slowo4 = @Html.Raw(Json.Serialize(@Model.Slowo4));
 
+        document.getElementById('slowo1').innerHTML = '<input type="text" value="' + slowo1 + '" readonly>';
+        document.getElementById('slowo2').innerHTML = '<input type="text" value="' + slowo2 + '" readonly>';
+        document.getElementById('slowo3').innerHTML = '<input type="text" value="' + slowo3 + '" readonly>';
+        document.getElementById('slowo4').innerHTML = '<input type="text" value="' + slowo4 + '" readonly>';
 
+        var slowa = [slowo1, slowo2, slowo3, slowo4];
 
-                    // Tworzymy przyciski dla każdej litery w słowie
-                    unikalneLitery.forEach(function (litera) {
-                        var button = document.createElement('button');
-                        button.textContent = litera.toUpperCase(); // Wielkie litery na przyciskach
-                        button.onclick = function () {
-                            wybierzLitere(litera);
-                        };
-                        klawiaturaDiv.appendChild(button); 
-                    });
-
-                    for (var i = 0; i < slowo.length; i++) {
-                        if (slowo[i].match(/[a-zA-Z]/)) { // Sprawdzamy czy litera jest alfabetem
-                            drugieSlowo += slowo[i]; // Dodajemy literę do drugiego słowa
-                        }
-                    }
-
-                    // Jeśli drugie słowo jest takie samo jak pierwsze(rozwijane)
-                    if (drugieSlowo === slowo) {
-                       
-                            drugieSlowo = losujSłowoZLiterami(pierwszeSlowo);
-                       
-                    }
-
-
-                    drugieSlowoInput.value = drugieSlowo;
+        function najdluzszeSlowo(slowa) {
+            let najdluzsze = slowa[0];
+            for (let i = 1; i < slowa.length; i++) {
+                if (slowa[i].length > najdluzsze.length) {
+                    najdluzsze = slowa[i];
                 }
+            }
+            return najdluzsze;
+        }
 
-                // Wywołujemy funkcję inicjującą klawiaturę po załadowaniu strony
-                document.addEventListener('DOMContentLoaded', inicjujKlawiature);
+        //inicjalizacja klawiatury
+        function inicjujKlawiature() {
+
+            var najdluzsze = najdluzszeSlowo(slowa);
+
+            var klawiatura = document.getElementById('klawiatura');
+            klawiatura.innerHTML = '';
+
+            for (var litera of najdluzsze) {
+                var button = document.createElement('button');
+                button.innerHTML = litera;
+                button.disabled = true; // Na początku przyciski są wyłączone
+                button.onclick = function () {
+                    wybierzLitere(this.innerHTML);
+                };
+                klawiatura.appendChild(button);
+            }
+        }
 
                 // Funkcja wybierająca literę
                 function wybierzLitere(litera) {
@@ -117,90 +163,34 @@
                     aktualizujWpisywaneSłowo(); // Aktualizujemy wpisywane słowo
                 }
 
+                //działanie backspace
+        function usunOstatniaLitere() {
+            var wpisywaneSłowo = document.getElementById('wpisywaneSłowo');
+            var aktualnyTekst = wpisywaneSłowo.value;
+
+
+        }
                 // Funkcja aktualizująca wpisywane słowo
                 function aktualizujWpisywaneSłowo() {
                     var wpisywaneSłowo = document.getElementById('wpisywaneSłowo');
                     wpisywaneSłowo.value = wybraneLitery.join('');
                 }
-            </script>
 
+        function sprawdz() {
+            var wpisaneSlowo = document.getElementById('wpisywaneSłowo').value;
 
-
-        <script>
-            var wybraneLitery = [];
-                var text = '@Html.Raw(Model.slowo)';
-
-            function wybierzLitere(litera) {
-                wybraneLitery.push(litera);
-                aktualizujWpisywaneSłowo();
+            if (wpisaneSlowo === slowo1) {
+                document.getElementById('slowo1').style.display = 'block';
+            } else if (wpisaneSlowo === slowo2) {
+                document.getElementById('slowo2').style.display = 'block';
+            } else if (wpisaneSlowo === slowo3) {
+                document.getElementById('slowo3').style.display = 'block';
+            } else if (wpisaneSlowo === slowo4) {
+                document.getElementById('slowo4').style.display = 'block';
+            } else {
+                alert("Błędne słowo!");
             }
-
-            function aktualizujWpisywaneSłowo() {
-                var wpisywaneSłowo = document.getElementById('wpisywaneSłowo');
-                wpisywaneSłowo.value = wybraneLitery.join('');
-            }
-
-                // Funkcja sprawdzająca, czy słowo zawiera tylko litery z pierwszego słowa
-                function sprawdzCzyZawieraTylkoLitery(slowo) {
-                    var slowo1 = document.getElementById('wylosowaneSlowo').value.toLowerCase();
-                    var slowo2 = slowo.toLowerCase();
-                    for (var i = 0; i < slowo2.length; i++) {
-                        if (!slowo1.includes(slowo2[i])) {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-
-               
-
-        </script>
-
-        <div id="ramkaPonumerowanychSlow" style="margin-top: 20px;">
-            <h2 class="tytul">Słowa do odgadnięcia:</h2>
-
-                <!-- Pierwsze wylosowane słowo -->
-            <div class="slowo" id="slowo1">
-                    <input type="text" id="wylosowaneSlowo" value="@Html.Raw(Model.slowo)" readonly>
-                </div>
-
-                <!-- Drugie wylosowane słowo -->
-                <div class="slowo" id="slowo2">
-                    <input type="text" id="drugieWylosowaneSlowo" readonly>
-                </div>
-
-        </div>
-
-
-        <div id="error" class="error" style="display: none;">Błędne słowo!</div>
-    </div>
-</div>
-
- 
-
-<script>
-    var wybraneLitery = [];
-    var poziomWybrany = false;
-
-    var timer;
-    var czasStartowy;
-
-
-    function wybierzLitere(litera) {
-        if (!poziomWybrany) {
-            alert("Wybierz poziom trudności przed wprowadzeniem liter!");
-            return;
         }
-
-        wybraneLitery.push(litera);
-        aktualizujWpisywaneSłowo();
-    }
-
-    function aktualizujWpisywaneSłowo() {
-        var wpisywaneSłowo = document.getElementById('wpisywaneSłowo');
-        wpisywaneSłowo.value = wybraneLitery.join('');
-    }
-
 
     function wybierzPoziom(poziom) {
         switch (poziom.toLowerCase()) {
@@ -217,10 +207,18 @@
                 czasStartowy = 0;
         }
         poziomWybrany = true;
-        rozpocznijGre();
+
+            // Odblokowujemy przyciski na klawiaturze po wybraniu poziomu trudności
+            var klawiatura = document.getElementById('klawiatura');
+            var buttons = klawiatura.getElementsByTagName('button');
+            for (var button of buttons) {
+                button.disabled = false;
+            }
 
         var ramkaPoziomu = document.getElementById('ramkaPoziomu');
         ramkaPoziomu.style.display = 'none';
+
+            rozpocznijGre();
     }
 
     function rozpocznijGre() {
@@ -230,9 +228,9 @@
         function odliczanieCzasu() {
             var minuty = Math.floor(czas / 60);
             var sekundy = czas % 60;
-            licznik.innerHTML = minuty + 'm ' + sekundy + 's';
+                licznik.innerHTML = minuty + 'm ' + (sekundy < 10 ? '0' : '') + sekundy + 's';
             czas--;
-            if (czas <= 0) {
+            if (czas < 0) {
                 clearInterval(timer);
                 licznik.innerHTML = 'Koniec czasu!';
             }
@@ -243,7 +241,7 @@
         timer = setInterval(odliczanieCzasu, 1000);
     }
 
-
+        document.addEventListener('DOMContentLoaded', inicjujKlawiature);
 </script>
 </body>
 </html>

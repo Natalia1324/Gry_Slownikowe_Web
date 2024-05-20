@@ -16,6 +16,8 @@
 
         private bool _isClueLetter = false;
 
+        private bool? _isHorizontal;
+
         /**
          * Konstruktor
          */
@@ -65,6 +67,22 @@
 
                 _isFirstLetter = value; 
             
+            }
+        }
+
+        /**
+         * Ustawienie czy horizontal
+         */
+        public bool? Horizontal
+        {
+            get { return _isHorizontal; }
+            set
+            {
+                if (_isHorizontal == null)
+                {
+                    _isHorizontal = value;
+                }
+             
             }
         }
 

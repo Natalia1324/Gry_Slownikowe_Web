@@ -7,7 +7,7 @@
 //using Microsoft.AspNetCore.Hosting;
 //using Microsoft.AspNetCore.Identity;
 //using System;
-//using Gry_S³ownikowe.Entities;
+//using Gry_Slownikowe.Entities;
 
 
 using Microsoft.AspNetCore.Builder;
