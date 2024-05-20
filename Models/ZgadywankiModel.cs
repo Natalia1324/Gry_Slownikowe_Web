@@ -1,4 +1,4 @@
-﻿namespace Gry_Słownikowe.Models
+﻿namespace Gry_Slownikowe.Models
 {
     public class ZgadywankiModel
     {

@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Gry_Słownikowe.Migrations
+namespace Gry_Slownikowe.Migrations
 {
     /// <inheritdoc />
-    public partial class NowaNazwaMigracji : Migration
+    public partial class NowaNazwaMigracja : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

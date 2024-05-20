@@ -1,6 +1,6 @@
 ﻿using DynamicMatrix;
 using CrosswordComponents;
-using Gry_Słownikowe.Models;
+using Gry_Slownikowe.Models;
 using DynamicArray;
 using System.Diagnostics;
 

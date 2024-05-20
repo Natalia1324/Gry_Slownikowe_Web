@@ -1,10 +1,10 @@
-﻿using Gry_Słownikowe.Models;
+﻿using Gry_Slownikowe.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Gry_Słownikowe.Entions
+namespace Gry_Slownikowe.Entions
 {
     public class User
     {
@@ -34,8 +34,8 @@ namespace Gry_Słownikowe.Entions
 
         //public ICollection<Status> Status { get; set; }
         //// Properties
-        //[NotMapped]
-        //public bool isLogged { get; set; } = false;
+        [NotMapped]
+        public bool isLogged { get; set; } = false;
 
         //[NotMapped]
         //public ListsModel lists { get; set; }

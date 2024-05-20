@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gry_Słownikowe.Models
+namespace Gry_Slownikowe.Models
 {
     public interface ICrosswordModelReadOnly
     {

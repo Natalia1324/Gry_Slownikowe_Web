@@ -1,461 +1,552 @@
 ﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    ViewData["Title"] = "Wordle";
-   
+ViewData["Title"] = "Wordle";
+
 }
- @model Gry_Słownikowe.Models.WordleModel
+@model Gry_Słownikowe.Models.WordleModel
 
 
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <title>Wordle</title>
-    <style>
-        h1 {
-            margin-top: 10px; 
-            margin-bottom: 10px; 
-            margin-left: 150px;
-            color: white;
-        }
+<meta charset="UTF-8">
+<title>Wordle</title>
+<style>
+h1 {
+margin-top: 10px;
+margin-bottom: 10px;
+margin-left: 150px;
+color: white;
+}
 
-        body {
-            background-color: black;
-        }
+body {
+background-color: black;
+}
 
-        .container {
-            position: relative;
-        }
+.container {
+position: relative;
+}
 
-        #grid-container {
-            display: grid;
-            column-rule: 1px;
-            column-gap: 1px;
-           
-           
-        }
+#grid-container {
+display: grid;
+column-rule: 1px;
+column-gap: 1px;
 
-        #klawiatura {
-            display: grid;
-            position: absolute;
-            left: 520px;
-            bottom: 1px;
-           
-        }
 
-        .litera {
-            background-color: gray ; 
-            text-transform: uppercase;
-            color: white;
-        }
-        
-        .input {
-            width: 100px;
-            heigth: 175px;
-            font-size: 60px;
-            background-color: gray;
-            color: white;
-            text-align: center;
-            text-transform: uppercase;
-        }
+}
 
-        #enable-next-row {
-            
-            margin-left: 135px;
-            width: 200px;
-            height: 80px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+#klawiatura {
+display: grid;
+grid-auto-flow: row;
+position: fixed;
+left: 920px;
+bottom: 200px;
 
-        #zasady {
-            position: absolute;
-            left: 600px;
-            bottom: 750px;
-        }
+}
 
-        #tryb {
-            position: absolute;
-            left: 675px;
-            bottom: 750px;
-        }
+.litera {
+background-color: gray ;
+text-transform: uppercase;
+color: white;
+}
 
-        .row {
-            display: flex;
-            margin-bottom: 1px;
-        }
+.input {
+width: 100px;
+heigth: 175px;
+font-size: 60px;
+background-color: gray;
+color: white;
+text-align: center;
+text-transform: uppercase;
+}
 
-        #wynik {
-            margin-top: 30px;
-            margin-left: -20px;
-            margin-bottom: 5px;
-            
-        }
+#enable-next-row {
 
-            #wynik p {
-                color: white; 
-                font-size: 30px; 
-            }
+margin-left: 135px;
+width: 200px;
+height: 80px;
+background-color: #28a745;
+color: white;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+margin-top: 10px;
 
-        #restart {
-            pointer-events: none;
-            display: none;
-            margin-left: 135px;
-            width: 200px;
-            height: 80px;
-            background-color: red;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            
-        }
+}
 
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-           
-        }
+#zasady {
+position: relative;
+left: 630px;
+background-color: green;
+color: white;
 
-        .overlay-content {
-            background-color: black;
-            padding: 20px;
-            border-radius: 8px;
-            color: white;
-            position: relative;
-            border: 2px solid white;
-        }
-        .overlay-content h1 {
-            margin-left: 125px;
-        }
+}
 
-        .close-button {
-         
-            cursor: pointer;
-            color:white;
-            background-color: black;
-            position: absolute;
-            top: 2px;
-            right: 10px;
-            font-size: 36px;
-            border: 0;
-           
-        }
-    </style>
+#tryb {
+position: relative;
+left: 630px;
+background-color: green;
+color: white;
+}
+
+.row {
+display: flex;
+margin-bottom: 1px;
+}
+
+#wynik {
+margin-top: 30px;
+margin-left: -20px;
+margin-bottom: 5px;
+
+}
+
+#wynik p {
+color: white;
+font-size: 30px;
+}
+
+#restart {
+pointer-events: none;
+display: none;
+margin-left: 135px;
+width: 200px;
+height: 80px;
+background-color: red;
+color: white;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+
+}
+
+.overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+display: flex;
+justify-content: center;
+align-items: center;
+
+}
+
+.overlay-content {
+background-color: black;
+padding: 20px;
+border-radius: 8px;
+color: white;
+position: relative;
+border: 2px solid white;
+}
+.overlay-content h1 {
+margin: 0 auto;
+margin-bottom: 15px;
+}
+
+.close-button {
+
+cursor: pointer;
+color:white;
+background-color: black;
+position: absolute;
+top: 2px;
+right: 10px;
+font-size: 36px;
+border: 0;
+
+}
+
+.mode-button {
+cursor: pointer;
+color: black;
+background-color: white;
+
+font-size: 20px;
+margin-left: 5px;
+margin-right: 5px;
+
+}
+</style>
 </head>
 <body>
-    <h1>WORDLE</h1>
-    <button id="zasady">Zasady</button>
-    <button id="tryb">Tryb gry</button>
-    <div class="container">
-    <div id="grid-container">
-        <div class="row">
-        <input type="text" class="input" value="" maxlength="1">
-        <input type="text" class="input" value="" maxlength="1" >
-        <input type="text" class="input" value="" maxlength="1" >
-        <input type="text" class="input" value="" maxlength="1">
-        <input type="text" class="input" value="" maxlength="1">
-        </div>
+<h1>WORDLE</h1>
+<button id="zasady">Zasady</button>
+<button id="tryb">Tryb gry</button>
+<div class="container">
+<div id="grid-container">
+<div class="row">
+<input type="text" class="input" value="" maxlength="1">
+<input type="text" class="input" value="" maxlength="1" >
+<input type="text" class="input" value="" maxlength="1" >
+<input type="text" class="input" value="" maxlength="1">
+<input type="text" class="input" value="" maxlength="1">
+<input type="text" class="input" value="" maxlength="1">
+<input type="text" class="input" value="" maxlength="1">
+</div>
 
-        <div class="row">
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-        </div>
+<div class="row">
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
 
-        <div class="row">
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-        </div>
 
-        <div class="row">
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-        </div>
+</div>
 
-        <div class="row">
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-        </div>
+<div class="row">
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+</div>
 
-        <div class="row">
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-            <input type="text" class="input" value="" maxlength="1" disabled>
-        </div>
-    </div>
+<div class="row">
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+</div>
 
-    <div id="klawiatura">
-        <div class="key-row">
-            <button type="button" class="litera">a</button>
-            <button type="button" class="litera">ą</button>
-            <button type="button" class="litera">b</button>
-            <button type="button" class="litera">c</button>
-            <button type="button" class="litera">ć</button>
+<div class="row">
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+</div>
 
-            <button type="button" class="litera">d</button>
-            <button type="button" class="litera">e</button>
-            <button type="button" class="litera">ę</button>
-            <button type="button" class="litera">f</button>
-            <button type="button" class="litera">g</button>
-            <button type="button" class="litera">h</button>
-            <button type="button" class="litera">i</button>
-        </div>
+<div class="row">
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+<input type="text" class="input" value="" maxlength="1" disabled>
+</div>
+</div>
 
-        <div class="key-row">
-            <button type="button" class="litera">j</button>
-            <button type="button" class="litera">k</button>
-            <button type="button" class="litera">l</button>
+<div id="klawiatura">
+<div class="key-row">
+<button type="button" class="litera">a</button>
+<button type="button" class="litera">ą</button>
+<button type="button" class="litera">b</button>
+<button type="button" class="litera">c</button>
+<button type="button" class="litera">ć</button>
 
-            <button type="button" class="litera">ł</button>
-            <button type="button" class="litera">m</button>
-            <button type="button" class="litera">n</button>
-            <button type="button" class="litera">ń</button>
-            <button type="button" class="litera">o</button>
-            <button type="button" class="litera">ó</button>
-            <button type="button" class="litera">p</button>
-            <button type="button" class="litera">q</button>
-            <button type="button" class="litera">r</button>
-        </div>
+<button type="button" class="litera">d</button>
+<button type="button" class="litera">e</button>
+<button type="button" class="litera">ę</button>
+<button type="button" class="litera">f</button>
+<button type="button" class="litera">g</button>
+<button type="button" class="litera">h</button>
+<button type="button" class="litera">i</button>
+</div>
 
-        <div class="key-row">
+<div class="key-row">
+<button type="button" class="litera">j</button>
+<button type="button" class="litera">k</button>
+<button type="button" class="litera">l</button>
 
-            
-            <button type="button" class="litera">s</button>
-            <button type="button" class="litera">ś</button>
+<button type="button" class="litera">ł</button>
+<button type="button" class="litera">m</button>
+<button type="button" class="litera">n</button>
+<button type="button" class="litera">ń</button>
+<button type="button" class="litera">o</button>
+<button type="button" class="litera">ó</button>
+<button type="button" class="litera">p</button>
+<button type="button" class="litera">q</button>
+<button type="button" class="litera">r</button>
+</div>
 
-            <button type="button" class="litera">t</button>
-            <button type="button" class="litera">u</button>
-            <button type="button" class="litera">v</button>
-            <button type="button" class="litera">w</button>
-            <button type="button" class="litera">x</button>
-            <button type="button" class="litera">y</button>
-            <button type="button" class="litera">z</button>
-            <button type="button" class="litera">ź</button>
-            <button type="button" class="litera">ż</button>
-        </div>
-    </div>
-    </div>
+<div class="key-row">
 
-    <button id="enable-next-row">Zgadnij</button>
-    <div id="wynik">
-       
 
-    </div>
-    <form asp-controller="Home" asp-action="Wordle" method="get" id="aaa">
+<button type="button" class="litera">s</button>
+<button type="button" class="litera">ś</button>
+
+<button type="button" class="litera">t</button>
+<button type="button" class="litera">u</button>
+<button type="button" class="litera">v</button>
+<button type="button" class="litera">w</button>
+<button type="button" class="litera">x</button>
+<button type="button" class="litera">y</button>
+<button type="button" class="litera">z</button>
+<button type="button" class="litera">ź</button>
+<button type="button" class="litera">ż</button>
+</div>
+</div>
+</div>
+
+<button id="enable-next-row">Zgadnij</button>
+<div id="wynik">
+
+
+</div>
+<form asp-controller="Home" asp-action="Wordle" method="get" id="aaa">
+
+<button id="restart" type="submit">Restart</button>
+</form>
+
+<script>
+function createInputGrid(rows, columns, visibleInputs) {
+const gridContainer = document.getElementById("grid-container");
+
+for (let i = 0; i < rows; i++) {
+const row = gridContainer.children[i];
+const inputs = row.querySelectorAll(".input");
+
+for (let j = 0; j < columns; j++) {
+if (j >= visibleInputs) {
+inputs[j].style.display = "none";
+} else {
+inputs[j].style.display = "block";
+}
+}
+}
+}
+window.onload = function () {
+const rows = 6;
+const columns = 7;
+const visibleInputs = @Model.dlugosc;
+createInputGrid(rows, columns, visibleInputs);
+};
+var idx = 0;
+document.addEventListener("DOMContentLoaded", function () {
+var inputs = document.querySelectorAll("#grid-container .row .input");
+
+
+
+inputs[0].focus();
+
+inputs.forEach(function (input, index) {
+input.addEventListener("input", function () {
+if (input.value.length >= input.maxLength && index < inputs.length - 1) {
+
+inputs[index + 1].focus();
+
+idx = index + 1;
+
+}
+});
+input.addEventListener("keydown", function (event) {
+if (event.key === "Backspace" && input.value === "" && index > 0) {
+
+inputs[index - 1].focus();
+
+idx = index - 1;
+
+
+}
+});
+});
+
+var buttons = document.getElementsByClassName("litera");
+for (var i = 0; i < buttons.length; i++) {
+buttons[i].addEventListener("click", function () {
+
+inputs[idx].value = this.textContent;
+
+
+idx += 1;
+inputs[idx].focus();
+
+
+
+});
+}
+
+});
+var enabledRowIndex = -1;
+var words = ["karta", "brzeg", "domek", "melon", "trasa", "mango", "bekon", "sklep", "kiosk", "kogut"];
+
+var randomIndex = Math.floor(Math.random() * words.length);
+//var text = words[randomIndex];
+// var text = "@Model.slowo";
+var text = @Html.Raw(Json.Serialize(Model.slowo));
+var znaczenie = @Html.Raw(Json.Serialize(Model.znaczenia));
+var correct = false;
+var textSet = new Set(text);
+var wynikwypisany = false;
+var restarted = false;
+var colors = ["A", "A", "A", "A", "A"];
+
+
+document.getElementById("enable-next-row").addEventListener("click", function () {
+
+restarted = false;
+var rows = document.querySelectorAll("#grid-container .row");
+
+for (var i = (enabledRowIndex + 1); i < 6; i++) {
+if (!rows[i].querySelector(".input").disabled) {
+enabledRowIndex = i;
+break;
+}
+}
+var concatenatedText = ""
+if (enabledRowIndex > -1 && enabledRowIndex < 6) {
+concatenatedText = Array.from(rows[enabledRowIndex].querySelectorAll(".input")).map(input => input.value).join('');
+if (concatenatedText.length === text.length) {
+rows[enabledRowIndex].querySelectorAll(".input").forEach(function (input) {
+input.disabled = true;
+});
+
+if (concatenatedText === text && wynikwypisany === false) {
+
+
+correct = true;
+var paragraph = document.createElement("p");
+paragraph.textContent = "Gratulacje! Odgadłes poprawnie za " + (enabledRowIndex + 1) + " razem!" + "\n" + "Znaczenie słowa: " + znaczenie;
+var wynikDiv = document.getElementById("wynik");
+wynikDiv.appendChild(paragraph);
+wynikwypisany = true;
+var button = document.getElementById("restart");
+button.style.display = "block";
+button.style.pointerEvents = "auto";
+                        var newDiv = document.createElement("div");
+
+
+                        var newParagraph = document.createElement("p");
+
+
+                        var paragraphText = document.createTextNode("Statystki: 1 próba: " + @Model.statystki[0]+" 2 próby: " + @Model.statystki[1]+" 3 próby: " + @Model.statystki[2]+" 4 próby: "
+                            + @Model.statystki[3]+" 5 prób: " + @Model.statystki[4]+" 6 prób: " + @Model.statystki[5]+" Nie zgadnięto: " + @Model.statystki[6]);
+
     
-        <button id="restart" type="submit">Restart</button>
-    </form>
+                        newParagraph.appendChild(paragraphText);
+
    
-    <script>
-        var idx = 0;
-        document.addEventListener("DOMContentLoaded", function () {
-            var inputs = document.querySelectorAll("#grid-container .row .input");
-            
-
-          
-            inputs[0].focus();
-
-            inputs.forEach(function (input, index) {
-                input.addEventListener("input", function () {
-                    if (input.value.length >= input.maxLength && index < inputs.length - 1) {
-                        
-                        inputs[index + 1].focus();
-                        
-                            idx = index + 1;
-                        
-                    }
-                });
-                input.addEventListener("keydown", function (event) {
-                    if (event.key === "Backspace" && input.value === "" && index > 0) {
-
-                        inputs[index - 1].focus();
-                        
-                            idx = index - 1;
-                        
-                        
-                    }
-                });
-            });
-
-            var buttons = document.getElementsByClassName("litera");
-            for (var i = 0; i < buttons.length; i++) {
-                buttons[i].addEventListener("click", function () {
-
-                    inputs[idx].value = this.textContent;
-                    
-                        
-                        idx += 1;
-                    inputs[idx].focus();
-                    
-                    
-                    
-                });
-            }
-            
-        });
-        var enabledRowIndex = -1;
-        var words = ["karta", "brzeg", "domek", "melon", "trasa", "mango", "bekon", "sklep", "kiosk", "kogut"];
-
-        var randomIndex = Math.floor(Math.random() * words.length);
-        //var text = words[randomIndex];
-       // var text = "@Model.slowo";
-        var text = @Html.Raw(Json.Serialize(Model.slowo));
-        var znaczenie = @Html.Raw(Json.Serialize(Model.znaczenia));
-        var correct = false;
-        var textSet = new Set(text);
-        var wynikwypisany = false;
-        var restarted = false;
-        var colors = ["A", "A", "A", "A", "A"];
-        
-        
-        document.getElementById("enable-next-row").addEventListener("click", function () {
-           
-                restarted = false;
-                var rows = document.querySelectorAll("#grid-container .row");
-
-                for (var i = (enabledRowIndex + 1); i < 6; i++) {
-                    if (!rows[i].querySelector(".input").disabled) {
-                        enabledRowIndex = i;
-                        break;
-                    }
-                }
-                var concatenatedText = ""
-                if (enabledRowIndex > -1 && enabledRowIndex < 6) {
-                    concatenatedText = Array.from(rows[enabledRowIndex].querySelectorAll(".input")).map(input => input.value).join('');
-                    if (concatenatedText.length === text.length) {
-                        rows[enabledRowIndex].querySelectorAll(".input").forEach(function (input) {
-                            input.disabled = true;
-                        });
-                        
-                        if (concatenatedText === text && wynikwypisany === false) {
+                        newDiv.appendChild(newParagraph);
 
 
-                            correct = true;
-                            var paragraph = document.createElement("p");
-                            paragraph.textContent = "Gratulacje! Odgadłes poprawnie za " + (enabledRowIndex + 1) + " razem!" + "\n" + "Znaczenie słowa: " + znaczenie;
-                            var wynikDiv = document.getElementById("wynik");
-                            wynikDiv.appendChild(paragraph);
-                            wynikwypisany = true;
-                            var button = document.getElementById("restart");
-                            button.style.display = "block";
-                            button.style.pointerEvents = "auto";
-                        }
+                        document.body.appendChild(newDiv);
+}
 
 
-                        for (var j = 0; j < concatenatedText.length; j++) {
-                            var currentChar = concatenatedText[j];
-                            if (currentChar === text[j]) {
+for (var j = 0; j < concatenatedText.length; j++) {
+var currentChar = concatenatedText[j];
+if (currentChar === text[j]) {
 
-                                rows[enabledRowIndex].querySelectorAll(".input")[j].style.backgroundColor = "green";
-                                colors[j] = "G";
-                            }
-                            else if (textSet.has(currentChar)) {
+rows[enabledRowIndex].querySelectorAll(".input")[j].style.backgroundColor = "green";
+colors[j] = "G";
+}
+else if (textSet.has(currentChar)) {
 
-                                rows[enabledRowIndex].querySelectorAll(".input")[j].style.backgroundColor = "#b8860b";
-                                colors[j] = "Y";
-                            }
-                            else {
-                                rows[enabledRowIndex].querySelectorAll(".input")[j].style.backgroundColor = "#444";
-                                colors[j] = "B";
-                            }
-
-                            
-                             
-                        }
-                        
-                        var buttons = document.getElementsByClassName("litera");
-                        for (var i = 0; i < buttons.length; i++) {
-                            for (var j = 0; j < concatenatedText.length; j++) {
-                                if (buttons[i].textContent === concatenatedText[j]) {
-                                    if (colors[j] === "G") {
-                                        buttons[i].style.backgroundColor = "green";
-                                    }
-                                    else if (colors[j] === "Y") {
-                                        buttons[i].style.backgroundColor = "#b8860b";
-                                    }
-                                    else if (colors[j] === "B") {
-                                        buttons[i].style.backgroundColor = "#444";
-                                        buttons[i].disabled = true;
-                                    }
-                                }
-                            }
+rows[enabledRowIndex].querySelectorAll(".input")[j].style.backgroundColor = "#b8860b";
+colors[j] = "Y";
+}
+else {
+rows[enabledRowIndex].querySelectorAll(".input")[j].style.backgroundColor = "#444";
+colors[j] = "B";
+}
 
 
-                        }
-                    
-                    }
 
-                }
+}
 
-                if (enabledRowIndex < 5 && correct === false && concatenatedText.length===text.length) {
-                    rows[enabledRowIndex + 1].querySelectorAll(".input").forEach(function (input) {
-                        input.disabled = false;
-                    });
-                }
-
-            if (enabledRowIndex === 5 && correct === false && wynikwypisany === false && concatenatedText.length === text.length) {
-                    var paragraph = document.createElement("p");
-                    paragraph.textContent = "Niestety nie zgadłeś :( Wynikiem było słowo: " + text.toUpperCase() + "\n" + "Znaczenie słowa: "+znaczenie;
-                    var wynikDiv = document.getElementById("wynik");
-                    wynikDiv.appendChild(paragraph);
-                    wynikwypisany = true;
-                    var button = document.getElementById("restart");
-                    button.style.display = "block";
-                    button.style.pointerEvents = "auto";
-                }
+var buttons = document.getElementsByClassName("litera");
+for (var i = 0; i < buttons.length; i++) {
+for (var j = 0; j < concatenatedText.length; j++) {
+if (buttons[i].textContent === concatenatedText[j]) {
+if (colors[j] === "G") {
+buttons[i].style.backgroundColor = "green";
+}
+else if (colors[j] === "Y") {
+buttons[i].style.backgroundColor = "#b8860b";
+}
+else if (colors[j] === "B") {
+buttons[i].style.backgroundColor = "#444";
+buttons[i].disabled = true;
+}
+}
+}
 
 
-            
-             
-        });
-        document.getElementById('zasady').addEventListener('click', function () {
-            var overlay = document.createElement('div');
-            overlay.className = 'overlay';
+}
 
-            var content = document.createElement('div');
-            content.className = 'overlay-content';
-            var closeButton = document.createElement('button');
-            closeButton.textContent = 'x';
-            closeButton.className = 'close-button';
-            closeButton.addEventListener('click', function () {
+}
 
-                document.body.removeChild(overlay);
-            });
+}
 
-           
-            content.innerHTML = '<h1>ZASADY GRY</h1><p>W 6 próbach spróbuj odgadnąć wylosowane słowo.</p><p>Po każdej próbie otrzymasz wskazówki w postaci kolorowych liter.</p><p>Szara litera - Nie znajduje się w słowie</p><p>Żółta litera - Znajduje się w słowie, ale na innej pozycji</p><p>Zielona litera - Jest na dobrej pozycji</p>';
-            content.appendChild(closeButton);
-            overlay.appendChild(content);
+if (enabledRowIndex < 5 && correct === false && concatenatedText.length===text.length) {
+rows[enabledRowIndex + 1].querySelectorAll(".input").forEach(function (input) {
+input.disabled = false;
+});
+}
 
-            document.body.appendChild(overlay);
-        });
-    </script> 
+if (enabledRowIndex === 5 && correct === false && wynikwypisany === false && concatenatedText.length === text.length) {
+var paragraph = document.createElement("p");
+paragraph.textContent = "Niestety nie zgadłeś :( Wynikiem było słowo: " + text.toUpperCase() + "\n" + "Znaczenie słowa: "+znaczenie;
+var wynikDiv = document.getElementById("wynik");
+wynikDiv.appendChild(paragraph);
+wynikwypisany = true;
+var button = document.getElementById("restart");
+button.style.display = "block";
+button.style.pointerEvents = "auto";
+                var newDiv = document.createElement("div");
+
+
+                var newParagraph = document.createElement("p");
+
+
+                var paragraphText = document.createTextNode("Statystki: 1 próba: " + @Model.statystki[0]+" 2 próby: " + @Model.statystki[1]+" 3 próby: " + @Model.statystki[2]+" 4 próby: "
+                    + @Model.statystki[3]+" 5 prób: " + @Model.statystki[4]+" 6 prób: " + @Model.statystki[5]+" Nie zgadnięto: " + (@Model.statystki[6]+1));
+
+
+                newParagraph.appendChild(paragraphText);
+
+
+                newDiv.appendChild(newParagraph);
+
+
+                document.body.appendChild(newDiv);
+}
+
+
+
+
+});
+document.getElementById('zasady').addEventListener('click', function () {
+var overlay = document.createElement('div');
+overlay.className = 'overlay';
+
+var content = document.createElement('div');
+content.className = 'overlay-content';
+var closeButton = document.createElement('button');
+closeButton.textContent = 'x';
+closeButton.className = 'close-button';
+closeButton.addEventListener('click', function () {
+
+document.body.removeChild(overlay);
+});
+
+
+content.innerHTML = '<h1>ZASADY GRY</h1><p>W 6 próbach spróbuj odgadnąć wylosowane słowo.</p><p>Po każdej próbie otrzymasz wskazówki w postaci kolorowych liter.</p><p>Szara litera - Nie znajduje się w słowie</p><p>Żółta litera - Znajduje się w słowie, ale na innej pozycji</p><p>Zielona litera - Jest na dobrej pozycji</p>';
+content.appendChild(closeButton);
+overlay.appendChild(content);
+
+document.body.appendChild(overlay);
+});
+
+document.getElementById('tryb').addEventListener('click', function () {
+window.location.href = '/Home/WordleGamemode';
+});
+</script>
 </body>
 </html>

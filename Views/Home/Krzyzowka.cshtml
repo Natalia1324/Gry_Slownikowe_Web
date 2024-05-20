@@ -1,4 +1,4 @@
-﻿@model Gry_Słownikowe.Models.ICrosswordModelReadOnly
+﻿@model Gry_Slownikowe.Models.ICrosswordModelReadOnly
 
 @{
     int crosswordColumns = Model.Columns;
@@ -197,17 +197,18 @@
                 {
                     string inputId = $"{y}_{x}";
                     string divID = "div_" + inputId;
+                    bool horizontal = Model[y, x]?.Horizontal ?? false;
                     if (Model[y, x] != null)
                     {
                         if (@Model[y, x].FirstLetter)
                         {
-                            <div id="@divID" class="cell first_letter" oninput="handleWrite('@inputId', '@Model[y,x].WordNumber')" >
+                            <div id="@divID" class="cell first_letter" oninput="handleWrite('@inputId', '@Model[y,x].WordNumber', '@horizontal')">
                                 <input autocomplete="off" id="@inputId" onblur="restoreNumber('@inputId', '@Model[y,x].WordNumber')" onfocus="removeNumber('@inputId')" class="letterInput" type="text" maxlength="1" value="@Model[y,x].WordNumber" />
                             </div>
                         }
                         else
                         {
-                            <div id="@divID" class="cell" oninput="handleWrite('@inputId')">
+                            <div id="@divID" class="cell" oninput="handleWrite('@inputId', '@Model[y,x].WordNumber', '@horizontal')">
                                 <input autocomplete="off" id="@inputId" class="letterInput" type="text" maxlength="1" />
                             </div>
                         }
@@ -240,6 +241,19 @@
 </main>
 
 <script>
+
+    function nextCell(inputId, horizontal) {
+        let [row, col] = inputId.split('_').map(Number);
+        var nextInput;
+        if (horizontal == "True") {
+            nextInput = document.getElementById(`${row}_${col + 1}`);
+        }else {
+            nextInput = document.getElementById(`${row + 1}_${col}`);
+        }
+        if (nextInput) {
+            nextInput.focus();
+        }
+    }
 
     function newCrossword(){
         let result = confirm("Czy na pewno chcesz zmienić krzyżówkę?");
@@ -279,7 +293,7 @@
         });
     }
 
-    function handleWrite(inputId, wordNumber) {
+    function handleWrite(inputId, wordNumber, horizontal) {
         let input = document.getElementById(inputId);
         let letter = input.value;
         let coords = inputId.split("_");
@@ -300,6 +314,7 @@
                         div.style.backgroundColor = "#ccdbb8";
                     }
                     checkIfIsFinished();
+                    nextCell(inputId, horizontal)
                 } else {
                     if (wordNumber == undefined) {
                         input.value = "";               
