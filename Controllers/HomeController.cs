@@ -11,7 +11,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
 
-
 namespace Gry_Słownikowe.Controllers
 {
     public class HomeController : Controller
@@ -147,7 +146,13 @@ namespace Gry_Słownikowe.Controllers
 
         public IActionResult Wisielec()
         {
-            return View();
+            string slowo = "";
+            SJP_API api = new SJP_API();
+            slowo = api.getSlowo();
+            string polskieZnaki = HttpUtility.HtmlEncode(slowo);
+
+            WisielecModel model = new WisielecModel(polskieZnaki);
+            return View(model);
         }
 
         public IActionResult KrzyzowkaMenu()
