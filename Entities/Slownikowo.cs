@@ -10,7 +10,7 @@ namespace Gry_Slownikowe.Entions
     {
         public int Id { get; set; }
         public int Win { get; set; }
-        public string Loss { get; set; }
+        public int Loss { get; set; }
         public TimeSpan GameTime { get; set; }
         public DateTime? GameData { get; set; }
 

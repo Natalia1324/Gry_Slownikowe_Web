@@ -183,14 +183,40 @@ namespace Gry_Slownikowe.Controllers
                 random = new SJP_API();
             } while (!random.getDopuszczalnosc());
 
+
             //SlownikowoModel _slownikowoModel = new(random.getSlowo());
             //random = new SJP_API("żółć");
-            
+
             //string slowo = HttpUtility.HtmlEncode(random.getSlowo());
             SlownikowoModel _slownikowoModel = new(random.getSlowo());
-            Console.WriteLine(_slownikowoModel.WylosowaneSlowo);
+            //Console.WriteLine(_slownikowoModel.WylosowaneSlowo);
             return View(_slownikowoModel);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveGameSlownikowo([FromBody] Slownikowo game)
+        {
+            if (game == null)
+            {
+                _logger.LogError("Invalid game data received");
+                return BadRequest(new { message = "Invalid game data" });
+            }
+
+            try
+            {
+                game.GameData = DateTime.Now;
+                _context.Slownikowo.Add(game);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("Game saved successfully");
+                return Ok(new { message = "Game saved successfully", game });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error saving game data");
+                return StatusCode(500, new { message = "Internal server error" });
+            }
+        }
+
 
         [HttpPost]
         public IActionResult SprawdzSlowo(string wpisaneSlowo)

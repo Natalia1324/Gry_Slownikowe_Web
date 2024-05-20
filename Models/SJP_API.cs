@@ -28,6 +28,11 @@ namespace Gry_Slownikowe.Models
         public SJP_API() {
             GetMeaning("https://sjp.pl/sl/los/");
         }
+
+        public void losuj_w_obiekcie()
+        {
+            GetMeaning("https://sjp.pl/sl/los/");
+        }
         public bool getDopuszczalnosc()
         {
             return czy_dopuszczalne;
