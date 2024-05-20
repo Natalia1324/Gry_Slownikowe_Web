@@ -3,7 +3,7 @@ using CrosswordComponents;
 using Gry_Slownikowe.Entions;
 using Gry_Slownikowe.Entities;
 using Gry_Slownikowe.Models;
-using Gry_Słownikowe.Models;
+using Gry_Slownikowe.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
