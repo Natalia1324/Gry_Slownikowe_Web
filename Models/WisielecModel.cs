@@ -12,10 +12,10 @@ namespace Gry_Slownikowe.Models
         }
         public string Losuj() {
             bool isCorrect = false;
-            SJP_API api = null;
+            SJP_API api = new SJP_API();
             do
             {
-                api = new SJP_API();
+                api.losuj_w_obiekcie();
                 isCorrect = api.getDopuszczalnosc();
             } while (isCorrect == false);
 
