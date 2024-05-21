@@ -357,13 +357,52 @@ namespace Gry_Slownikowe.Controllers
         public IActionResult Wisielec()
         {
             string slowo = "";
-            SJP_API api = new SJP_API();
+            bool isCorrect = false;
+            SJP_API api;
+            do
+            {
+                api = new SJP_API();
+                isCorrect = api.getDopuszczalnosc();
+            } while (isCorrect == false);
+
             slowo = api.getSlowo();
             string polskieZnaki = HttpUtility.HtmlEncode(slowo);
 
             WisielecModel model = new WisielecModel(polskieZnaki);
             return View(model);
         }
+
+
+        //[HttpGet]
+        //public IActionResult losuj()
+        //{
+        //    SJP_API random;
+
+        //    do
+        //    {
+        //        random = new SJP_API();
+        //    } while (!random.getDopuszczalnosc());
+        //    //SlownikowoModel _slownikowoModel = new(random.getSlowo());
+        //    //random = new SJP_API("żółć");
+
+        //    //string slowo = HttpUtility.HtmlEncode(random.getSlowo());
+        //    WisielecModel WisielecModel = new WisielecModel(random.getSlowo());
+        //    //Console.WriteLine(_slownikowoModel.WylosowaneSlowo);
+        //    return View(WisielecModel);
+        //}
+
+
+        //[HttpGet]
+        //public IActionResult Losuj()
+        //{
+        //    SJP_API random;
+        //    do
+        //    {
+        //        random = new SJP_API();
+        //    } while (!random.getDopuszczalnosc());
+
+        //    return Json(new { word = random.getSlowo() });
+        //}
 
         public IActionResult KrzyzowkaMenu()
         {

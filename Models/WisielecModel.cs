@@ -11,7 +11,14 @@ namespace Gry_Slownikowe.Models
             this.slowo = slowo;
         }
         public string Losuj() {
+            bool isCorrect = false;
             SJP_API api = new SJP_API();
+            do
+            {
+                api.losuj_w_obiekcie();
+                isCorrect = api.getDopuszczalnosc();
+            } while (isCorrect == false);
+
             slowo = api.getSlowo();
             slowo = HttpUtility.HtmlEncode(slowo);
             return slowo;

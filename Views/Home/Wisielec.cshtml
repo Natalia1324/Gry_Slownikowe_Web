@@ -148,7 +148,10 @@
         // Funkcja rozpoczynająca nową grę
         function startNewGame() {
             //wordToGuess = "Ala ma Kota  kot mam ale"; // Nowe słowo do zgadnięcia
-            wordToGuess = @Html.Raw(Json.Serialize(Model.Losuj())); // Nowe słowo do zgadnięcia
+            var kopia = wordToGuess; 
+            //do {
+                wordToGuess = @Html.Raw(Json.Serialize(Model.Losuj())); // Nowe słowo do zgadnięcia
+            //} while (kopia == wordToGuess)
             guessedWord = wordToGuess.replace(/[a-zA-Ząćęłńóśźż]/g, "_"); // Zakryj litery
             currentAttempts = 0; // Zresetuj liczbę prób
             updateScreen(); // Zaktualizuj ekran
@@ -159,6 +162,80 @@
                 buttons[i].disabled = false;
             }
         }
+
+        // function startNewGame() {
+        //     // Użyj Fetch API do pobrania nowego słowa z serwera
+        //     fetch('/controllerName/Losuj') // Zamień 'controllerName' na nazwę Twojego kontrolera
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             var wordToGuess = data.word; // Nowe słowo do zgadnięcia
+        //             var kopia = wordToGuess;
+
+        //             guessedWord = wordToGuess.replace(/[a-zA-Ząćęłńóśźż]/g, "_"); // Zakryj litery
+        //             currentAttempts = 0; // Zresetuj liczbę prób
+        //             updateScreen(); // Zaktualizuj ekran
+
+        //             // Włącz przyciski liter
+        //             var buttons = document.getElementsByClassName("litera");
+        //             for (var i = 0; i < buttons.length; i++) {
+        //                 buttons[i].disabled = false;
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.error('Error fetching the word:', error);
+        //         });
+        // }
+
+        // function startNewGame() {
+        //     // Użyj AJAX do pobrania nowego słowa z serwera
+        //     $.ajax({
+        //         url: '@Url.Action("SprawdzSlowo", "Home")', // Zamień 'controllerName' na nazwę Twojego kontrolera
+        //         type: 'GET',
+        //         success: function (data) {
+        //             var wordToGuess = data.word; // Nowe słowo do zgadnięcia
+        //             var kopia = wordToGuess;
+
+        //             guessedWord = wordToGuess.replace(/[a-zA-Ząćęłńóśźż]/g, "_"); // Zakryj litery
+        //             currentAttempts = 0; // Zresetuj liczbę prób
+        //             updateScreen(); // Zaktualizuj ekran
+
+        //             // Włącz przyciski liter
+        //             var buttons = document.getElementsByClassName("litera");
+        //             for (var i = 0; i <= buttons.length; i++) {
+        //                 buttons[i].disabled = false;
+        //             }
+        //         },
+        //         error: function (xhr, status, error) {
+        //             console.error('Error fetching the word:', status, error);
+        //         }
+        //     });
+        // }
+        
+        
+        //dziala gorzej niz poprzednio
+        // function startNewGame() {
+        //     $.ajax({
+        //         url: '@Url.Action("Losuj", "Home")',
+        //         type: 'GET',
+        //         dataType: 'json',
+        //         success: function (response) {
+        //             var wordToGuess = response.word;  // Get the new word from the server response
+        //             guessedWord = wordToGuess.replace(/[a-zA-Ząćęłńóśźż]/g, "_");  // Cover letters with underscores
+        //             currentAttempts = 0;  // Reset attempts
+
+        //             updateScreen();  // Update the screen with the new game state
+
+        //             // Enable letter buttons
+        //             var buttons = document.getElementsByClassName("litera");
+        //             for (var i = 0; i < buttons.length; i++) {
+        //                 buttons[i].disabled = false;
+        //             }
+        //         },
+        //         error: function () {
+        //             console.log("Wystąpił błąd podczas pobierania nowego słowa.");
+        //         }
+        //     });
+        // }
 
         // Inicjalizacja stanu gry
         guessedWord = wordToGuess.replace(/[a-zA-Ząćęłńóśźż]/g, "_"); // Początkowo zakrywamy litery, a spacje od razu odkrywamy
