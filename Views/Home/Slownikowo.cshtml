@@ -126,6 +126,8 @@
         //kontenery słów
         var wyzejSlowa = [];
         var nizejSlowa = [];
+
+        var gameStatus = false;
         //pobranie wylosowanego słowa
         var wylosowaneSlowo = '@Model.WylosowaneSlowo';
         //przekształcenie go na Raw, by zapobiec problemom ze znakami diakrytycznymi
@@ -166,10 +168,11 @@
 
             //czyszczenie pola tekstowego
             wynik.textContent = "";
+            wynik.textContent = text;
 
            //czy gracz się poddał?
             if (wpisaneSlowo === 'q') {
-                koniecGry();
+                przegrana();
                 return;
             }
 
@@ -187,8 +190,8 @@
                     //zakoloruj probe na zielono
                     kolorujKola('zielone', liczbaProb + 1);
                     //uniemozliw dalsze zgadywanie
-                    document.getElementById("wpisaneSlowo").disabled = true;
-                    wynik.textContent = "Gratulacje! Zgadłeś wylosowane słowo!";
+                    gameStatus = true;
+                    koniecGry();
 
                 } else if (!slowa.includes(wpisaneSlowo)) {
                     //jesli proba była niepoprawna
@@ -245,7 +248,7 @@
                     if (liczbaProb < kola.length) {
                         kolorujKola('zolte', liczbaProb);
                     }
-                    else koniecGry();
+                    else przegrana();
 
                 }
                 else {
@@ -257,50 +260,40 @@
             });
         }
 
-        function saveGameToDatabase(win, loss, gameTime, userId) {
-            var gameData = {
-                Win: win,
-                Loss: loss,
-                GameTime: gameTime,
-                UserId: userId
-            };
-
-            fetch('/Home/SaveGameSlownikowo', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
+        function sendGameData(gameTime) {
+            $.ajax({
+                url: '@Url.Action("SaveGame", "Home")', // URL do metody w kontrolerze
+                type: 'POST',
+                data: {
+                    win: gameStatus,
+                    tries: liczbaProb+1,
+                    gameTime: gameTime
                 },
-                body: JSON.stringify(gameData)
-            })
-                .then(response => {
-                    // Sprawdź, czy odpowiedź jest w porządku
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json(); // Próbujemy sparsować odpowiedź jako JSON
-                })
-                .then(data => {
-                    console.log('Success:', data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
+                success: function (response) {
+                    console.log('Data saved successfully:', response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error saving data:', {
+                        readyState: xhr.readyState,
+                        status: xhr.status,
+                        statusText: xhr.statusText,
+                        responseText: xhr.responseText
+                    });
+                }
+            });
         }
         
+        function przegrana() {
+            kolorujKola('czerwone', liczbaProb);
+            gameStatus = false;
+            koniecGry();
+        }
+
         function koniecGry(){
             endTime = new Date();
             const gameTime = endTime - startTime;
-
-            // Przelicz czas gry na format czytelny dla użytkownika (minuty:sekundy)
-            const seconds = Math.floor((gameTime / 1000) % 60);
-            const minutes = Math.floor((gameTime / (1000 * 60)) % 60);
-
-            const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
-
-            kolorujKola('czerwone', liczbaProb);
-            wynik.textContent = "Koniec gry. Wylosowane słowo to: " + text;
-            saveGameToDatabase(0, 1, formattedTime, 1);
+            wynik.textContent = "Koniec gry. Wylosowane słowo to: " + text + ". A twój czas wyniósł: " + gameTime/1000;
+            sendGameData(gameTime);
             document.getElementById("wpisaneSlowo").disabled = true;
         }
 

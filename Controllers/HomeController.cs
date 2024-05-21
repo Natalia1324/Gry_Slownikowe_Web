@@ -182,18 +182,18 @@ namespace Gry_Slownikowe.Controllers
                 random = new SJP_API();
             } while (!random.getDopuszczalnosc());
 
-            var newRecord = new Slownikowo
-            {
-                Win = 1,
-                Loss = 0,
-                GameTime = new TimeSpan(1, 30, 0), // 1 godzina, 30 minut
-                GameData = DateTime.Now,
-                UserId = getLoggedUser().Id
-            };
+            //var newRecord = new Slownikowo
+            //{
+            //    Win = 1,
+            //    Loss = 0,
+            //    GameTime = new TimeSpan(1, 30, 0), // 1 godzina, 30 minut
+            //    GameData = DateTime.Now,
+            //    UserId = getLoggedUser().Id
+            //};
 
-            getLoggedUser().Slownikowo.Add(newRecord);
-            _context.Slownikowo.Add(newRecord);
-            _context.SaveChanges();
+            //getLoggedUser().Slownikowo.Add(newRecord);
+            //_context.Slownikowo.Add(newRecord);
+            //_context.SaveChanges();
 
             //string slowo = HttpUtility.HtmlEncode(random.getSlowo());
             SlownikowoModel _slownikowoModel = new(random.getSlowo());
@@ -203,31 +203,36 @@ namespace Gry_Slownikowe.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveGameSlownikowo([FromBody] Slownikowo game)
+        public IActionResult SaveGame(bool win, int tries, int gameTime)
         {
-            if (game == null)
-            {
-                _logger.LogError("Invalid game data received");
-                return BadRequest(new { message = "Invalid game data" });
-            }
+            Console.WriteLine("Wygrana: " + win);
+            Console.WriteLine("Proby: " + tries);
+            Console.WriteLine("Czas: " + gameTime);
 
             try
             {
-                game.GameData = DateTime.Now;
-                game.UserId = getLoggedUser().Id;
-                _context.Slownikowo.Add(game);
-                await _context.SaveChangesAsync();
-                _logger.LogInformation("Game saved successfully");
-                return Ok(new { message = "Game saved successfully", game });
+                TimeSpan timespan = TimeSpan.FromMilliseconds(gameTime);
+                var newRecord = new Slownikowo
+                {
+                    Win = win,
+                    Tries = tries,
+                    GameTime = timespan, // 1 godzina, 30 minut
+                    GameData = DateTime.Now,
+                    UserId = getLoggedUser().Id
+                };
+
+                getLoggedUser().Slownikowo.Add(newRecord);
+                _context.Slownikowo.Add(newRecord);
+                _context.SaveChanges();
             }
-            catch (Exception ex)
+            catch
             {
-                _logger.LogError(ex, "Error saving game data");
-                return StatusCode(500, new { message = "Internal server error" });
+                return Json(new { success = false, message = "Couldn't push to database" });
             }
+
+
+            return Json(new { success = true, message = "Data saved successfully." });
         }
-
-
         [HttpPost]
         public IActionResult SprawdzSlowo(string wpisaneSlowo)
         {
@@ -239,7 +244,6 @@ namespace Gry_Slownikowe.Controllers
             // Zwracamy wynik sprawdzenia w formie JSON
             return Json(new { IsCorrect = isCorrect });
         }
-
         [HttpPost]
         public IActionResult LosujSlowo()
         {
@@ -253,7 +257,6 @@ namespace Gry_Slownikowe.Controllers
             // Zwracamy wynik sprawdzenia w formie JSON
             return Json(new { slowo = random.getSlowo() });
         }
-
         public IActionResult ZgadywankiPTrudności()
         {
             // Losowanie pierwszego słowa
@@ -301,7 +304,6 @@ namespace Gry_Slownikowe.Controllers
             ZgadywankiModel model = new ZgadywankiModel(polskieZnaki1, polskieZnaki2, polskieZnaki3, polskieZnaki4);
             return View(model);
         }
-
         private bool CzyDrugieSlowoMaMinTrzyLitery(string slowo1, string slowo2, string slowo3, string slowo4)
         {
             var literyZPierwszego = new HashSet<char>(slowo1);
@@ -345,7 +347,6 @@ namespace Gry_Slownikowe.Controllers
 
             return licznik2 >= 2 && licznik3 >= 2 && licznik4 >= 2;
         }
-
         public IActionResult ZgadywankiMenu ()
         {
 
