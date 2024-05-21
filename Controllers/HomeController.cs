@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Memory;
+using System;
+
 //using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
@@ -127,8 +129,6 @@ namespace Gry_Slownikowe.Controllers
         {
             return View();
         }
-
-
         public IActionResult WordleGamemode()
         {
             return View();
@@ -167,15 +167,14 @@ namespace Gry_Slownikowe.Controllers
             WordleModel model = new WordleModel(polskieZnaki, znaczeniePL, dlugosc, counts);
             return View(model);
         }
-
-
-
-
-        //znaki unicode
-
         [HttpGet]
         public IActionResult Slownikowo()
         {
+            if (getLoggedUser() == null)
+            {
+                return View("Login");
+            }
+            else { 
             SJP_API random;
 
             do
@@ -183,14 +182,24 @@ namespace Gry_Slownikowe.Controllers
                 random = new SJP_API();
             } while (!random.getDopuszczalnosc());
 
+            var newRecord = new Slownikowo
+            {
+                Win = 1,
+                Loss = 0,
+                GameTime = new TimeSpan(1, 30, 0), // 1 godzina, 30 minut
+                GameData = DateTime.Now,
+                UserId = getLoggedUser().Id
+            };
 
-            //SlownikowoModel _slownikowoModel = new(random.getSlowo());
-            //random = new SJP_API("żółć");
+            getLoggedUser().Slownikowo.Add(newRecord);
+            _context.Slownikowo.Add(newRecord);
+            _context.SaveChanges();
 
             //string slowo = HttpUtility.HtmlEncode(random.getSlowo());
             SlownikowoModel _slownikowoModel = new(random.getSlowo());
             //Console.WriteLine(_slownikowoModel.WylosowaneSlowo);
             return View(_slownikowoModel);
+            }
         }
 
         [HttpPost]
@@ -205,6 +214,7 @@ namespace Gry_Slownikowe.Controllers
             try
             {
                 game.GameData = DateTime.Now;
+                game.UserId = getLoggedUser().Id;
                 _context.Slownikowo.Add(game);
                 await _context.SaveChangesAsync();
                 _logger.LogInformation("Game saved successfully");

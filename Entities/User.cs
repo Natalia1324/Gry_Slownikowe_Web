@@ -16,11 +16,11 @@ namespace Gry_Slownikowe.Entions
         public DateTime AccountCreationDate { get; set; }
 
         
-        public ICollection<Krzyzowki> Krzyzowki { get; set; } = new List<Krzyzowki>();
-        public ICollection<Wisielec> Wisielec {  get; set; } = new List<Wisielec>();
-        public ICollection<Wordle> Wordle { get; set; } = new List<Wordle>();
-        public ICollection<Zgadywanki> Zgadywanki { get; set; } = new List<Zgadywanki>();
-        public ICollection<Slownikowo> Slownikowo { get; set; } = new List<Slownikowo>();
+        public List<Krzyzowki> Krzyzowki { get; set; } = new List<Krzyzowki>();
+        public List<Wisielec> Wisielec {  get; set; } = new List<Wisielec>();
+        public List<Wordle> Wordle { get; set; } = new List<Wordle>();
+        public List<Zgadywanki> Zgadywanki { get; set; } = new List<Zgadywanki>();
+        public List<Slownikowo> Slownikowo { get; set; } = new List<Slownikowo>();
 
 
         //// 1 - admin
