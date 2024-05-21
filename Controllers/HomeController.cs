@@ -240,6 +240,20 @@ namespace Gry_Slownikowe.Controllers
             return Json(new { IsCorrect = isCorrect });
         }
 
+        [HttpPost]
+        public IActionResult LosujSlowo()
+        {
+            SJP_API random;
+
+            do
+            {
+                random = new SJP_API();
+            } while (!random.getDopuszczalnosc());
+
+            // Zwracamy wynik sprawdzenia w formie JSON
+            return Json(new { slowo = random.getSlowo() });
+        }
+
         public IActionResult ZgadywankiPTrudności()
         {
             // Losowanie pierwszego słowa

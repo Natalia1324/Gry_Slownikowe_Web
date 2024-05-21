@@ -18,7 +18,6 @@ namespace Gry_Slownikowe.Models
                 api.losuj_w_obiekcie();
                 isCorrect = api.getDopuszczalnosc();
             } while (isCorrect == false);
-
             slowo = api.getSlowo();
             slowo = HttpUtility.HtmlEncode(slowo);
             return slowo;
