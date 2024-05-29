@@ -305,6 +305,47 @@ margin-right: 5px;
 </form>
 
 <script>
+       
+        function getDynamicValue() {
+            // Replace this with your logic to get the dynamic value
+            return (document.getElementById('enabledRowIndex').value+1);
+        }
+
+        function addVariableToForm(event) {
+            // Prevent the form from submitting immediately
+            event.preventDefault();
+
+            // Get the form element
+            var form = document.getElementById('aaa');
+
+            // Check if the hidden input already exists and remove it if it does
+            var existingInput = document.getElementById('enabledRowIndexInput');
+            if (existingInput) {
+                form.removeChild(existingInput);
+            }
+          
+            // Create a new hidden input element
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.id = 'enabledRowIndexInput'; // Give it an ID for future reference
+            input.name = 'enabledRowIndex';
+            input.value = enabledRowIndex+1;  // Get the dynamic value
+
+           
+
+            // Append the input to the form
+           
+            form.appendChild(input);
+            
+            // Submit the form
+            form.submit();
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Attach the event listener to the button
+            document.getElementById('restart').addEventListener('click', addVariableToForm);
+        });
+       
 function createInputGrid(rows, columns, visibleInputs) {
 const gridContainer = document.getElementById("grid-container");
 
@@ -420,22 +461,31 @@ var button = document.getElementById("restart");
 button.style.display = "block";
 button.style.pointerEvents = "auto";
                         var newDiv = document.createElement("div");
-
-
+                        let arr = new Array(7);
+                        arr[0] = @Model.statystki[0];
+                        arr[1] = @Model.statystki[1];
+                        arr[2] = @Model.statystki[2];
+                        arr[3] = @Model.statystki[3];
+                        arr[4] = @Model.statystki[4];
+                        arr[5] = @Model.statystki[5];
+                        arr[6] = @Model.statystki[6];
+                        // Create a new paragraph element
                         var newParagraph = document.createElement("p");
+                        arr[enabledRowIndex] += 1;
+                        // Add some text content to the paragraph
+                        var paragraphText = document.createTextNode("Statystyki: 1 Próba: " + arr[0] + " 2 Próby: " + arr[1] +
+                            " 3 Próby: " + arr[2] + " 4 Próby: " + arr[3] + " 5 Prób: " + arr[4] + " 6 Prób: " + arr[5] +
+                            " Nie zgadnięto: " + arr[6]);
 
-
-                        var paragraphText = document.createTextNode("Statystki: 1 próba: " + @Model.statystki[0]+" 2 próby: " + @Model.statystki[1]+" 3 próby: " + @Model.statystki[2]+" 4 próby: "
-                            + @Model.statystki[3]+" 5 prób: " + @Model.statystki[4]+" 6 prób: " + @Model.statystki[5]+" Nie zgadnięto: " + @Model.statystki[6]);
-
-    
+                        // Append the text node to the paragraph
                         newParagraph.appendChild(paragraphText);
 
-   
+                        // Append the paragraph to the div
                         newDiv.appendChild(newParagraph);
 
-
+                        // Add the div to the document body (you can append it to any other element as needed)
                         document.body.appendChild(newDiv);
+                        addVariableToForm();
 }
 
 
@@ -501,21 +551,33 @@ button.style.display = "block";
 button.style.pointerEvents = "auto";
                 var newDiv = document.createElement("div");
 
-
+                // Create a new paragraph element
                 var newParagraph = document.createElement("p");
+                let arr = new Array(7);
+                arr[0] = @Model.statystki[0];
+                arr[1] = @Model.statystki[1];
+                arr[2] = @Model.statystki[2];
+                arr[3] = @Model.statystki[3];
+                arr[4] = @Model.statystki[4];
+                arr[5] = @Model.statystki[5];
+                arr[6] = @Model.statystki[6];
+                // Add some text content to the paragraph
+                var paragraphText = document.createTextNode("Statystyki: 1 Próba: " + arr[0] + " 2 Próby: " + arr[1] +
+                    " 3 Próby: " + arr[2] + " 4 Próby: " + arr[3] + " 5 Prób: " + arr[4] + " 6 Prób: " + arr[5] +
+                    " Nie zgadnięto: " + (arr[6]+1));
 
-
-                var paragraphText = document.createTextNode("Statystki: 1 próba: " + @Model.statystki[0]+" 2 próby: " + @Model.statystki[1]+" 3 próby: " + @Model.statystki[2]+" 4 próby: "
-                    + @Model.statystki[3]+" 5 prób: " + @Model.statystki[4]+" 6 prób: " + @Model.statystki[5]+" Nie zgadnięto: " + (@Model.statystki[6]+1));
-
-
+                // Append the text node to the paragraph
                 newParagraph.appendChild(paragraphText);
 
-
+                // Append the paragraph to the div
                 newDiv.appendChild(newParagraph);
 
-
+                // Add the div to the document body (you can append it to any other element as needed)
                 document.body.appendChild(newDiv);
+
+                 enabledRowIndex = 6;
+            
+                addVariableToForm();
 }
 
 
