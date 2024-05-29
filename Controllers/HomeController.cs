@@ -198,22 +198,8 @@ namespace Gry_Slownikowe.Controllers
                 random = new SJP_API();
             } while (!random.getDopuszczalnosc());
 
-            //var newRecord = new Slownikowo
-            //{
-            //    Win = 1,
-            //    Loss = 0,
-            //    GameTime = new TimeSpan(1, 30, 0), // 1 godzina, 30 minut
-            //    GameData = DateTime.Now,
-            //    UserId = getLoggedUser().Id
-            //};
 
-            //getLoggedUser().Slownikowo.Add(newRecord);
-            //_context.Slownikowo.Add(newRecord);
-            //_context.SaveChanges();
-
-            //string slowo = HttpUtility.HtmlEncode(random.getSlowo());
             SlownikowoModel _slownikowoModel = new(random.getSlowo());
-            //Console.WriteLine(_slownikowoModel.WylosowaneSlowo);
             return View(_slownikowoModel);
             }
         }
