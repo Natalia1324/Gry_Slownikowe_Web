@@ -2,11 +2,19 @@
 {
     public class ZgadywankiModel
     {
-        public string slowo { get; set; }
+        public string Slowo1 { get; set; }
+        public string Slowo2 { get; set; }
 
-        public ZgadywankiModel(string slowo)
+        public string Slowo3 { get; set; }
+
+        public string Slowo4 { get; set; }
+
+        public ZgadywankiModel(string slowo1, string slowo2, string slowo3, string slowo4)
         {
-            this.slowo = slowo;
+            Slowo1 = slowo1;
+            Slowo2 = slowo2;
+            Slowo3 = slowo3;
+            Slowo4 = slowo4;
         }
     }
 }

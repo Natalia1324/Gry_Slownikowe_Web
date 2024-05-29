@@ -121,10 +121,13 @@
         
     </div>
     <script type="text/javascript">
-       
+        var startTime = new Date();
+        var slowa = [];
         //kontenery słów
         var wyzejSlowa = [];
         var nizejSlowa = [];
+
+        var gameStatus = false;
         //pobranie wylosowanego słowa
         var wylosowaneSlowo = '@Model.WylosowaneSlowo';
         //przekształcenie go na Raw, by zapobiec problemom ze znakami diakrytycznymi
@@ -165,10 +168,11 @@
 
             //czyszczenie pola tekstowego
             wynik.textContent = "";
+            wynik.textContent = text;
 
            //czy gracz się poddał?
             if (wpisaneSlowo === 'q') {
-                koniecGry();
+                przegrana();
                 return;
             }
 
@@ -179,17 +183,22 @@
                 if (result === false) {
                     wynik.textContent = "Takie slowo nie istnieje";
                 }
+
                 //odgadnięto słowo
                 else if (porownanie === 0) {
+
                     //zakoloruj probe na zielono
                     kolorujKola('zielone', liczbaProb + 1);
                     //uniemozliw dalsze zgadywanie
-                    document.getElementById("wpisaneSlowo").disabled = true;
-                    wynik.textContent = "Gratulacje! Zgadłeś wylosowane słowo!";
-                } else {
+                    gameStatus = true;
+                    koniecGry();
+
+                } else if (!slowa.includes(wpisaneSlowo)) {
                     //jesli proba była niepoprawna
 
+                    slowa.push(wpisaneSlowo);
                     //wpisz slowa do odpowiedniego kontenera
+
                     if (porownanie < 0) {
                         wyzejSlowa.push(wpisaneSlowo);
                     } else {
@@ -239,8 +248,11 @@
                     if (liczbaProb < kola.length) {
                         kolorujKola('zolte', liczbaProb);
                     }
-                    else koniecGry();
+                    else przegrana();
 
+                }
+                else {
+                    wynik.textContent = "Temat wałkowany setki razy. Było.";
                 }
 
             }).catch(function (error) {
@@ -248,9 +260,40 @@
             });
         }
 
-        function koniecGry(){
+        function sendGameData(gameTime) {
+            $.ajax({
+                url: '@Url.Action("SaveGame", "Home")', // URL do metody w kontrolerze
+                type: 'POST',
+                data: {
+                    win: gameStatus,
+                    tries: liczbaProb+1,
+                    gameTime: gameTime
+                },
+                success: function (response) {
+                    console.log('Data saved successfully:', response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error saving data:', {
+                        readyState: xhr.readyState,
+                        status: xhr.status,
+                        statusText: xhr.statusText,
+                        responseText: xhr.responseText
+                    });
+                }
+            });
+        }
+        
+        function przegrana() {
             kolorujKola('czerwone', liczbaProb);
-            wynik.textContent = "Koniec gry. Wylosowane słowo to: " + text;
+            gameStatus = false;
+            koniecGry();
+        }
+
+        function koniecGry(){
+            endTime = new Date();
+            const gameTime = endTime - startTime;
+            wynik.textContent = "Koniec gry. Wylosowane słowo to: " + text + ". A twój czas wyniósł: " + gameTime/1000;
+            sendGameData(gameTime);
             document.getElementById("wpisaneSlowo").disabled = true;
         }
 
@@ -289,8 +332,7 @@
 
         function porownaj(slowo1, slowo2) {
             return slowo1.localeCompare(slowo2, 'pl', { sensitivity: 'base', localeMatcher: 'best fit' });
-        }
-        
+        }      
 
         function podzielSlowo(litera, index) {
             var wynik = '';
@@ -317,7 +359,6 @@
                 }
             }
         }
-
 
 </script>
 </body>

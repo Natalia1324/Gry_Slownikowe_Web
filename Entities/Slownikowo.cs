@@ -9,8 +9,9 @@ namespace Gry_Slownikowe.Entions
     public class Slownikowo
     {
         public int Id { get; set; }
-        public int Win { get; set; }
-        public string Loss { get; set; }
+        //0 - lose, 1 - win
+        public bool Win { get; set; }
+        public int Tries { get; set; }
         public TimeSpan GameTime { get; set; }
         public DateTime? GameData { get; set; }
 

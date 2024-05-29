@@ -1,11 +1,13 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@model Gry_Slownikowe.Models.WisielecModel
 @{
     ViewData["Title"] = "Wisielec";
     char[] alfabet = { 'a', 'ą', 'b', 'c', 'ć', 'd', 'e', 'ę', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'ł', 'm', 'n', 'o', 'ó', 'p', 'r', 's', 'ś', 't', 'u', 'w', 'y', 'z', 'ź', 'ż', 'q', 'v', 'x' };
 }
 <!-- <link rel="stylesheet" type="text/css" href="~/css/privacy.css">-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <div class="WelcomeToWisielca">
     <!--text-center-->
 
@@ -78,7 +80,9 @@
 @section Scripts
    {
     <script type="text/javascript">
-        var wordToGuess = "Lorem Ipsum";    // Słowo do zgadnięcia (bedzie losowa)
+        //var wordToGuess = "Lorem Ipsum";    // Słowo do zgadnięcia (bedzie losowa)
+        var wordToGuess = @Html.Raw(Json.Serialize(Model.slowo));   // Słowo do zgadnięcia (bedzie losowa)
+        
         var guessedWord = "";               // Zgadnięte litery
         var maxAttempts = 7;                // Maksymalna liczba prób
         var currentAttempts = 0;            // Aktualna liczba prób
@@ -98,7 +102,7 @@
                 console.log("Liczba prób po: " + currentAttempts);
             }
             updateWisielecImage(); // Aktualizuj obrazek wisielca
-            updateAttemptsCount(); // Aktualizuj liczbę prób
+            //updateAttemptsCount(); // Aktualizuj liczbę prób
             updateScreen();
             checkGameOver();
         }
@@ -115,19 +119,8 @@
 
         // Funkcja aktualizująca obrazek wisielca
         function updateWisielecImage() {
-            //var currentImageNumber = currentAttempts; // Przyjmując, że currentAttempts zawiera aktualną liczbę prób
-            //var imagePath = "Graphics/wisielec" + currentImageNumber + ".png"; // Ścieżka do obrazka
-            //document.getElementById("wisielecImg").src = imagePath; // Ustawienie nowej ścieżki obrazka
-            //<img id="wisielecImg" src = "~/Graphics/wisielec0.png" alt = "Wisielec" >
-            
-            // Działa ale rozwala kod
-
-            //var licznaP = "<p >Liczba prób:  + currentAttempts + / + maxAttempts </p >  <br>";
             var plik = "<img src= \"/Graphics/wisielec" + currentAttempts + ".png\" />";
             document.getElementById("xd").innerHTML =  plik;
-            //document.getElementById("wisielec").innerHTML = plik;
-            // var currentImageNumber = currentAttempts;
-            // document.getElementById("wisielecImg").src = "~/Graphics/wisielec" + currentImageNumber + ".png";
         }
 
         // Funkcja sprawdzająca, czy gra się zakończyła
@@ -135,7 +128,7 @@
             if (currentAttempts >= maxAttempts) {
                 // Tutaj dodaj kod, który wykona się, gdy gracz przegra
                 alert("Przegrałeś! Szukane słowo to: " + wordToGuess);
-                startNewGame(); // Rozpocznij nową grę po przegranej
+                startNewGame(); // Rozpocznij nową grę po wygranej
             } else if (guessedWord.replace(/\s+/g, '').toLowerCase() === wordToGuess.replace(/\s+/g, '').toLowerCase()) {
                 // Tutaj dodaj kod, który wykona się, gdy gracz wygra
                 alert("Gratulacje! Zgadłeś słowo: " + wordToGuess);
@@ -153,18 +146,119 @@
             });
         }
 
-        // Funkcja rozpoczynająca nową grę
-        function startNewGame() {
-            wordToGuess = "Ala ma Kota  kot mam ale"; // Nowe słowo do zgadnięcia
+        //Funkcja rozpoczynająca nową grę
+        async function startNewGame() {
+            //wordToGuess = "Ala ma Kota  kot mam ale"; // Nowe słowo do zgadnięcia
+            var kopia = wordToGuess; 
+            const newWord = await sprawdz();
+            // Sprawdź, czy nowe słowo jest różne od poprzedniego
+            while (wordToGuess === newWord) {
+                newWord = await sprawdz();
+            }
+            wordToGuess = newWord;
             guessedWord = wordToGuess.replace(/[a-zA-Ząćęłńóśźż]/g, "_"); // Zakryj litery
             currentAttempts = 0; // Zresetuj liczbę prób
             updateScreen(); // Zaktualizuj ekran
-            // Włącz przyciski liter
+
+            //Włącz przyciski liter
             var buttons = document.getElementsByClassName("litera");
             for (var i = 0; i < buttons.length; i++) {
                 buttons[i].disabled = false;
             }
         }
+
+        function sprawdz() {
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: '@Url.Action("LosujSlowo", "Home")',
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (response) {
+                        resolve(response.slowo);
+                    },
+                    error: function () {
+                        console.log("Wystąpił błąd podczas wysyłania żądania AJAX.");
+                        reject(new Error("AJAX request failed"));
+                    }
+                });
+            });
+        }
+
+
+
+        // function startNewGame() {
+        //     // Użyj Fetch API do pobrania nowego słowa z serwera
+        //     fetch('/controllerName/Losuj') // Zamień 'controllerName' na nazwę Twojego kontrolera
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             var wordToGuess = data.word; // Nowe słowo do zgadnięcia
+        //             var kopia = wordToGuess;
+
+        //             guessedWord = wordToGuess.replace(/[a-zA-Ząćęłńóśźż]/g, "_"); // Zakryj litery
+        //             currentAttempts = 0; // Zresetuj liczbę prób
+        //             updateScreen(); // Zaktualizuj ekran
+
+        //             // Włącz przyciski liter
+        //             var buttons = document.getElementsByClassName("litera");
+        //             for (var i = 0; i < buttons.length; i++) {
+        //                 buttons[i].disabled = false;
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.error('Error fetching the word:', error);
+        //         });
+        // }
+
+        // function startNewGame() {
+        //     // użyj ajax do pobrania nowego słowa z serwera
+        //     $.ajax({
+        //         url: '@Url.Action("LosujSlowo", "Home")', // zamień 'controllername' na nazwę twojego kontrolera
+        //         type: 'POST',
+        //         success: function (data) {
+        //             var wordtoguess = data; // nowe słowo do zgadnięcia
+        //             var kopia = wordtoguess;
+
+        //             guessedword = wordtoguess.replace(/[a-za-ząćęłńóśźż]/g, "_"); // zakryj litery
+        //             currentattempts = 0; // zresetuj liczbę prób
+        //             updatescreen(); // zaktualizuj ekran
+
+        //             // włącz przyciski liter
+        //             var buttons = document.getelementsbyclassname("litera");
+        //             for (var i = 0; i <= buttons.length; i++) {
+        //                 buttons[i].disabled = false;
+        //             }
+        //         },
+        //         error: function (xhr, status, error) {
+        //             console.error('error fetching the word:', status, error);
+        //         }
+        //     });
+        // }
+        
+        
+        //dziala gorzej niz poprzednio
+        // function startNewGame() {
+        //     $.ajax({
+        //         url: '@Url.Action("Losuj", "Home")',
+        //         type: 'GET',
+        //         dataType: 'json',
+        //         success: function (response) {
+        //             var wordToGuess = response.word;  // Get the new word from the server response
+        //             guessedWord = wordToGuess.replace(/[a-zA-Ząćęłńóśźż]/g, "_");  // Cover letters with underscores
+        //             currentAttempts = 0;  // Reset attempts
+
+        //             updateScreen();  // Update the screen with the new game state
+
+        //             // Enable letter buttons
+        //             var buttons = document.getElementsByClassName("litera");
+        //             for (var i = 0; i < buttons.length; i++) {
+        //                 buttons[i].disabled = false;
+        //             }
+        //         },
+        //         error: function () {
+        //             console.log("Wystąpił błąd podczas pobierania nowego słowa.");
+        //         }
+        //     });
+        // }
 
         // Inicjalizacja stanu gry
         guessedWord = wordToGuess.replace(/[a-zA-Ząćęłńóśźż]/g, "_"); // Początkowo zakrywamy litery, a spacje od razu odkrywamy
