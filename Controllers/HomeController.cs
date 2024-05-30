@@ -3,6 +3,7 @@ using CrosswordComponents;
 using Gry_Slownikowe.Entions;
 using Gry_Slownikowe.Entities;
 using Gry_Slownikowe.Models;
+//using Gry_Słownikowe.Models;
 using Gry_Slownikowe.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ using System.Diagnostics.Metrics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
 namespace Gry_Slownikowe.Controllers
@@ -133,7 +135,7 @@ namespace Gry_Slownikowe.Controllers
         {
             return View();
         }
-        public IActionResult Wordle(int dlugosc)
+        public IActionResult Wordle(int dlugosc, int enabledRowIndex)
         {
             string slowo = "";
             if (dlugosc == 0)
@@ -156,6 +158,20 @@ namespace Gry_Slownikowe.Controllers
             string polskieZnaki = HttpUtility.HtmlEncode(slowo);
             string znaczeniePL = HttpUtility.HtmlAttributeEncode(znaczenia.First());
             var id = getLoggedUser().Id;
+            if (enabledRowIndex != 0)
+            {
+                var rekord = new Wordle
+                {
+                    Win = enabledRowIndex,
+                    Loss = 0,
+                    UserId = id,
+                    //  User = getLoggedUser(),
+                    //  GameTime = TimeSpan(1s),
+
+                };
+                _context.Wordle.Add(rekord);
+                _context.SaveChanges();
+            }
             int[] counts = new int[7];
             for (int i = 0; i<counts.Length; i++)
             {
@@ -347,8 +363,9 @@ namespace Gry_Slownikowe.Controllers
 
             }
 
-            ZgadywankiModel model = new ZgadywankiModel(polskieZnaki1, polskieZnaki2, polskieZnaki3, polskieZnaki4);
-            return View(model);
+            // ZgadywankiModel model = new ZgadywankiModel(polskieZnaki1, polskieZnaki2, polskieZnaki3, polskieZnaki4);
+            // return View(model);
+            return View();
         }
         private bool CzyDrugieSlowoMaMinTrzyLitery(string slowo1, string slowo2, string slowo3, string slowo4)
         {

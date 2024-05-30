@@ -18,6 +18,7 @@
 
         body {
             background-color: black;
+           
         }
 
         .input {
@@ -37,9 +38,31 @@
             
         }
 
+        #layout {
+            display: flex;
+            flex-direction: row;
+        }
+
         #board {
             display: grid;
+            margin-right: 30px;
             
+        }
+
+        #board button {
+            color: white;
+        }
+
+        #left {
+            display: flex;
+            flex-direction: column;
+        }
+        #litery {
+            display: flex;
+            flex-riection: row;
+        }
+        #punkty h2 {
+            color: white;
         }
 
         .cell {
@@ -72,6 +95,7 @@
     </style>
 </head>
 <body>
+    <div id="layout">
     <div id="board">
         <div class="row">
             <button class="tw"></button>
@@ -330,8 +354,255 @@
         </div>
 
     </div>
-    <script>
+    <div id="left">
+    <div id="punkty">
+        <h2 id="hp1">Gracz 1: <p id="p1">0</p></h2>
+                <h2 id="hp2">Gracz 2: <p id="p2">0</p></h2>
+    </div>
+    <div id="litery">
+                <button type="button" class="litera"></button>
+                <button type="button" class="litera"></button>
+                <button type="button" class="litera"></button>
+                <button type="button" class="litera"></button>
+                <button type="button" class="litera"></button>
 
+                <button type="button" class="litera"></button>
+                <button type="button" class="litera"></button>
+    </div>
+    <div>
+        <button type="button" id="next">Zakończ ture</button>
+    </div>
+            <div>
+                <button type="button" id="shuffle">Wymień litery</button>
+            </div>
+            <div>
+                <button type="button" id="skip">Pomiń ture</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.4.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+        $(function () {
+            var hub = $.connection.gameHub;
+
+            hub.server.joinLobby("Gracz 1");
+
+            hub.client.receiveMove = function (boardState, points, playerId) {
+                if (playerId === 1) {
+                    const pts = document.getElementById('p1');
+                    pts.textContent = points.toString();
+
+                }
+                else {
+                    const pts = document.getElementById('p2');
+                    pts.textContent = points.toString();
+                }
+                const board = document.getElementById('board');
+                const buttons = board.querySelectorAll('button');
+                let inx = 0;
+                buttons.forEach(button => {
+                    button.textContent = boardState[inx];
+                    inx += 1;
+                });
+            };
+
+            hub.client.playerJoined = function (playerName) {
+           
+                if (hub.server.players.length >= 2) {
+                    const pname = document.getElementById('hp1');
+                    pname.textContent = playerName + ": ";
+                    hub.server.startGame("Player1", playerName);
+                }
+            };
+            hub.client.gameStarted = function (player1Name, player2Name) {
+              
+            };
+          
+            $("#next").click(function () {
+            
+                
+                hub.server.sendMove(boardState, points, playerId);
+            });
+        });
+        /*
+        function test() {
+            const board = document.getElementById('board');
+            const buttons = board.querySelectorAll('button');
+            let inx = 0;
+            buttons.forEach(button => {
+                button.textContent = inx;
+                inx += 1;
+            });
+        }
+        test();
+        */
+        let points = 0;
+        let playerId = 1;
+        let boardState = [];
+        let map = new Map([
+            ['A', 1],
+            ['E', 1],
+            ['I', 1],
+            ['N', 1],
+            ['O', 1],
+            ['R', 1],
+            ['S', 1],
+            ['W', 1],
+            ['Z', 1],
+            ['C', 2],
+            ['D', 2],
+            ['K', 2],
+            ['L', 2],
+            ['M', 2],
+            ['P', 2],
+            ['T', 2],
+            ['Y', 2],
+            ['B', 3],
+            ['G', 3],
+            ['H', 3],
+            ['J', 3],
+            ['Ł', 3],
+            ['U', 3],
+            ['Ą', 5],
+            ['Ę', 5],
+            ['F', 5],
+            ['Ó', 5],
+            ['Ś', 5],
+            ['Ż', 5],
+            ['Ć', 6],
+            ['Ń', 7],
+            ['Ź', 9]
+         
+        ]);
+        let currentLetter = '';
+        let letterIndex = 0;
+        const array = [
+            ['A', 9], ['E', 7], ['I', 8], ['N', 5], ['O', 6], ['R', 4], ['S', 4], ['W', 4], ['Z', 5],
+            ['C', 3], ['D', 3], ['K', 3], ['L', 3], ['M', 3], ['P', 3], ['T', 3], ['Y', 4],
+            ['B', 2], ['G', 2], ['H', 2], ['J', 2], ['Ł', 2], ['U', 2],
+            ['Ą', 1], ['Ę', 1], ['F', 1], ['Ó', 1], ['Ś', 1], ['Ż', 1],
+            ['Ć', 1],  ['Ń', 1], ['Ź', 1]
+        ];
+
+        let litery= [];
+
+        array.forEach(([char, count]) => {
+            for (let i = 0; i < count; i++) {
+                litery.push(char);
+            }
+        });
+        function getRandomLetters() {
+            let randomLetters = [];
+            for (let i = 0; i < 7; i++) {
+                const randomIndex = Math.floor(Math.random() * litery.length);
+                randomLetters.push(litery[randomIndex]);
+                litery.splice(randomIndex, 1);
+            }
+            const textFields = document.querySelectorAll('#litery .litera');
+            textFields.forEach((button, index) => {
+                if (index < 7) {
+                    button.innerHTML = randomLetters[index];
+                    button.onclick = () => {
+                        currentLetter = randomLetters[index];
+                        letterIndex = index;
+                      
+                    };
+                } else {
+                    button.innerHTML = ''; 
+                }
+            });
+        };
+        let position = [];
+        function nextTurn(){
+            const textFields = document.querySelectorAll('#litery .litera');
+            textFields.forEach((button, index) => {
+                if (index < 7) {
+                    button.disabled = false;
+                } 
+            });
+            let turnPts = 0;
+            getRandomLetters();
+            const board = document.getElementById('board');
+            const buttons = board.querySelectorAll('button');
+            let inx = 0;
+            let dw = 0;
+            let tw = 0;
+            buttons.forEach(button => {
+                boardState[inx] = button.textContent;
+                if (position.includes(inx)) {
+    
+                        let base = map.get(button.textContent);
+                    if (button.classList.contains('dw')) {
+                        dw += 1;
+                        turnPts += base;
+                    } else if (button.classList.contains('dl')) {
+                        base = base * 2;
+                        turnPts += base;
+                    } else if (button.classList.contains('tw')) {
+                        tw += 1;
+                        turnPts += base;
+                    } else if (button.classList.contains('tl')) {
+                        base = base * 3;
+                        turnPts += base;
+                    } else {
+                        turnPts += base;
+                    }
+                   
+                }
+                inx+=1;
+            });
+            while (dw>0){
+                turnPts = turnPts * 2;
+                dw--;
+            }
+            while (tw > 0) {
+                turnPts = turnPts * 3;
+                tw--;
+            }
+            if (position.length === 7) {
+                turnPts += 50;
+            }
+            while (position.length > 0) {
+                position.pop();
+            }
+            points = turnPts;
+            const pts = document.getElementById('p1');
+            pts.textContent = points.toString();
+           
+        }
+        document.getElementById('next').addEventListener('click', nextTurn);
+        document.getElementById('shuffle').addEventListener('click', getRandomLetters);
+        document.getElementById('skip').addEventListener('click', skipTurn);
+        function skipTurn() {
+
+        }
+        getRandomLetters();
+
+        const board = document.getElementById('board');
+        const buttons = board.querySelectorAll('button');
+
+
+        buttons.forEach((button, index) => {
+          
+            
+                button.addEventListener('click', () => {
+                   button.textContent=currentLetter;
+                    button.disabled = true;
+                    position.push(index)
+                console.log(index);
+
+                const textFields = document.querySelectorAll('#litery .litera');
+                textFields.forEach((button, index) => {
+                    if (index === letterIndex) {
+                        button.textContent = '';
+                        button.disabled = true;
+                    } 
+                });
+                });
+           
+        });
     </script>
 </body>
 </html>
