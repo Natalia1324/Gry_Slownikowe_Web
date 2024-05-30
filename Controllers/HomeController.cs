@@ -170,11 +170,7 @@ namespace Gry_Slownikowe.Controllers
         [HttpGet]
         public IActionResult Slownikowo()
         {
-            if (getLoggedUser() == null)
-            {
-                return View("Login");
-            }
-            else { 
+            
             SJP_API random;
 
             do
@@ -185,39 +181,103 @@ namespace Gry_Slownikowe.Controllers
 
             SlownikowoModel _slownikowoModel = new(random.getSlowo());
             return View(_slownikowoModel);
-            }
+            
         }
+        public async Task<IActionResult> Statistics()
+        {
+            var userId = getLoggedUser().Id;
+            var user = await _context.User
+            .Include(u => u.Krzyzowki)
+            .Include(u => u.Wisielec)
+            .Include(u => u.Wordle)
+            .Include(u => u.Zgadywanki)
+            .Include(u => u.Slownikowo)
+            .FirstOrDefaultAsync(u => u.Id == userId);
 
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var model = new StatisticsModel
+            {
+                Nick = user.Nick,
+                GameStatistics = new List<GameStatistics>
+            {
+                new GameStatistics
+                {
+                    GameName = "Krzyzowki",
+                    TotalGames = user.Krzyzowki.Count,
+                    Wins = user.Krzyzowki.Sum(g => g.Win),
+                    Losses = user.Krzyzowki.Sum(g => g.Loss)
+                },
+                new GameStatistics
+                {
+                    GameName = "Wisielec",
+                    TotalGames = user.Wisielec.Count,
+                    Wins = user.Wisielec.Sum(g => g.Win),
+                    Losses = user.Wisielec.Sum(g => g.Loss)
+                },
+                new GameStatistics
+                {
+                    GameName = "Wordle",
+                    TotalGames = user.Wordle.Count,
+                    Wins = user.Wordle.Sum(g => g.Win),
+                    Losses = user.Wordle.Sum(g => g.Loss)
+                },
+                new GameStatistics
+                {
+                    GameName = "Zgadywanki",
+                    TotalGames = user.Zgadywanki.Count,
+                    Wins = user.Zgadywanki.Sum(g => g.Win),
+                    Losses = user.Zgadywanki.Sum(g => g.Loss)
+                },
+                new GameStatistics
+                {
+                    GameName = "Slownikowo",
+                    TotalGames = user.Slownikowo.Count,
+                    Wins = user.Slownikowo.Count(g => g.Win == true),
+                    Losses = user.Slownikowo.Count(g => g.Win == false)
+                }
+            }
+            };
+
+            return View(model);
+        }
         [HttpPost]
         public IActionResult SaveGame(bool win, int tries, int gameTime)
         {
+          
             Console.WriteLine("Wygrana: " + win);
             Console.WriteLine("Proby: " + tries);
             Console.WriteLine("Czas: " + gameTime);
 
-            try
+            if (getLoggedUser() != null)
             {
-                TimeSpan timespan = TimeSpan.FromMilliseconds(gameTime);
-                var newRecord = new Slownikowo
+
+                try
                 {
-                    Win = win,
-                    Tries = tries,
-                    GameTime = timespan, // 1 godzina, 30 minut
-                    GameData = DateTime.Now,
-                    UserId = getLoggedUser().Id
-                };
+                    TimeSpan timespan = TimeSpan.FromMilliseconds(gameTime);
+                    var newRecord = new Slownikowo
+                    {
+                        Win = win,
+                        Tries = tries,
+                        GameTime = timespan, // 1 godzina, 30 minut
+                        GameData = DateTime.Now,
+                        UserId = getLoggedUser().Id
+                    };
 
-                getLoggedUser().Slownikowo.Add(newRecord);
-                _context.Slownikowo.Add(newRecord);
-                _context.SaveChanges();
+                    getLoggedUser().Slownikowo.Add(newRecord);
+                    _context.Slownikowo.Add(newRecord);
+                    _context.SaveChanges();
+                }
+                catch
+                {
+                    return Json(new { success = false, message = "Couldn't push to database" });
+                }
+                return Json(new { success = true, message = "Data saved successfully." });
             }
-            catch
-            {
-                return Json(new { success = false, message = "Couldn't push to database" });
-            }
-
-
-            return Json(new { success = true, message = "Data saved successfully." });
+            else return Json(new { success = false, message = "Didn't push to database - played as guest." });
         }
         [HttpPost]
         public IActionResult SprawdzSlowo(string wpisaneSlowo)

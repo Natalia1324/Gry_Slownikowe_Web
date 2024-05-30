@@ -1,0 +1,108 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model StatisticsModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+
+    <div class="statistics-page">
+        <h1 style ="font-size: 50px">Twoje Statystyki</h1>
+        <div class="game-statistics-container">
+            @foreach (var game in Model.GameStatistics)
+            {
+                <div class="game-statistics">
+                    <h2>@game.GameName</h2>
+                    <p>Ilość rozegranych gier: @game.TotalGames</p>
+                    <p>Ilość wygranych: @game.Wins</p>
+                    <p>Ilość przegranych: @game.Losses</p>
+                    @if (game.TotalGames > 0)
+                    {
+                        <canvas id="chart-@game.GameName" width="150" height="150"></canvas>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var gameStats = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GameStatistics));
+            gameStats.forEach(function(game) {
+                if (game.TotalGames > 0) {
+                    var ctx = document.getElementById('chart-' + game.GameName).getContext('2d');
+                    new Chart(ctx, {
+                        type: 'pie', 
+                        data: {
+                            labels: ['Win', 'Loss'],
+                            datasets: [{
+                                data: [game.Wins, game.Losses],
+                                backgroundColor: ['#17c704', '#fa0905'],
+                                hoverBackgroundColor: ['#66bb6a', '#e57373']
+                            }]
+                        },
+                        options: {
+                            responsive: false,
+                            maintainAspectRatio: false
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+    <style>
+        body {
+            background-color: #2b2e30;
+        }
+        .statistics-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px; 
+            
+        }
+
+        .statistics-page h1 {
+                color: #edf1f5;
+            margin-bottom: 30px;
+        }
+
+        .game-statistics-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%; 
+            max-width: 1200px;
+            
+        }
+
+        .game-statistics {
+            flex: 1 1 auto; 
+            max-width: 300px; 
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            background-color: #edf1f5;
+            color: #333;
+        }
+
+        canvas {
+            width: 150px; 
+            height: 150px; 
+            display: block;
+            margin: 0 auto; 
+        }
+    </style>
+</body>
+</html>

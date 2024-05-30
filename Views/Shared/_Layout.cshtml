@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Gry_Slownikowe.Entions
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -34,6 +36,12 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+                        @{
+                            var loggedUser = ViewContext.HttpContext.Session.GetObject<User>("LoggedUser");
+                            var userRank = loggedUser?.Ranks;
+                        }
+
+
                         <partial name="_LoginPartial" />
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="MainMenu">Home</a>
@@ -41,7 +49,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                       
+                        @if (ViewContext.HttpContext.Session.GetObject<User>("LoggedUser")?.isLogged == true)
+                        {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Statistics">Statystyki</a>
+                        </li>
+                        }                       
                     </ul>
                 </div>
             </div>
