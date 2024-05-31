@@ -8,205 +8,263 @@
 <head>
     <meta charset="UTF-8">
     <title>@ViewData["Title"]</title>
-<style>
-    .con {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        height: 100vh;
-    }
-
-    .frame {
-        border: 2px solid #000;
-        padding: 20px;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    h1.title {
-        margin-top: 20px;
-        font-size: 2em;
-    }
-
-    .poziom-buttons {
-        display: flex;
-        justify-content: center;
-    }
-
-        .poziom-buttons .btn {
-            margin: 10px;
+    <style>
+        .con {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
         }
 
-    .frame h1 {
-        font-size: 1.5em;
-        font-weight: bold;
-    }
+        .frame {
+            border: 2px solid #000;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h1.title {
+            margin-top: 20px;
+            font-size: 2em;
+        }
+
+        .poziom-buttons {
+            display: flex;
+            justify-content: center;
+        }
+
+            .poziom-buttons .btn {
+                margin: 10px;
+            }
+
+        .frame h1 {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
 
 
-    #klawiatura button {
-        margin: 5px;
-        padding: 10px;
-        font-size: 1em;
-        cursor: pointer;
-    }
+        #klawiatura button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 1em;
+            cursor: pointer;
+        }
 
-    #ramkaPonumerowanychSlow {
-        margin-top: 20px;
-    }
+        #ramkaPonumerowanychSlow {
+            margin-top: 20px;
+        }
 
-    .tytul {
-        font-size: 1.2em;
-        font-weight: bold;
-    }
+        .tytul {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
 
-    .slowo {
-        margin-bottom: 10px;
-    }
+        .slowo {
+            margin-bottom: 10px;
+        }
 
-    .slowo input {
-       font-size: 1em;
-       padding: 5px;
-    }
+            .slowo input {
+                font-size: 1em;
+                padding: 5px;
+            }
 
-</style>
+        #punktyTable {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 200px;
+        }
+
+            #punktyTable th, #punktyTable td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+            }
+
+    </style>
 </head>
 
 <body>
-<div class="con">
-    <div class="frame" id="ramkaPoziomu">
-        <h1>Wybierz poziom trudności:</h1>
+    <div class="con">
+        <div class="frame" id="ramkaPoziomu">
+            <h1>Wybierz poziom trudności:</h1>
 
-        <div class="poziom-buttons">
-            <button id="latwy" class="btn btn-primary" onclick="wybierzPoziom('latwy')">Łatwy</button>
-            <button id="sredni" class="btn btn-primary" onclick="wybierzPoziom('sredni')">Średni</button>
-            <button id="trudny" class="btn btn-primary" onclick="wybierzPoziom('trudny')">Trudny</button>
-        </div>
-    </div>
-
-    <div id="licznik"></div>
-
-    <div id="kontener">
-        <div id="ramkaWybranychSlow" style="margin-bottom: 10px;">
-            <h2 class="tytul">Wpisywane słowa:</h2>
-            <div id="wybraneLitery" style="margin-bottom: 10px;"></div>
+            <div class="poziom-buttons">
+                <button id="latwy" class="btn btn-primary" onclick="wybierzPoziom('latwy')">Łatwy</button>
+                <button id="sredni" class="btn btn-primary" onclick="wybierzPoziom('sredni')">Średni</button>
+                <button id="trudny" class="btn btn-primary" onclick="wybierzPoziom('trudny')">Trudny</button>
+            </div>
         </div>
 
-       
-        <input type="text" id="wpisywaneSłowo" readonly style="margin-bottom: 10px;">
+        <div id="licznik"></div>
+
+        <div id="kontener">
+            <div id="ramkaWybranychSlow" style="margin-bottom: 10px;">
+                <h2 class="tytul">Wpisywane słowa:</h2>
+                <div id="wybraneLitery" style="margin-bottom: 10px;"></div>
+            </div>
+
+
+            <input type="text" id="wpisywaneSłowo" readonly style="margin-bottom: 10px;">
             <button onclick="usunOstatniaLitere()">Backspace</button>
-        <button id="przyciskSprawdz" onclick="sprawdz()">Sprawdź</button>
+            <button id="przyciskSprawdz" onclick="sprawdz()">Sprawdź</button>
+            <button id="przyciskMieszaj" onclick="mieszaj_literki()">Mieszaj</button>
 
-        <div id="klawiatura" style="margin-top: 10px;"></div>
+            <div id="klawiatura" style="margin-top: 10px;"></div>
 
-            <div id="ramkaPonumerowanychSlow" style="margin-top: 20px; display: none; ">
+            <div id="ramkaPonumerowanychSlow" style="margin-top: 20px; ">
                 <h2 class="tytul">Słowa do odgadnięcia:</h2>
-                <div id="slowo1" class="slowo"></div>
-                <div id="slowo2" class="slowo"></div>
-                <div id="slowo3" class="slowo"></div>
-                <div id="slowo4" class="slowo"></div>
+                <div id="slowo1" class="slowo" style="display: none; "></div>
+
+                <!-- <div id="slowo1" class="slowo" style="display: none;"></div> -->
+
+                <div id="slowo2" class="slowo" style="display: none;"></div>
+                <div id="slowo3" class="slowo" style="display: none;"></div>
+                <div id="slowo4" class="slowo" style="display: none;"></div>
+
             </div>
             <div id="error" class="error" style="display: none;">Błędne słowo!</div>
         </div>
+
+        <table id="punktyTable">
+            <tr>
+                <th>Punkty</th>
+            </tr>
+            <tr>
+                <td id="punkty">0</td>
+            </tr>
+        </table>
+
     </div>
 
- <script>
+    <script>
         var wybraneLitery = [];
         var poziomWybrany = false; // Zmienna określająca, czy poziom trudności został wybrany
         var czasStartowy;
         var timer;
+        var punkty = 0; //Zmienna przechowująca punkty gracza
 
         var slowo1 = @Html.Raw(Json.Serialize(@Model.Slowo1));
         var slowo2 = @Html.Raw(Json.Serialize(@Model.Slowo2));
         var slowo3 = @Html.Raw(Json.Serialize(@Model.Slowo3));
         var slowo4 = @Html.Raw(Json.Serialize(@Model.Slowo4));
 
-        document.getElementById('slowo1').innerHTML = '<input type="text" value="' + slowo1 + '" readonly>';
-        document.getElementById('slowo2').innerHTML = '<input type="text" value="' + slowo2 + '" readonly>';
-        document.getElementById('slowo3').innerHTML = '<input type="text" value="' + slowo3 + '" readonly>';
-        document.getElementById('slowo4').innerHTML = '<input type="text" value="' + slowo4 + '" readonly>';
+        document.getElementById('slowo1').innerHTML = '<input type="text" value="1. ' + slowo1 + '" readonly>';
+        document.getElementById('slowo2').innerHTML = '<input type="text" value="2. ' + slowo2 + '" readonly>';
+        document.getElementById('slowo3').innerHTML = '<input type="text" value="3. ' + slowo3 + '" readonly>';
+        document.getElementById('slowo4').innerHTML = '<input type="text" value="4. ' + slowo4 + '" readonly>';
 
         var slowa = [slowo1, slowo2, slowo3, slowo4];
 
-        function najdluzszeSlowo(slowa) {
-            let najdluzsze = slowa[0];
-            for (let i = 1; i < slowa.length; i++) {
-                if (slowa[i].length > najdluzsze.length) {
-                    najdluzsze = slowa[i];
-                }
-            }
-            return najdluzsze;
+
+
+        //wyświetlenie słów zawartych w tabeli (konsola)
+        gry_slownikowe_showme = () => {
+            document.querySelectorAll('.slowo').forEach((el) => {
+                el.style.display = 'flex';
+            });
+        }
+
+        //schowanie słów zawartych w tabeli (konsola)
+        gry_slownikowe_hide = () => {
+            document.querySelectorAll('.slowo').forEach((el) => {
+                el.style.display = 'none';
+            });
         }
 
         //inicjalizacja klawiatury
         function inicjujKlawiature() {
 
-            var najdluzsze = najdluzszeSlowo(slowa);
 
+            //Sprawdzamy czy dana litera jest w zbiorze jeżeli nie to ją dodajemy i tworzymy z niego przycisk
             var klawiatura = document.getElementById('klawiatura');
             klawiatura.innerHTML = '';
 
-            for (var litera of najdluzsze) {
-                var button = document.createElement('button');
-                button.innerHTML = litera;
-                button.disabled = true; // Na początku przyciski są wyłączone
-                button.onclick = function () {
-                    wybierzLitere(this.innerHTML);
-                };
-                klawiatura.appendChild(button);
+            let literki = new Set();
+
+            for (let slowo of slowa) {
+                for (let litera of slowo) {
+                    if (!literki.has(litera)) {
+                        literki.add(litera);
+                        let button = document.createElement('button');
+                        button.innerHTML = litera;
+                        button.disabled = true; // Na początku przyciski są wyłączone
+                        button.addEventListener("click", () => {
+                            wybierzLitere(litera);
+                        });
+                        klawiatura.appendChild(button);
+                    }
+                }
             }
+
+            mieszaj_literki();
         }
 
-                // Funkcja wybierająca literę
-                function wybierzLitere(litera) {
-                    wybraneLitery.push(litera); // Dodajemy wybraną literę do tablicy wybranych liter
-                    aktualizujWpisywaneSłowo(); // Aktualizujemy wpisywane słowo
-                }
+        // Funkcja wybierająca literę
+        function wybierzLitere(litera) {
+            wybraneLitery.push(litera); // Dodajemy wybraną literę do tablicy wybranych liter
+            aktualizujWpisywaneSłowo(); // Aktualizujemy wpisywane słowo
+        }
 
-                //działanie backspace
+        //działanie backspace
         function usunOstatniaLitere() {
-            var wpisywaneSłowo = document.getElementById('wpisywaneSłowo');
-            var aktualnyTekst = wpisywaneSłowo.value;
+
+            if (wybraneLitery.length > 0) {
+                wybraneLitery.pop(); // Usuń ostatnią literę z tablicy wybranych liter
+                aktualizujWpisywaneSłowo(); // Aktualizuj wpisywane słowo
+            }
 
 
         }
-                // Funkcja aktualizująca wpisywane słowo
-                function aktualizujWpisywaneSłowo() {
-                    var wpisywaneSłowo = document.getElementById('wpisywaneSłowo');
-                    wpisywaneSłowo.value = wybraneLitery.join('');
-                }
+        // Funkcja aktualizująca wpisywane słowo
+        function aktualizujWpisywaneSłowo() {
+            var wpisywaneSłowo = document.getElementById('wpisywaneSłowo');
+            wpisywaneSłowo.value = wybraneLitery.join('');
+        }
 
         function sprawdz() {
             var wpisaneSlowo = document.getElementById('wpisywaneSłowo').value;
+            var slowaDoSprawdzenia = [slowo1, slowo2, slowo3, slowo4];
 
-            if (wpisaneSlowo === slowo1) {
-                document.getElementById('slowo1').style.display = 'block';
-            } else if (wpisaneSlowo === slowo2) {
-                document.getElementById('slowo2').style.display = 'block';
-            } else if (wpisaneSlowo === slowo3) {
-                document.getElementById('slowo3').style.display = 'block';
-            } else if (wpisaneSlowo === slowo4) {
-                document.getElementById('slowo4').style.display = 'block';
-            } else {
-                alert("Błędne słowo!");
+            for (var i = 0; i < slowaDoSprawdzenia.length; i++) {
+                if (wpisaneSlowo === slowaDoSprawdzenia[i]) {
+                    document.getElementById('slowo' + (i + 1)).style.display = 'block';
+                    punkty += 5; // Zwiększ punkty o 5 za odgadnięte słowo
+                    document.getElementById('punkty').innerHTML = punkty; // Aktualizuj wyświetlaną liczbę punktów
+                    return;
+                }
             }
+            alert("Błędne słowo!");
+        }
+        //Mieszanie liter/przycisków, zmiana kolejności
+        function mieszaj_literki() {
+            let klawiatura = document.getElementById('klawiatura');
+            let przyciski = Array.from(klawiatura.children);
+
+            for (let i = przyciski.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [przyciski[i], przyciski[j]] = [przyciski[j], przyciski[i]];
+            }
+
+            klawiatura.innerHTML = '';
+            przyciski.forEach(i => klawiatura.appendChild(i));
         }
 
-    function wybierzPoziom(poziom) {
-        switch (poziom.toLowerCase()) {
-            case 'latwy':
-                czasStartowy = 20 * 60;
-                break;
-            case 'sredni':
-                czasStartowy = 15 * 60;
-                break;
-            case 'trudny':
-                czasStartowy = 10 * 60;
-                break;
-            default:
-                czasStartowy = 0;
-        }
-        poziomWybrany = true;
+        function wybierzPoziom(poziom) {
+            switch (poziom.toLowerCase()) {
+                case 'latwy':
+                    czasStartowy = 20 * 60;
+                    break;
+                case 'sredni':
+                    czasStartowy = 15 * 60;
+                    break;
+                case 'trudny':
+                    czasStartowy = 10 * 60;
+                    break;
+                default:
+                    czasStartowy = 0;
+            }
+            poziomWybrany = true;
 
             // Odblokowujemy przyciski na klawiaturze po wybraniu poziomu trudności
             var klawiatura = document.getElementById('klawiatura');
@@ -215,34 +273,34 @@
                 button.disabled = false;
             }
 
-        var ramkaPoziomu = document.getElementById('ramkaPoziomu');
-        ramkaPoziomu.style.display = 'none';
+            var ramkaPoziomu = document.getElementById('ramkaPoziomu');
+            ramkaPoziomu.style.display = 'none';
 
             rozpocznijGre();
-    }
-
-    function rozpocznijGre() {
-        var licznik = document.getElementById('licznik');
-        var czas = czasStartowy;
-
-        function odliczanieCzasu() {
-            var minuty = Math.floor(czas / 60);
-            var sekundy = czas % 60;
-                licznik.innerHTML = minuty + 'm ' + (sekundy < 10 ? '0' : '') + sekundy + 's';
-            czas--;
-            if (czas < 0) {
-                clearInterval(timer);
-                licznik.innerHTML = 'Koniec czasu!';
-            }
         }
 
-        clearInterval(timer);
-        odliczanieCzasu();
-        timer = setInterval(odliczanieCzasu, 1000);
-    }
+        function rozpocznijGre() {
+            var licznik = document.getElementById('licznik');
+            var czas = czasStartowy;
+
+            function odliczanieCzasu() {
+                var minuty = Math.floor(czas / 60);
+                var sekundy = czas % 60;
+                licznik.innerHTML = minuty + 'm ' + (sekundy < 10 ? '0' : '') + sekundy + 's';
+                czas--;
+                if (czas < 0) {
+                    clearInterval(timer);
+                    licznik.innerHTML = 'Koniec czasu!';
+                }
+            }
+
+            clearInterval(timer);
+            odliczanieCzasu();
+            timer = setInterval(odliczanieCzasu, 1000);
+        }
 
         document.addEventListener('DOMContentLoaded', inicjujKlawiature);
-</script>
+    </script>
 </body>
 </html>
 
