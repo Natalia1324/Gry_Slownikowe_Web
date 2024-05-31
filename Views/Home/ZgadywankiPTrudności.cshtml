@@ -8,80 +8,8 @@
 <head>
     <meta charset="UTF-8">
     <title>@ViewData["Title"]</title>
-    <style>
-        .con {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            height: 100vh;
-        }
+    <link rel="stylesheet" type="text/css" href="~/css/zgadywanki.css">
 
-        .frame {
-            border: 2px solid #000;
-            padding: 20px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        h1.title {
-            margin-top: 20px;
-            font-size: 2em;
-        }
-
-        .poziom-buttons {
-            display: flex;
-            justify-content: center;
-        }
-
-            .poziom-buttons .btn {
-                margin: 10px;
-            }
-
-        .frame h1 {
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-
-
-        #klawiatura button {
-            margin: 5px;
-            padding: 10px;
-            font-size: 1em;
-            cursor: pointer;
-        }
-
-        #ramkaPonumerowanychSlow {
-            margin-top: 20px;
-        }
-
-        .tytul {
-            font-size: 1.2em;
-            font-weight: bold;
-        }
-
-        .slowo {
-            margin-bottom: 10px;
-        }
-
-            .slowo input {
-                font-size: 1em;
-                padding: 5px;
-            }
-
-        #punktyTable {
-            margin-top: 20px;
-            border-collapse: collapse;
-            width: 200px;
-        }
-
-            #punktyTable th, #punktyTable td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: center;
-            }
-
-    </style>
 </head>
 
 <body>
@@ -129,15 +57,39 @@
         <table id="punktyTable">
             <tr>
                 <th>Punkty</th>
-                <th>Czas</th>
+               
             </tr>
             <tr>
                 <td id="punkty">0</td>
-                <td id="czas">00:00</td>
+                
             </tr>
         </table>
 
     </div>
+
+    <!-- Okno dialogowe o wygranej -->
+    <div id="winModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeWinModal()">&times;</span>
+            <h2>Gratulacje!</h2>
+            <p>Odgadłeś/aś wszystkie słowa :3</p>
+            <p>Punkty: <span id="modal-punkty"></span></p>
+            <p>Czas: <span id="modal-czas"></span></p>
+        </div>
+    </div>
+
+    <!-- Okno dialogowe o przegranej -->
+    <div id="lostModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLostModal()">&times;</span>
+            <h2>Krytyczne 1</h2>
+            <p>Może następnym razem kości będą po twojej stronie</p>
+            <p>Zdobyte punkty: <span id="modal-lost-punkty"></span></p>
+            <p>Słowa do odgadnięcia:</p>
+            <ul id="modal-lost-words"></ul>
+        </div>
+    </div>
+
 
     <script>
         var wybraneLitery = [];
@@ -228,32 +180,21 @@
         function sprawdz() {
             var wpisaneSlowo = document.getElementById('wpisywaneSłowo').value;
             var slowaDoSprawdzenia = [slowo1, slowo2, slowo3, slowo4];
-            var poprawne = false;
+            
 
             for (var i = 0; i < slowaDoSprawdzenia.length; i++) {
                 if (wpisaneSlowo === slowaDoSprawdzenia[i]) {
                     document.getElementById('slowo' + (i + 1)).style.display = 'block';
-                    punkty += 5; // Zwiększ punkty o 5 za odgadnięte słowo
-                    document.getElementById('punkty').innerHTML = punkty; // Aktualizuj wyświetlaną liczbę punktów
-                    slowaDoSprawdzenia[i] = null;
-                    poprawne = true;
-                    
+                    punkty += 5;
+                    document.getElementById('punkty').innerHTML = punkty;
+                    if (punkty >= 20) { // Sprawdzenie, czy liczba punktów wynosi co najmniej 20
+                        clearInterval(timer); // Zatrzymaj timer
+                        showModal(); // Pokaz okienko z gratulacjami
+                    }
+                    return;
                 }
             }
-            if (poprawne) {
-                var wszystkieOdgadniete = slowaDoSprawdzenia.every(s => s === null);
-                if (wszystkieOdgadniete) {
-                    clearInterval(timer);
-                    const endTime = new Date();
-                    const timeTaken = Math.floor((endTime - startTime) / 1000);
-                    const minuty = Math.floor(timeTaken / 60);
-                    const sekundy = timeTaken % 60;
-                    document.getElementById('czas').innerHTML = `${minuty < 10 ? '0' : ''}${minuty}:${sekundy < 10 ? '0' : ''}${sekundy}`;
-                    alert("Gratulacje! Odgadłeś wszystkie słowa!");
-                }
-            } else {
-                alert("Błędne słowo!");
-            }
+            alert("Błędne słowo!");
         }
 
                 
@@ -282,7 +223,7 @@
                     czasStartowy = 15 * 60;
                     break;
                 case 'trudny':
-                    czasStartowy = 10 * 60;
+                    czasStartowy = 0.1 * 60;
                     break;
                 default:
                     czasStartowy = 0;
@@ -314,13 +255,72 @@
                 czas--;
                 if (czas < 0) {
                     clearInterval(timer);
-                    licznik.innerHTML = 'Koniec czasu!';
+                    showLostModal(); // Wywołaj funkcję pokazującą okno o przegranej
                 }
             }
 
             clearInterval(timer);
             odliczanieCzasu();
             timer = setInterval(odliczanieCzasu, 1000);
+        }
+
+        //okienko z przegraną
+        function showModal() {
+            var modal = document.getElementById("winModal");
+            var modalPunkty = document.getElementById("modal-punkty");
+            var modalCzas = document.getElementById("modal-czas");
+
+            modalPunkty.innerHTML = punkty;
+            modalCzas.innerHTML = getTimeElapsed(startTime, new Date());
+
+            modal.style.display = "block";
+        }
+
+        //okienko z przegraną
+        function showLostModal() {
+            var modal = document.getElementById("lostModal");
+            var modalPunkty = document.getElementById("modal-lost-punkty"); //punkty
+            var modalAllWords = document.getElementById("modal-lost-words"); // słowa do odgadnięcia
+
+            // Wyczyść listę i dodaj wszystkie słowa
+            modalAllWords.innerHTML = "";
+            slowa.forEach(function (slowo) {
+                var div = document.createElement("div");
+                div.textContent = " -> " + slowo; 
+                modalAllWords.appendChild(div);
+            });
+
+            // punkty w prawym górnym rogu okna
+            modalPunkty.innerHTML = punkty;
+
+            modal.style.display = "block";
+        }
+
+
+        function closeModal() {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+
+        function getTimeElapsed(start, end) {
+            var diff = Math.abs(end - start) / 1000;
+            var minutes = Math.floor(diff / 60);
+            var seconds = Math.floor(diff % 60);
+            return (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+        }
+
+        // Funkcja zamykająca okno dialogowe o wygranej
+        function closeWinModal() {
+            var modal = document.getElementById("winModal");
+            modal.style.display = "none";
+            window.location.reload(); // Odśwież stronę
+        }
+
+        // Funkcja zamykająca okno dialogowe o przegranej
+        function closeLostModal() {
+            var modal = document.getElementById("lostModal");
+            modal.style.display = "none";
+            window.location.reload(); // Odśwież stronę
         }
 
         document.addEventListener('DOMContentLoaded', inicjujKlawiature);
