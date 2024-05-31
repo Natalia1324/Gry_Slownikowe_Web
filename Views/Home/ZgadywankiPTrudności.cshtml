@@ -129,9 +129,11 @@
         <table id="punktyTable">
             <tr>
                 <th>Punkty</th>
+                <th>Czas</th>
             </tr>
             <tr>
                 <td id="punkty">0</td>
+                <td id="czas">00:00</td>
             </tr>
         </table>
 
@@ -142,6 +144,7 @@
         var poziomWybrany = false; // Zmienna określająca, czy poziom trudności został wybrany
         var czasStartowy;
         var timer;
+        var startTime;
         var punkty = 0; //Zmienna przechowująca punkty gracza
 
         var slowo1 = @Html.Raw(Json.Serialize(@Model.Slowo1));
@@ -225,17 +228,37 @@
         function sprawdz() {
             var wpisaneSlowo = document.getElementById('wpisywaneSłowo').value;
             var slowaDoSprawdzenia = [slowo1, slowo2, slowo3, slowo4];
+            var poprawne = false;
 
             for (var i = 0; i < slowaDoSprawdzenia.length; i++) {
                 if (wpisaneSlowo === slowaDoSprawdzenia[i]) {
                     document.getElementById('slowo' + (i + 1)).style.display = 'block';
                     punkty += 5; // Zwiększ punkty o 5 za odgadnięte słowo
                     document.getElementById('punkty').innerHTML = punkty; // Aktualizuj wyświetlaną liczbę punktów
-                    return;
+                    slowaDoSprawdzenia[i] = null;
+                    poprawne = true;
+                    
                 }
             }
-            alert("Błędne słowo!");
+            if (poprawne) {
+                var wszystkieOdgadniete = slowaDoSprawdzenia.every(s => s === null);
+                if (wszystkieOdgadniete) {
+                    clearInterval(timer);
+                    const endTime = new Date();
+                    const timeTaken = Math.floor((endTime - startTime) / 1000);
+                    const minuty = Math.floor(timeTaken / 60);
+                    const sekundy = timeTaken % 60;
+                    document.getElementById('czas').innerHTML = `${minuty < 10 ? '0' : ''}${minuty}:${sekundy < 10 ? '0' : ''}${sekundy}`;
+                    alert("Gratulacje! Odgadłeś wszystkie słowa!");
+                }
+            } else {
+                alert("Błędne słowo!");
+            }
         }
+
+                
+
+
         //Mieszanie liter/przycisków, zmiana kolejności
         function mieszaj_literki() {
             let klawiatura = document.getElementById('klawiatura');
@@ -282,6 +305,7 @@
         function rozpocznijGre() {
             var licznik = document.getElementById('licznik');
             var czas = czasStartowy;
+            startTime = new Date();
 
             function odliczanieCzasu() {
                 var minuty = Math.floor(czas / 60);

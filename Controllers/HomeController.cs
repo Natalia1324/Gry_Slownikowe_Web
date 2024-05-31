@@ -235,6 +235,7 @@ namespace Gry_Slownikowe.Controllers
 
             return Json(new { success = true, message = "Data saved successfully." });
         }
+
         [HttpPost]
         public IActionResult SprawdzSlowo(string wpisaneSlowo)
         {
@@ -359,14 +360,45 @@ namespace Gry_Slownikowe.Controllers
         }
         public IActionResult ZgadywankiMenu ()
         {
-
             return View();
         }
 
-       // public IActionResult ZgadywankiPTrudności()
-       // {
+        [HttpPost]
+        public IActionResult ZgaadywankiWynik(int punkty, int gameTime)
+        {
+            Console.WriteLine("Wygrana: " + punkty);
+            Console.WriteLine("Czas: " + gameTime);
+
+            try
+            {
+                TimeSpan timespan = TimeSpan.FromMilliseconds(gameTime);
+                var newRecord = new Zgadywanki
+                {
+                    // Win = win,
+                    //Tries = tries,
+                    Punkty = punkty,
+                    GameTime = timespan, // 1 godzina, 30 minut
+                    //GameData = DateTime.Now,
+                    UserId = getLoggedUser().Id
+                };
+
+                getLoggedUser().Zgadywanki.Add(newRecord);
+                _context.Zgadywanki.Add(newRecord);
+                _context.SaveChanges();
+            }
+            catch
+            {
+                return Json(new { success = false, message = "Couldn't push to database" });
+            }
+
+
+            return Json(new { success = true, message = "Data saved successfully." });
+        }
+
+        // public IActionResult ZgadywankiPTrudności()
+        // {
         //    return View();
-       // }
+        // }
 
         public IActionResult ZgadywankiSlowotok(string poziom)
         {
@@ -397,37 +429,6 @@ namespace Gry_Slownikowe.Controllers
             return View(model);
         }
 
-
-        //[HttpGet]
-        //public IActionResult losuj()
-        //{
-        //    SJP_API random;
-
-        //    do
-        //    {
-        //        random = new SJP_API();
-        //    } while (!random.getDopuszczalnosc());
-        //    //SlownikowoModel _slownikowoModel = new(random.getSlowo());
-        //    //random = new SJP_API("żółć");
-
-        //    //string slowo = HttpUtility.HtmlEncode(random.getSlowo());
-        //    WisielecModel WisielecModel = new WisielecModel(random.getSlowo());
-        //    //Console.WriteLine(_slownikowoModel.WylosowaneSlowo);
-        //    return View(WisielecModel);
-        //}
-
-
-        //[HttpGet]
-        //public IActionResult Losuj()
-        //{
-        //    SJP_API random;
-        //    do
-        //    {
-        //        random = new SJP_API();
-        //    } while (!random.getDopuszczalnosc());
-
-        //    return Json(new { word = random.getSlowo() });
-        //}
 
         public IActionResult KrzyzowkaMenu()
         {
