@@ -114,12 +114,12 @@ namespace Gry_Slownikowe.Entities
 
             modelBuilder.Entity<Zgadywanki>(eb => {
                 eb.Property(e => e.Id).ValueGeneratedOnAdd();
-                eb.Property(gd => gd.GameData).HasDefaultValueSql("GETDATE()");
+                //eb.Property(gd => gd.GameData).HasDefaultValueSql("GETDATE()");
 
-                eb.Property(win => win.Win).IsRequired();
-                eb.Property(loss => loss.Loss).IsRequired();
+                eb.Property(win => win.Punkty).IsRequired();
+               // eb.Property(loss => loss.Loss).IsRequired();
                 eb.Property(gameTime => gameTime.GameTime).IsRequired();
-                eb.Property(gameData => gameData.GameData).IsRequired(false); // Nie wymagane, ponieważ jest to typ nullable
+                //eb.Property(gameData => gameData.GameData).IsRequired(false); // Nie wymagane, ponieważ jest to typ nullable
             });
             modelBuilder.Entity<Slownikowo>(eb => {
                 eb.Property(e => e.Id).ValueGeneratedOnAdd();
