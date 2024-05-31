@@ -266,6 +266,7 @@ namespace Gry_Slownikowe.Controllers
             string slowo1, slowo2, slowo3, slowo4;
             string polskieZnaki1, polskieZnaki2, polskieZnaki3, polskieZnaki4;
 
+
             do
             {
 
