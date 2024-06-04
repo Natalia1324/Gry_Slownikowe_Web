@@ -241,12 +241,13 @@ namespace Gry_Slownikowe.Controllers
                     Wins = user.Wordle.Sum(g => g.Win),
                     Losses = user.Wordle.Sum(g => g.Loss)
                 },
-                new GameStatistics
+                new ZgadywankiStatistics
                 {
                     GameName = "Zgadywanki",
                     TotalGames = user.Zgadywanki.Count,
-                    Wins = user.Zgadywanki.Sum(g => g.Win),
-                    Losses = user.Zgadywanki.Sum(g => g.Loss)
+                    //Wins = user.Zgadywanki.Sum(g => g.Win),
+                    //Losses = user.Zgadywanki.Sum(g => g.Loss)
+                    Punkty = user.Zgadywanki.Sum(g => g.Punkty)
                 },
                 new GameStatistics
                 {

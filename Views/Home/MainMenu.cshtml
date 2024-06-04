@@ -4,17 +4,75 @@
 @{
     ViewData["Title"] = "Main Menu";
 }
-<div style="text-align: center;">
-    <h1 style="font-size: 2.25rem;">Wybierz gre:</h1>
-    <div>
-        <button onclick="window.location.href='@Url.Action("WordleGamemode", "Home")'" style="margin: 10px; padding: 10px 20px; font-size: 1.25rem;">Wordle</button>
-        <button onclick="window.location.href='@Url.Action("Scrabble", "Home")'" style="margin: 10px; padding: 10px 20px; font-size: 1.25rem;">Scrabble</button>
-        <button onclick="window.location.href='@Url.Action("KrzyzowkaMenu", "Home")'" style="margin: 10px; padding: 10px 20px; font-size: 1.25rem;">Krzyżówki</button>
-        <button onclick="window.location.href='@Url.Action("ZgadywankiMenu", "Home")'" style="margin: 10px; padding: 10px 20px; font-size: 1.25rem;">Zgadywanki</button>
-        <button onclick="window.location.href='@Url.Action("Wisielec", "Home")'" style="margin: 10px; padding: 10px 20px; font-size: 1.25rem;">Wisielec</button>
-        <button onclick="window.location.href='@Url.Action("Slownikowo", "Home")'" style="margin: 10px; padding: 10px 20px; font-size: 1.25rem;">Słownikowo</button>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wybierz grę</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #2C2C2C;
+            color: #F0F0F0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 1.25rem;
+            color: #2C2C2C;
+            background-color: #F0F0F0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .btn:hover {
+                background-color: #E0E0E0;
+                transform: scale(1.1);
+            }
+
+            .btn:active {
+                background-color: #D0D0D0;
+                transform: scale(1);
+            }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div>
+            <h1>Wybierz grę:</h1>
+            <div>
+                <button onclick="window.location.href='@Url.Action("WordleGamemode", "Home")'" class="btn">Wordle</button>
+                <button onclick="window.location.href='@Url.Action("Scrabble", "Home")'" class="btn">Scrabble</button>
+                <button onclick="window.location.href='@Url.Action("KrzyzowkaMenu", "Home")'" class="btn">Krzyżówki</button>
+                <button onclick="window.location.href='@Url.Action("ZgadywankiMenu", "Home")'" class="btn">Zgadywanki</button>
+                <button onclick="window.location.href='@Url.Action("Wisielec", "Home")'" class="btn">Wisielec</button>
+                <button onclick="window.location.href='@Url.Action("Slownikowo", "Home")'" class="btn">Słownikowo</button>
+            </div>
+        </div>
     </div>
-</div>
+
+</body>
+</html>
+
 
 
 

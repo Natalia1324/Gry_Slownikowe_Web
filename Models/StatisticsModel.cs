@@ -13,4 +13,9 @@
         public int Wins { get; set; }
         public int Losses { get; set; }
     }
+
+    public class ZgadywankiStatistics : GameStatistics
+    {
+        public int Punkty { get; set; }
+    }
 }
