@@ -1,0 +1,136 @@
+﻿
+.con {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+}
+
+.frame {
+    border: 2px solid #000;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+h1.title {
+    margin-top: 20px;
+    font-size: 2em;
+}
+
+.poziom-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+    .poziom-buttons .btn {
+        margin: 10px;
+    }
+
+.frame h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+
+#klawiatura button {
+    margin: 5px;
+    padding: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+}
+
+#ramkaPonumerowanychSlow {
+    margin-top: 20px;
+}
+
+.tytul {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.slowo {
+    margin-bottom: 10px;
+}
+
+    .slowo input {
+        font-size: 1em;
+        padding: 5px;
+    }
+
+#punktyTable {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 200px;
+}
+
+    #punktyTable th, #punktyTable td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+/* Styl dla okna dialogowego o przegranej */
+#lostModal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+/* Stylowanie okienka dialogowego */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    text-align: center;
+}
+
+.close {
+    color: #aaa;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    margin: 10px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+
+
+
+
+

@@ -295,6 +295,7 @@ namespace Gry_Slownikowe.Controllers
             }
             else return Json(new { success = false, message = "Didn't push to database - played as guest." });
         }
+
         [HttpPost]
         public IActionResult SprawdzSlowo(string wpisaneSlowo)
         {
@@ -321,65 +322,73 @@ namespace Gry_Slownikowe.Controllers
         }
         public IActionResult ZgadywankiPTrudności()
         {
-            // Losowanie pierwszego słowa
-            SJP_API api1 = new SJP_API();
-            string slowo1 = api1.getSlowo();
-            string polskieZnaki1 = HttpUtility.HtmlEncode(slowo1);
+            SJP_API api1, api2, api3, api4;
+            string slowo1, slowo2, slowo3, slowo4;
+            string polskieZnaki1, polskieZnaki2, polskieZnaki3, polskieZnaki4;
 
-            // Losowanie drugiego słowa
-            SJP_API api2 = new SJP_API();
-            string slowo2 = api2.getSlowo();
-            string polskieZnaki2 = HttpUtility.HtmlEncode(slowo2);
 
-            // Losowanie tzreciego słowa
-            SJP_API api3 = new SJP_API();
-            string slowo3 = api3.getSlowo();
-            string polskieZnaki3 = HttpUtility.HtmlEncode(slowo3);
-
-            // Losowanie czwarte słowa
-            SJP_API api4 = new SJP_API();
-            string slowo4 = api4.getSlowo();
-            string polskieZnaki4 = HttpUtility.HtmlEncode(slowo3);
-
-            // Losowanie piąte słowa
-            SJP_API api5 = new SJP_API();
-            string slowo5 = api5.getSlowo();
-            string polskieZnaki5 = HttpUtility.HtmlEncode(slowo3);
-
-            // Sprawdzanie, czy drugie słowo zawiera co najmniej trzy litery z pierwszego słowa
-            while (!CzyDrugieSlowoMaMinTrzyLitery(slowo1, slowo2, slowo3, slowo4))
+            do
             {
-                api2 = new SJP_API();
+
+                // Losowanie pierwszego słowa
+                do
+                {
+                    api1 = new SJP_API();
+                } while (api1.getDopuszczalnosc() == false);
+                slowo1 = api1.getSlowo();
+                polskieZnaki1 = HttpUtility.HtmlEncode(slowo1);
+
+                // Losowanie drugiego słowa
+
+                do
+                {
+                    api2 = new SJP_API();
+
+                } while (api2.getDopuszczalnosc() == false);
                 slowo2 = api2.getSlowo();
                 polskieZnaki2 = HttpUtility.HtmlEncode(slowo2);
 
-                api3 = new SJP_API();
+                // Losowanie tzreciego słowa
+
+                do
+                {
+                    api3 = new SJP_API();
+                } while (api3.getDopuszczalnosc() == false);
                 slowo3 = api3.getSlowo();
                 polskieZnaki3 = HttpUtility.HtmlEncode(slowo3);
 
-                api4 = new SJP_API();
+                // Losowanie czwarte słowa
+
+                do
+                {
+                    api4 = new SJP_API();
+                } while (api4.getDopuszczalnosc() == false);
                 slowo4 = api4.getSlowo();
                 polskieZnaki4 = HttpUtility.HtmlEncode(slowo4);
 
-            }
+            } while (slowo2 == null || slowo3 == null || slowo4 == null);
 
-            // ZgadywankiModel model = new ZgadywankiModel(polskieZnaki1, polskieZnaki2, polskieZnaki3, polskieZnaki4);
-            // return View(model);
-            return View();
+
+
+            ZgadywankiModel model = new ZgadywankiModel(polskieZnaki1, polskieZnaki2, polskieZnaki3, polskieZnaki4);
+            return View(model);
+           
         }
         private bool CzyDrugieSlowoMaMinTrzyLitery(string slowo1, string slowo2, string slowo3, string slowo4)
         {
             var literyZPierwszego = new HashSet<char>(slowo1);
             int licznik2 = 0, licznik3 = 0, licznik4 = 0;
+
+
             foreach (var litera in slowo2)
             {
                 if (literyZPierwszego.Contains(litera))
                 {
                     licznik2++;
-                    if (licznik2 >= 2)
-                    {
-                        break;
-                    }
+                    //if (licznik2 >= 4)
+                    //{
+                    //    break;
+                    //}
                 }
             }
 
@@ -388,10 +397,10 @@ namespace Gry_Slownikowe.Controllers
                 if (literyZPierwszego.Contains(litera))
                 {
                     licznik3++;
-                    if (licznik3 >= 2)
-                    {
-                        break;
-                    }
+                    //if (licznik3 >= 4)
+                    //{
+                    //    break;
+                    //}
                 }
             }
 
@@ -400,26 +409,57 @@ namespace Gry_Slownikowe.Controllers
                 if (literyZPierwszego.Contains(litera))
                 {
                     licznik4++;
-                    if (licznik4 >= 2)
-                    {
-                        break;
-                    }
+                    //if (licznik4 >= 4)
+                    //{
+                    //    break;
+                    //}
                 }
             }
 
 
-            return licznik2 >= 2 && licznik3 >= 2 && licznik4 >= 2;
+            return licznik2 >= 4 && licznik3 >= 4 && licznik4 >= 4;
         }
         public IActionResult ZgadywankiMenu ()
         {
-
             return View();
         }
 
-       // public IActionResult ZgadywankiPTrudności()
-       // {
+        [HttpPost]
+        public IActionResult ZgaadywankiWynik(int punkty, int gameTime)
+        {
+            Console.WriteLine("Wygrana: " + punkty);
+            Console.WriteLine("Czas: " + gameTime);
+
+            try
+            {
+                TimeSpan timespan = TimeSpan.FromMilliseconds(gameTime);
+                var newRecord = new Zgadywanki
+                {
+                    // Win = win,
+                    //Tries = tries,
+                    Punkty = punkty,
+                    GameTime = timespan, // 1 godzina, 30 minut
+                    //GameData = DateTime.Now,
+                    UserId = getLoggedUser().Id
+                };
+
+                getLoggedUser().Zgadywanki.Add(newRecord);
+                _context.Zgadywanki.Add(newRecord);
+                _context.SaveChanges();
+            }
+            catch
+            {
+                return Json(new { success = false, message = "Couldn't push to database" });
+            }
+
+
+            return Json(new { success = true, message = "Data saved successfully." });
+        }
+
+        // public IActionResult ZgadywankiPTrudności()
+        // {
         //    return View();
-       // }
+        // }
 
         public IActionResult ZgadywankiSlowotok(string poziom)
         {
@@ -450,37 +490,6 @@ namespace Gry_Slownikowe.Controllers
             return View(model);
         }
 
-
-        //[HttpGet]
-        //public IActionResult losuj()
-        //{
-        //    SJP_API random;
-
-        //    do
-        //    {
-        //        random = new SJP_API();
-        //    } while (!random.getDopuszczalnosc());
-        //    //SlownikowoModel _slownikowoModel = new(random.getSlowo());
-        //    //random = new SJP_API("żółć");
-
-        //    //string slowo = HttpUtility.HtmlEncode(random.getSlowo());
-        //    WisielecModel WisielecModel = new WisielecModel(random.getSlowo());
-        //    //Console.WriteLine(_slownikowoModel.WylosowaneSlowo);
-        //    return View(WisielecModel);
-        //}
-
-
-        //[HttpGet]
-        //public IActionResult Losuj()
-        //{
-        //    SJP_API random;
-        //    do
-        //    {
-        //        random = new SJP_API();
-        //    } while (!random.getDopuszczalnosc());
-
-        //    return Json(new { word = random.getSlowo() });
-        //}
 
         public IActionResult KrzyzowkaMenu()
         {
