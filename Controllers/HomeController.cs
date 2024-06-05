@@ -426,7 +426,7 @@ namespace Gry_Slownikowe.Controllers
         }
 
         [HttpPost]
-        public IActionResult ZgaadywankiWynik(int punkty, int gameTime)
+        public IActionResult ZgadywankiWynik(int punkty, int gameTime)
         {
             Console.WriteLine("Wygrana: " + punkty);
             Console.WriteLine("Czas: " + gameTime);
@@ -436,15 +436,14 @@ namespace Gry_Slownikowe.Controllers
                 TimeSpan timespan = TimeSpan.FromMilliseconds(gameTime);
                 var newRecord = new Zgadywanki
                 {
-                    // Win = win,
-                    //Tries = tries,
+                    
                     Punkty = punkty,
-                    GameTime = timespan, // 1 godzina, 30 minut
-                    //GameData = DateTime.Now,
-                    UserId = getLoggedUser().Id
+                    GameTime = timespan, 
+                    
+                   // UserId = getLoggedUser().Id
                 };
 
-                getLoggedUser().Zgadywanki.Add(newRecord);
+                //getLoggedUser().Zgadywanki.Add(newRecord);
                 _context.Zgadywanki.Add(newRecord);
                 _context.SaveChanges();
             }
@@ -457,10 +456,7 @@ namespace Gry_Slownikowe.Controllers
             return Json(new { success = true, message = "Data saved successfully." });
         }
 
-        // public IActionResult ZgadywankiPTrudności()
-        // {
-        //    return View();
-        // }
+       
 
         public IActionResult ZgadywankiSlowotok(string poziom)
         {
