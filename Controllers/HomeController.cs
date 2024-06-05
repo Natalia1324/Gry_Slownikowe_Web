@@ -431,31 +431,32 @@ namespace Gry_Slownikowe.Controllers
             Console.WriteLine("Wygrana: " + punkty);
             Console.WriteLine("Czas: " + gameTime);
 
-            try
-            {
-                TimeSpan timespan = TimeSpan.FromMilliseconds(gameTime);
-                var newRecord = new Zgadywanki
+            if (getLoggedUser() == null) { return Json(new { success = false, message = "You not login in web page!!" }); }
+
+                try
                 {
-                    
-                    Punkty = punkty,
-                    GameTime = timespan, 
-                    
-                   // UserId = getLoggedUser().Id
-                };
+                    TimeSpan timespan = TimeSpan.FromMilliseconds(gameTime);
+                    var newRecord = new Zgadywanki
+                    {
 
-                //getLoggedUser().Zgadywanki.Add(newRecord);
-                _context.Zgadywanki.Add(newRecord);
-                _context.SaveChanges();
+                        Punkty = punkty,
+                        GameTime = timespan,
+
+                        UserId = getLoggedUser().Id
+                    };
+
+                    getLoggedUser().Zgadywanki.Add(newRecord);
+                    _context.Zgadywanki.Add(newRecord);
+                    _context.SaveChanges();
+                }
+                catch
+                {
+                    return Json(new { success = false, message = "Couldn't push to database" });
+                }
+            
+                return Json(new { success = true, message = "Data saved successfully." });
             }
-            catch
-            {
-                return Json(new { success = false, message = "Couldn't push to database" });
-            }
-
-
-            return Json(new { success = true, message = "Data saved successfully." });
-        }
-
+        
        
 
         public IActionResult ZgadywankiSlowotok(string poziom)

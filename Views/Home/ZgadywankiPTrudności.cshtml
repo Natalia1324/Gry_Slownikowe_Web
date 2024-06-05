@@ -292,19 +292,29 @@
         }
 
 
-        //okienko z przegraną
+        //okienko z wygraną
         function showModal() {
             var modal = document.getElementById("winModal");
             var modalPunkty = document.getElementById("modal-punkty");
             var modalCzas = document.getElementById("modal-czas");
 
             modalPunkty.innerHTML = punkty;
-            var gameTime = getTimeElapsed(startTime, new Date());
+
+
+            var gameTime = getTimeElapsed(startTime, new Date());//getTimeElapsed(startTime, new Date());
             modalCzas.innerHTML = gameTime;
 
             sendGameData(gameTime); //Przesłanie danych
 
             modal.style.display = "block";
+        }
+
+        function getTimeElapsed(startTime, endTime) {
+            // Obliczanie różnicy czasu w milisekundach
+            var elapsedTime = endTime - startTime;
+            // Konwersja milisekund na sekundy
+            var seconds = elapsedTime / 1000;
+            return seconds;
         }
 
         //okienko z przegraną
