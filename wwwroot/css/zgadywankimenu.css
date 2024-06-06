@@ -1,13 +1,32 @@
-﻿h1.title {
-    margin-top: 100px;
+﻿
+/*tytuł*/
+h1 {
+    background-color: #D5D7CC;
+    border-radius: 10px;
+    padding: 20px;
 }
+
+/*ramka przyciski*/
+.buttons-container {
+    background-color: #f5e6d7;
+    border-radius: 10px;
+    padding: 20px;
+    padding-bottom: 50px;
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between; /* Wycentrowanie przycisków */
+    justify-content: center; /* Wycentrowanie przycisków */
+}
+
+/*przyciski*/
 .btn {
     display: inline-block;
     margin: 10px;
     padding: 15px 30px;
     font-size: 1.25rem;
     color: #2C2C2C;
-    background-color: #8A2BE2; /* Fioletowy kolor tła */
+    background-color: #E9AE8C; /*  kolor tła */
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -15,11 +34,66 @@
 }
 
     .btn:hover {
-        background-color: #7B68EE; /* Ciemniejszy odcień fioletu podczas najechania */
+        background-color: #FF9376; /* Ciemniejszy odcień  podczas najechania */
         transform: scale(1.1);
     }
 
     .btn:active {
-        background-color: #6A5ACD; /* Jeszcze ciemniejszy odcień fioletu podczas kliknięcia */
+        background-color: #8DAAA6; /* Jeszcze ciemniejszy odcień podczas kliknięcia */
         transform: scale(0.95);
     }
+
+/*kropeczki*/
+.dots-left, .dots-right {
+    display: flex;
+    align-items: center;
+}
+
+.dot {
+    width: 15px;
+    height: 15px;
+    margin: 0 5px;
+    background-color: #D5D7CC;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+    .dot.active {
+        background-color: #8DAAA6; /* Kolor aktywnego kółka */
+    }
+
+    .dot.hovered:not(.active) {
+        background-color: #e6c5b3; /* Kolor nieaktywnej kropki podczas najechania */
+    }
+
+    .dot.hovered.active {
+        background-color: #FF9376; /* Kolor aktywnej kropki podczas najechania */
+    }
+
+/* tło pod ramką przycisków */
+.buttons-container {
+    position: relative; /* konieczne dla absolutnego położenia pseudo-elementu */
+}
+
+.buttons-background {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: calc(100% + 20px);
+    height: calc(100% + 20px);
+    background-color: #E3E0D6;
+    border-radius: 10px;
+    z-index: -1;
+}
+
+/* mały pasek na dole */
+.bottom-bar {
+    position: absolute;
+    bottom: -70px; /* przesunięcie paska w dół */
+    left: 0;
+    width: 100%;
+    height: 50px; /* zwiększenie wysokości paska */
+    background-color: #D5D7CC; /* kolor paska */
+    border-radius: 10px; /* zaokrąglenie rogów */
+    z-index: -1;
+}

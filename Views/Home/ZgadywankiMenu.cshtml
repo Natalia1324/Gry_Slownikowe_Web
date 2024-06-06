@@ -1,19 +1,86 @@
 ﻿@{
     ViewData["Title"] = "Zgadywanki";
 }
+
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="~/css/zgadywankimenu.css">
 </head>
 
+@* tytuł *@
+<header class="title-container text-center">
+    <h1 class="display-1 title">Słowotok</h1>
+</header>
 
-<div class="text-center d-flex flex-column align-items-center justify-content-center">
-    <h1 class="display-1 title " style="height: 15vh;">Słowotok</h1>
-    <div class="mt-3">
-        <a href="@Url.Action("ZgadywankiZasady", "Home")" class="btn btn-primary">Zasady</a>
+
+@* przyciski *@
+<div class="buttons-container d-flex align-items-center justify-content-between">
+    <div class="dots-left d-flex">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
     </div>
 
-    <div class="mt-3">
-        <a href="@Url.Action("ZgadywankiPTrudności", "Home")" class="btn btn-primary">Rozpocznij grę!</a>
+    <div class="buttons d-flex flex-column align-items-center">
+
+        <div class="mt-3">
+            <a href="@Url.Action("ZgadywankiZasady", "Home")" class="btn btn-primary">Zasady</a>
+        </div>
+
+        <div class="mt-3">
+            <a href="@Url.Action("ZgadywankiPTrudności", "Home")" class="btn btn-primary">Rozpocznij grę!</a>
+        </div>
     </div>
+
+    <div class="dots-right d-flex">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+
+    @*  tło pod ramką/obramówka *@
+    <div class="buttons-background"></div>
+    <div class="bottom-bar"></div>
+
 </div>
+
+<script>
+    let currentDot = 0;
+    const leftDots = document.querySelectorAll('.dots-left .dot');
+    const rightDots = document.querySelectorAll('.dots-right .dot');
+    const buttons = document.querySelectorAll('.btn');
+
+    function animateDots() {
+        leftDots.forEach((dot, index) => {
+            dot.classList.remove('active');
+            if (index === currentDot) {
+                dot.classList.add('active');
+            }
+        });
+        rightDots.forEach((dot, index) => {
+            dot.classList.remove('active');
+            if (index === currentDot) {
+                dot.classList.add('active');
+            }
+        });
+        currentDot = (currentDot + 1) % leftDots.length;
+    }
+
+    buttons.forEach(button => {
+        button.addEventListener('mouseover', () => {
+            leftDots.forEach(dot => dot.classList.add('hovered'));
+            rightDots.forEach(dot => dot.classList.add('hovered'));
+        });
+
+        button.addEventListener('mouseout', () => {
+            leftDots.forEach(dot => dot.classList.remove('hovered'));
+            rightDots.forEach(dot => dot.classList.remove('hovered'));
+        });
+    });
+
+    setInterval(animateDots, 500); // Animacja co 500 ms
+</script>
