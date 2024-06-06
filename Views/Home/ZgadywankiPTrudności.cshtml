@@ -225,7 +225,7 @@
                     czasStartowy = 15 * 60;
                     break;
                 case 'trudny':
-                    czasStartowy = 0.1 * 60;
+                    czasStartowy = 1 * 60;
                     break;
                 default:
                     czasStartowy = 0;
@@ -266,16 +266,55 @@
             timer = setInterval(odliczanieCzasu, 1000);
         }
 
-        //okienko z przegraną
+        //podesłanie wyników punktów oraz czasu do bazy danych
+        function sendGameData(gameTime) {
+            
+            $.ajax({
+                url: '@Url.Action("ZgadywankiWynik", "Home")',
+                type: 'POST',
+                data: {
+
+                    punkty: punkty,
+                    gameTime: gameTime
+                },
+                success: function (response) {
+                    console.log('Data saved successfully:', response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error saving data:', {
+                        readyState: xhr.readyState,
+                        status: xhr.status,
+                        statusText: xhr.statusText,
+                        responseText: xhr.responseText
+                    });
+                }
+            });
+        }
+
+
+        //okienko z wygraną
         function showModal() {
             var modal = document.getElementById("winModal");
             var modalPunkty = document.getElementById("modal-punkty");
             var modalCzas = document.getElementById("modal-czas");
 
             modalPunkty.innerHTML = punkty;
-            modalCzas.innerHTML = getTimeElapsed(startTime, new Date());
+
+
+            var gameTime = getTimeElapsed(startTime, new Date());//getTimeElapsed(startTime, new Date());
+            modalCzas.innerHTML = gameTime;
+
+            sendGameData(gameTime); //Przesłanie danych
 
             modal.style.display = "block";
+        }
+
+        function getTimeElapsed(startTime, endTime) {
+            // Obliczanie różnicy czasu w milisekundach
+            var elapsedTime = endTime - startTime;
+            // Konwersja milisekund na sekundy
+            var seconds = elapsedTime / 1000;
+            return seconds;
         }
 
         //okienko z przegraną
@@ -295,7 +334,13 @@
             // punkty w prawym górnym rogu okna
             modalPunkty.innerHTML = punkty;
 
+
             modal.style.display = "block";
+
+            // Prześlij dane do bazy danych
+            var endTime = new Date();
+            var gameTime = endTime - startTime;
+            sendGameData(gameTime);
         }
 
 
@@ -326,7 +371,14 @@
         }
 
         document.addEventListener('DOMContentLoaded', inicjujKlawiature);
-    </script>
+    
+            
+
+            
+            </script>
+
+
+
 </body>
 </html>
 

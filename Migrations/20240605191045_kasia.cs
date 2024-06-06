@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Gry_Slownikowe.Migrations
 {
     /// <inheritdoc />
-    public partial class NowaNazwaMigracji : Migration
+    public partial class kasia : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -80,10 +80,8 @@ namespace Gry_Slownikowe.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Win = table.Column<int>(type: "int", nullable: false),
-                    Loss = table.Column<int>(type: "int", nullable: false),
+                    wygrana_przegrana = table.Column<bool>(type: "bit", nullable: false),
                     GameTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    GameData = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "GETDATE()"),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

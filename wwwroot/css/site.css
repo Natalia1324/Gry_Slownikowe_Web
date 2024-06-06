@@ -39,6 +39,10 @@ body {
     flex: 1;
     background-color: #e0e0e0;
     padding: 2%;
+
+    display: flex;
+    justify-content: center; /* Poziome wyœrodkowanie */
+    align-items: center; /* Pionowe wyœrodkowanie */
 }
 
 .WelcomeToWisielca {
