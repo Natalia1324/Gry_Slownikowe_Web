@@ -245,8 +245,8 @@ namespace Gry_Slownikowe.Controllers
                 {
                     GameName = "Zgadywanki",
                     TotalGames = user.Zgadywanki.Count,
-                    //Wins = user.Zgadywanki.Sum(g => g.Win),
-                    //Losses = user.Zgadywanki.Sum(g => g.Loss)
+                    Wins = user.Zgadywanki.Count(g => g.Punkty >= 20),
+                    Losses = user.Zgadywanki.Count(g => g.Punkty < 20),
                     Punkty = user.Zgadywanki.Sum(g => g.Punkty)
                 },
                 new GameStatistics

@@ -9,11 +9,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wybierz grę</title>
     <style>
         body {
             margin: 0;
-            font-family: 'Arial', sans-serif;
             background-color: #2C2C2C;
             color: #F0F0F0;
             display: flex;
@@ -55,10 +53,9 @@
     </style>
 </head>
 <body>
-
+    <h1 style="font-size: 50px; margin-bottom: 50px">Wybierz grę</h1>
     <div class="container">
         <div>
-            <h1>Wybierz grę:</h1>
             <div>
                 <button onclick="window.location.href='@Url.Action("WordleGamemode", "Home")'" class="btn">Wordle</button>
                 <button onclick="window.location.href='@Url.Action("Scrabble", "Home")'" class="btn">Scrabble</button>
