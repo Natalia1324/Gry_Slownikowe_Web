@@ -231,8 +231,8 @@ namespace Gry_Slownikowe.Controllers
                 {
                     GameName = "Wisielec",
                     TotalGames = user.Wisielec.Count,
-                    Wins = user.Wisielec.Sum(g => g.Win),
-                    Losses = user.Wisielec.Sum(g => g.Loss)
+                    Wins = user.Wisielec.Count(g => g.wygrana_przegrana == true),
+                    Losses = user.Wisielec.Count(g => g.wygrana_przegrana == false)
                 },
                 new GameStatistics
                 {
@@ -468,6 +468,38 @@ namespace Gry_Slownikowe.Controllers
         public IActionResult ZgadywankiZasady()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult saveGameData(bool punkty, int gameTime)
+        {
+            Console.WriteLine("Wygrana: " + punkty);
+            Console.WriteLine("Czas: " + gameTime);
+
+            if (getLoggedUser() == null) { return Json(new { success = false, message = "You not login in web page!!" }); }
+
+            try
+            {
+                TimeSpan timespan = TimeSpan.FromMilliseconds(gameTime);
+                var newRecord = new Wisielec
+                {
+
+                    wygrana_przegrana = punkty,
+                    GameTime = timespan,
+
+                    UserId = getLoggedUser().Id
+                };
+
+                getLoggedUser().Wisielec.Add(newRecord);
+                _context.Wisielecs.Add(newRecord);
+                _context.SaveChanges();
+            }
+            catch
+            {
+                return Json(new { success = false, message = "Couldn't push to database" });
+            }
+
+            return Json(new { success = true, message = "Data saved successfully." });
         }
 
         public IActionResult Wisielec()

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gry_Slownikowe.Migrations
 {
     [DbContext(typeof(GryContext))]
-    [Migration("20240531085006_NowaNazwaMigracji")]
-    partial class NowaNazwaMigracji
+    [Migration("20240605191045_kasia")]
+    partial class kasia
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,22 +130,14 @@ namespace Gry_Slownikowe.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("GameData")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
                     b.Property<TimeSpan>("GameTime")
                         .HasColumnType("time");
-
-                    b.Property<int>("Loss")
-                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Win")
-                        .HasColumnType("int");
+                    b.Property<bool>("wygrana_przegrana")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

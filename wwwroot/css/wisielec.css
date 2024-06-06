@@ -1,0 +1,133 @@
+﻿/* Gra wisielec */
+
+/* Kontener Wisielec */
+.Kontener_Wisielec {
+    display: flex;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 1000px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #e2e2e2, #c9c9c9);
+    overflow: hidden;
+}
+
+.Kontener_Wisielec_Lewy,
+.Kontener_Wisielec_Prawy {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Backgrounds and Text Styles */
+.Kontener_Wisielec_Lewy {
+    background-color: #f9f9f9;
+}
+
+.Kontener_Wisielec_Prawy {
+    background-color: #eaeaea;
+}
+
+.WelcomeToWisielca {
+    text-align: center;
+    padding: 40px;
+    margin: 5px;
+    background: #4a90e2;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.display-4 {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.Wisielec_Screen {
+    height: 60px;
+    width: 80%;
+    font-size: 2rem;
+    text-align: center;
+    margin: 2%;
+    color: #333;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+/* Klawiatura */
+.Klawiatura {
+    margin: 20px auto;
+    display: table;
+}
+
+    .Klawiatura td {
+        padding: 5px;
+    }
+
+.litera {
+    margin: 5px;
+    padding: 15px;
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    background: #4a90e2;
+    color: white;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+    .litera:hover {
+        background: #357ab7;
+    }
+
+    .litera:disabled {
+        background: #bbb;
+        color: #666;
+    }
+
+/* Wisielec Image */
+#wisielecImg {
+    width: 80%;
+    max-width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    padding: 10px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .Kontener_Wisielec {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .Klawiatura {
+        margin: 10px auto;
+        width: 90%;
+    }
+
+        .Klawiatura td {
+            padding: 3px;
+        }
+
+    .litera {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .Wisielec_Screen {
+        width: 90%;
+        font-size: 1.5rem;
+    }
+}
