@@ -1,12 +1,4 @@
 ﻿
-.con {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    height: 100vh;
-}
-
 .frame {
     border: 2px solid #000;
     padding: 20px;
@@ -17,6 +9,7 @@
 body {
     font-family: 'Roboto', sans-serif;
 }
+
 
 h1.title {
     margin-top: 20px;
@@ -37,14 +30,20 @@ h1.title {
     font-weight: bold;
 }
 
-
-#klawiatura button {
-    margin: 5px;
-    padding: 10px;
-    font-size: 1em;
-    cursor: pointer;
-    font-family: 'Roboto', sans-serif;
+#klawiatura {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
+
+    #klawiatura button {
+        margin: 5px;
+        padding: 10px;
+        font-size: 1em;
+        cursor: pointer;
+        font-family: 'Roboto', sans-serif;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
 
 #ramkaPonumerowanychSlow {
     margin-top: 20px;
@@ -105,10 +104,14 @@ h1.title {
 
 .modal-content {
     background-color: #fefefe;
-    margin: 5% auto;
+    margin: auto;
     padding: 20px;
     border: 1px solid #888;
     width: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
 }
 
@@ -129,7 +132,56 @@ h1.title {
         cursor: pointer;
     }
 
+/* Ramka czasu*/
+#licznik {
+    background-color: pink;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 10px;
+}
 
+
+#prostokatL {
+    flex: 1;
+    margin-right: 50px;
+    background-color: lavender;
+    padding: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    text-align: center;
+}
+
+#prostokatM {
+    flex: 1;
+    margin-right: 100px;
+    background-color: mintcream;
+    padding: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#kontener {
+    display: flex;
+    height: 100%;
+}
+
+#buttonContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+    #buttonContainer .btn {
+        margin: 30px; /*  margines między przyciskami */
+    }
 
 
 
