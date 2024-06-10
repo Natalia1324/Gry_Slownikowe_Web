@@ -337,39 +337,34 @@ namespace Gry_Slownikowe.Controllers
                     api1 = new SJP_API();
                 } while (api1.getDopuszczalnosc() == false);
                 slowo1 = api1.getSlowo();
-                polskieZnaki1 = HttpUtility.HtmlEncode(slowo1);
+                polskieZnaki1 = slowo1;
 
                 // Losowanie drugiego słowa
-
                 do
                 {
                     api2 = new SJP_API();
 
                 } while (api2.getDopuszczalnosc() == false);
                 slowo2 = api2.getSlowo();
-                polskieZnaki2 = HttpUtility.HtmlEncode(slowo2);
+                polskieZnaki2 = slowo2;
 
                 // Losowanie tzreciego słowa
-
                 do
                 {
                     api3 = new SJP_API();
                 } while (api3.getDopuszczalnosc() == false);
                 slowo3 = api3.getSlowo();
-                polskieZnaki3 = HttpUtility.HtmlEncode(slowo3);
+                polskieZnaki3 = slowo3; 
 
                 // Losowanie czwarte słowa
-
                 do
                 {
                     api4 = new SJP_API();
                 } while (api4.getDopuszczalnosc() == false);
                 slowo4 = api4.getSlowo();
-                polskieZnaki4 = HttpUtility.HtmlEncode(slowo4);
+                polskieZnaki4 = slowo4;// HttpUtility.HtmlEncode(slowo4);// - Problem z "ó"
 
             } while (slowo2 == null || slowo3 == null || slowo4 == null);
-
-
 
             ZgadywankiModel model = new ZgadywankiModel(polskieZnaki1, polskieZnaki2, polskieZnaki3, polskieZnaki4);
             return View(model);
@@ -386,10 +381,7 @@ namespace Gry_Slownikowe.Controllers
                 if (literyZPierwszego.Contains(litera))
                 {
                     licznik2++;
-                    //if (licznik2 >= 4)
-                    //{
-                    //    break;
-                    //}
+                    
                 }
             }
 
@@ -398,10 +390,7 @@ namespace Gry_Slownikowe.Controllers
                 if (literyZPierwszego.Contains(litera))
                 {
                     licznik3++;
-                    //if (licznik3 >= 4)
-                    //{
-                    //    break;
-                    //}
+                   
                 }
             }
 
@@ -410,10 +399,7 @@ namespace Gry_Slownikowe.Controllers
                 if (literyZPierwszego.Contains(litera))
                 {
                     licznik4++;
-                    //if (licznik4 >= 4)
-                    //{
-                    //    break;
-                    //}
+                 
                 }
             }
 
@@ -441,7 +427,6 @@ namespace Gry_Slownikowe.Controllers
 
                         Punkty = punkty,
                         GameTime = timespan,
-
                         UserId = getLoggedUser().Id
                     };
 
@@ -514,7 +499,7 @@ namespace Gry_Slownikowe.Controllers
             } while (isCorrect == false);
 
             slowo = api.getSlowo();
-            string polskieZnaki = HttpUtility.HtmlEncode(slowo);
+            string polskieZnaki = HttpUtility.HtmlEncode(slowo);// ó
 
             WisielecModel model = new WisielecModel(polskieZnaki);
             return View(model);

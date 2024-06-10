@@ -23,9 +23,9 @@
             <h1>Wybierz poziom trudności:</h1>
 
             <div class="poziom-buttons">
-                <button id="latwy" class="btn btn-primary" onclick="wybierzPoziom('latwy')">Łatwy</button>
-                <button id="sredni" class="btn btn-primary" onclick="wybierzPoziom('sredni')">Średni</button>
-                <button id="trudny" class="btn btn-primary" onclick="wybierzPoziom('trudny')">Trudny</button>
+                    <button id="latwy" class="animowany-btn" onclick="wybierzPoziom('latwy')">Łatwy</button>
+                    <button id="sredni" class="animowany-btn" onclick="wybierzPoziom('sredni')">Średni</button>
+                    <button id="trudny" class="animowany-btn" onclick="wybierzPoziom('trudny')">Trudny</button>
             </div>
 
            </div>
@@ -74,9 +74,9 @@
 
             <input type="text" id="wpisywaneSłowo" readonly style="margin-bottom: 10px;">
             <div id="buttonContainer" class="poziom-buttons">
-            <button onclick="usunOstatniaLitere()">Backspace</button>
-            <button id="przyciskSprawdz" onclick="sprawdz()">Sprawdź</button>
-            <button id="przyciskMieszaj" onclick="mieszaj_literki()">Mieszaj</button>
+            <button class="animowany-btn" onclick="usunOstatniaLitere()">Backspace</button>
+                <button id="przyciskSprawdz" class="animowany-btn" onclick="sprawdz()">Sprawdź</button>
+                <button id="przyciskMieszaj" class="animowany-btn" onclick="mieszaj_literki()">Mieszaj</button>
             </div>
             <div id="klawiatura" style="margin-top: 10px;"></div>
 
@@ -116,10 +116,12 @@
         var startTime;
         var punkty = 0; //Zmienna przechowująca punkty gracza
 
+        
         var slowo1 = @Html.Raw(Json.Serialize(@Model.Slowo1));
         var slowo2 = @Html.Raw(Json.Serialize(@Model.Slowo2));
         var slowo3 = @Html.Raw(Json.Serialize(@Model.Slowo3));
         var slowo4 = @Html.Raw(Json.Serialize(@Model.Slowo4));
+
 
         document.getElementById('slowo1').innerHTML = '<input type="text" value="1. ' + slowo1 + '" readonly>';
         document.getElementById('slowo2').innerHTML = '<input type="text" value="2. ' + slowo2 + '" readonly>';
@@ -152,10 +154,11 @@
             var klawiatura = document.getElementById('klawiatura');
             klawiatura.innerHTML = '';
 
-            let literki = new Set();
-
+            let literki = new Set(); //nowy zbiór,który przechowuje unikalne litery
+            //console.log(" slowo " + slowa);
             for (let slowo of slowa) {
                 for (let litera of slowo) {
+                    //console.log(" litera  " + litera);
                     if (!literki.has(litera)) {
                         literki.add(litera);
                         let button = document.createElement('button');
@@ -241,8 +244,6 @@
             var modal = document.getElementById("poziomModal");
             var modalContent = document.querySelector(".modal-content");
             modal.style.display = "block";
-
-
         }
 
         //Wybur poziomu trudności
@@ -300,10 +301,10 @@
 
         //podesłanie wyników punktów oraz czasu do bazy danych
         function sendGameData(gameTime) {
-            
             $.ajax({
                 url: '@Url.Action("ZgadywankiWynik", "Home")',
                 type: 'POST',
+                
                 data: {
 
                     punkty: punkty,
@@ -333,9 +334,12 @@
             modalPunkty.innerHTML = punkty;
 
 
-            var gameTime = getTimeElapsed(startTime, new Date());//getTimeElapsed(startTime, new Date());
-            modalCzas.innerHTML = gameTime;
+            var gameTimeT = getTimeElapsed(startTime, new Date());//getTimeElapsed(startTime, new Date());
+            var endTime = new Date();
+            var gameTime = endTime - startTime;
 
+            modalCzas.innerHTML = gameTimeT;
+            console.log(gameTime);
             sendGameData(gameTime); //Przesłanie danych
 
             modal.style.display = "block";
@@ -372,6 +376,7 @@
             // Prześlij dane do bazy danych
             var endTime = new Date();
             var gameTime = endTime - startTime;
+            //console.log(gameTime);
             sendGameData(gameTime);
         }
 
