@@ -206,5 +206,22 @@ h1.title {
         margin: 10px; /*  margines między przyciskami */
     }
 
+.prostokat {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100px; /* Dostosuj szerokość według potrzeb */
+}
+
+#lewyProstokat {
+    left: 0;
+    background-color: #f0f0f0; /* Kolor prostokąta po lewej stronie */
+}
+
+#prawyProstokat {
+    right: 0;
+    background-color: #f0f0f0; /* Kolor prostokąta po prawej stronie */
+}
+
 
 
