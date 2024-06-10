@@ -155,7 +155,7 @@ namespace Gry_Slownikowe.Controllers
 
 
             }
-            string polskieZnaki = HttpUtility.HtmlEncode(slowo);
+            string polskieZnaki = HttpUtility.HtmlEncode(slowo);// ó
             string znaczeniePL = HttpUtility.HtmlAttributeEncode(znaczenia.First());
             var id = getLoggedUser().Id;
             if (enabledRowIndex != 0)
