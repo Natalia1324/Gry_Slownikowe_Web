@@ -15,58 +15,75 @@
 </head>
 
 <body>
-    <div class="con">
-        <div class="frame" id="ramkaPoziomu">
+    <div id="kontener">
+    
+        <!-- Okno dialogowe wybór poziomu trudności -->
+        <div id="poziomModal" class="modal" style="display: none;">
+           <div class="modal-content">
             <h1>Wybierz poziom trudności:</h1>
 
             <div class="poziom-buttons">
-                <button id="latwy" class="btn btn-primary" onclick="wybierzPoziom('latwy')">Łatwy</button>
-                <button id="sredni" class="btn btn-primary" onclick="wybierzPoziom('sredni')">Średni</button>
-                <button id="trudny" class="btn btn-primary" onclick="wybierzPoziom('trudny')">Trudny</button>
+                    <button id="latwy" class="animowanyp-btn" onclick="wybierzPoziom('latwy')">Łatwy</button>
+                    <button id="sredni" class="animowanyp-btn" onclick="wybierzPoziom('sredni')">Średni</button>
+                    <button id="trudny" class="animowanyp-btn" onclick="wybierzPoziom('trudny')">Trudny</button>
             </div>
+
+           </div>
         </div>
+
 
         <div id="licznik"></div>
 
-        <div id="kontener">
+
+      <div id="prostokatM">
+
+
+            <div id="ramkaPonumerowanychSlow" style="margin-top: 20px; ">
+                <h2 class="tytul">Słowa do odgadnięcia:</h2>
+                <ol>
+                    <li id="slowo1" class="slowo" style="display: none;"></li>
+                    <li id="slowo2" class="slowo" style="display: none;"></li>
+                    <li id="slowo3" class="slowo" style="display: none;"></li>
+                    <li id="slowo4" class="slowo" style="display: none;"></li>
+                </ol>
+            </div>
+           
+            <div id="error" class="error" style="display: none;">Błędne słowo!</div>
+
+
+            <table id="punktyTable">
+                <tr>
+                    <th>Punkty</th>
+
+                </tr>
+                <tr>
+                    <td id="punkty">0</td>
+
+                </tr>
+            </table>
+
+
+      </div>
+
+        <div id="prostokatL">
+
+
             <div id="ramkaWybranychSlow" style="margin-bottom: 10px;">
                 <h2 class="tytul">Wpisywane słowa:</h2>
                 <div id="wybraneLitery" style="margin-bottom: 10px;"></div>
             </div>
 
-
             <input type="text" id="wpisywaneSłowo" readonly style="margin-bottom: 10px;">
-            <button onclick="usunOstatniaLitere()">Backspace</button>
-            <button id="przyciskSprawdz" onclick="sprawdz()">Sprawdź</button>
-            <button id="przyciskMieszaj" onclick="mieszaj_literki()">Mieszaj</button>
-
-            <div id="klawiatura" style="margin-top: 10px;"></div>
-
-            <div id="ramkaPonumerowanychSlow" style="margin-top: 20px; ">
-                <h2 class="tytul">Słowa do odgadnięcia:</h2>
-                <div id="slowo1" class="slowo" style="display: none; "></div>
-
-                <!-- <div id="slowo1" class="slowo" style="display: none;"></div> -->
-
-                <div id="slowo2" class="slowo" style="display: none;"></div>
-                <div id="slowo3" class="slowo" style="display: none;"></div>
-                <div id="slowo4" class="slowo" style="display: none;"></div>
-
+            <div id="buttonContainer" class="poziom-buttons">
+            <button class="animowany-btn" onclick="usunOstatniaLitere()">Backspace</button>
+                <button id="przyciskSprawdz" class="animowany-btn" onclick="sprawdz()">Sprawdź</button>
+                <button id="przyciskMieszaj" class="animowany-btn" onclick="mieszaj_literki()">Mieszaj</button>
             </div>
-            <div id="error" class="error" style="display: none;">Błędne słowo!</div>
+            
+            <div id="klawiatura" style="margin-top: 10px;"></div>
+            
         </div>
-
-        <table id="punktyTable">
-            <tr>
-                <th>Punkty</th>
-               
-            </tr>
-            <tr>
-                <td id="punkty">0</td>
-                
-            </tr>
-        </table>
-
+        
     </div>
 
     <!-- Okno dialogowe o wygranej -->
@@ -101,18 +118,19 @@
         var startTime;
         var punkty = 0; //Zmienna przechowująca punkty gracza
 
+        
         var slowo1 = @Html.Raw(Json.Serialize(@Model.Slowo1));
         var slowo2 = @Html.Raw(Json.Serialize(@Model.Slowo2));
         var slowo3 = @Html.Raw(Json.Serialize(@Model.Slowo3));
         var slowo4 = @Html.Raw(Json.Serialize(@Model.Slowo4));
 
-        document.getElementById('slowo1').innerHTML = '<input type="text" value="1. ' + slowo1 + '" readonly>';
-        document.getElementById('slowo2').innerHTML = '<input type="text" value="2. ' + slowo2 + '" readonly>';
-        document.getElementById('slowo3').innerHTML = '<input type="text" value="3. ' + slowo3 + '" readonly>';
-        document.getElementById('slowo4').innerHTML = '<input type="text" value="4. ' + slowo4 + '" readonly>';
+
+        document.getElementById('slowo1').innerHTML = slowo1;
+        document.getElementById('slowo2').innerHTML = slowo2;
+        document.getElementById('slowo3').innerHTML = slowo3;
+        document.getElementById('slowo4').innerHTML = slowo4;
 
         var slowa = [slowo1, slowo2, slowo3, slowo4];
-
 
 
         //wyświetlenie słów zawartych w tabeli (konsola)
@@ -137,10 +155,11 @@
             var klawiatura = document.getElementById('klawiatura');
             klawiatura.innerHTML = '';
 
-            let literki = new Set();
-
+            let literki = new Set(); //nowy zbiór,który przechowuje unikalne litery
+            //console.log(" slowo " + slowa);
             for (let slowo of slowa) {
                 for (let litera of slowo) {
+                    //console.log(" litera  " + litera);
                     if (!literki.has(litera)) {
                         literki.add(litera);
                         let button = document.createElement('button');
@@ -216,6 +235,19 @@
             przyciski.forEach(i => klawiatura.appendChild(i));
         }
 
+        //okienko z wyborem poziomu
+        document.addEventListener('DOMContentLoaded', function () {
+            openPoziomModal();
+        });
+
+        // Funkcja otwierająca okno 
+        function openPoziomModal() {
+            var modal = document.getElementById("poziomModal");
+            var modalContent = document.querySelector(".modal-content");
+            modal.style.display = "block";
+        }
+
+        //Wybur poziomu trudności
         function wybierzPoziom(poziom) {
             switch (poziom.toLowerCase()) {
                 case 'latwy':
@@ -239,10 +271,12 @@
                 button.disabled = false;
             }
 
-            var ramkaPoziomu = document.getElementById('ramkaPoziomu');
+            var ramkaPoziomu = document.getElementById('poziomModal');
             ramkaPoziomu.style.display = 'none';
 
             rozpocznijGre();
+
+            
         }
 
         function rozpocznijGre() {
@@ -268,10 +302,10 @@
 
         //podesłanie wyników punktów oraz czasu do bazy danych
         function sendGameData(gameTime) {
-            
             $.ajax({
                 url: '@Url.Action("ZgadywankiWynik", "Home")',
                 type: 'POST',
+                
                 data: {
 
                     punkty: punkty,
@@ -301,9 +335,12 @@
             modalPunkty.innerHTML = punkty;
 
 
-            var gameTime = getTimeElapsed(startTime, new Date());//getTimeElapsed(startTime, new Date());
-            modalCzas.innerHTML = gameTime;
+            var gameTimeT = getTimeElapsed(startTime, new Date());//getTimeElapsed(startTime, new Date());
+            var endTime = new Date();
+            var gameTime = endTime - startTime;
 
+            modalCzas.innerHTML = gameTimeT;
+            console.log(gameTime);
             sendGameData(gameTime); //Przesłanie danych
 
             modal.style.display = "block";
@@ -340,6 +377,7 @@
             // Prześlij dane do bazy danych
             var endTime = new Date();
             var gameTime = endTime - startTime;
+            //console.log(gameTime);
             sendGameData(gameTime);
         }
 
