@@ -8,6 +8,7 @@
 
 body {
     font-family: 'Roboto', sans-serif;
+    background-color: #fcf9f5;
 }
 
 
@@ -32,23 +33,46 @@ h1.title {
     font-family: 'Roboto', sans-serif;
     cursor: pointer;
     border: none;
-    background-color: #6200ea;
+    background-color: #8DAAA6;
     color: white;
     border-radius: 5px;
     transition: background-color 0.3s, transform 0.2s;
 }
 
     .animowany-btn:hover {
-        background-color: #3700b3;
+        background-color: #FF9376;
         transform: scale(1.05);
     }
 
     .animowany-btn:active {
-        background-color: #03dac6;
+        background-color: #f2e5d9;
         transform: scale(0.95);
     }
 
-.frame h1 {
+.animowanyp-btn {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 1em;
+    font-family: 'Roboto', sans-serif;
+    cursor: pointer;
+    border: none;
+    background-color: #E9AE8C;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.animowanyp-btn:hover {
+    background-color: #FF9376;
+    transform: scale(1.05);
+}
+
+.animowanyp-btn:active {
+    background-color: #8DAAA6;
+    transform: scale(0.95);
+}
+
+    .frame h1 {
     font-size: 1.5em;
     font-weight: bold;
 }
@@ -56,17 +80,40 @@ h1.title {
 #klawiatura {
     margin-top: 20px;
     margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f2e5d9; /* Jasne tło */
+    border-radius: 12px; /* Zaokrąglone rogi */
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
     #klawiatura button {
-        margin: 5px;
-        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         font-size: 1em;
         cursor: pointer;
         font-family: 'Roboto', sans-serif;
-        margin-top: 10px;
-        margin-bottom: 10px;
+        border-radius: 15px;
+        background-color: #E9AE8C;
+        color: white;
+        width: 2em;
+        height: 2em;
+        transition: background-color 0.3s ease, transform 0.3s ease; /* Dodane przejścia */
     }
+
+        #klawiatura button:hover {
+            background-color: #FF9376; /* Zmiana koloru tła na hover */
+            transform: scale(1.1); /* Powiększenie przycisku na hover */
+        }
+
+        #klawiatura button:active {
+            background-color: #8DAAA6; /* Zmiana koloru tła na active */
+            transform: scale(0.95); /* Zmniejszenie przycisku na active */
+        }
+        
 
 #ramkaPonumerowanychSlow {
     margin-top: 20px;
@@ -79,6 +126,9 @@ h1.title {
 
 .slowo {
     margin-bottom: 10px;
+    background-color: #fcf9f5; /* Zmieniony kolor tła */
+    border-radius: 15px; /* Zaokrąglone rogi */
+    padding: 10px;
 }
 
     .slowo input {
@@ -90,6 +140,8 @@ h1.title {
     margin-top: 20px;
     border-collapse: collapse;
     width: 200px;
+    background-color: #fcf9f5;
+    border-radius: 15px;
 }
 
     #punktyTable th, #punktyTable td {
@@ -99,7 +151,7 @@ h1.title {
     }
 
 /* Styl dla okna dialogowego o przegranej */
-#lostModal {
+        #lostModal {
     display: none;
     position: fixed;
     z-index: 1;
@@ -126,7 +178,7 @@ h1.title {
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: #f2e5d9;
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
@@ -157,7 +209,7 @@ h1.title {
 
 /* Ramka czasu*/
 #licznik {
-    background-color: pink;
+    background-color: #8DAAA6;
     color: white;
     padding: 20px;
     position: fixed;
@@ -171,24 +223,25 @@ h1.title {
 #prostokatL {
     flex: 1;
     margin-right: 50px;
-    background-color: lavender;
-    padding: 130px;
+    background-color: #D5D7CC;
+    padding: 120px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    
     text-align: center;
+    border-radius: 20px; /* Dodane zaokrąglone rogi */
 }
 
 #prostokatM {
     flex: 1;
     margin-right: 100px;
-    background-color: mintcream;
-    padding: 130px;
+    background-color: #D5D7CC;
+    padding: 120px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    border-radius: 20px; /* Dodane zaokrąglone rogi */
 }
 
 #kontener {
@@ -213,15 +266,44 @@ h1.title {
     width: 100px; /* Dostosuj szerokość według potrzeb */
 }
 
-#lewyProstokat {
-    left: 0;
-    background-color: #f0f0f0; /* Kolor prostokąta po lewej stronie */
+/*miejsce na wpisanie słów*/
+
+#wpisywaneSłowo {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fcf9f5;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    min-height: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }
 
-#prawyProstokat {
-    right: 0;
-    background-color: #f0f0f0; /* Kolor prostokąta po prawej stronie */
+
+
+/* Stylizacja dla ramki z ponumerowanymi słowami */
+
+#ramka-ponumerowanych {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fcf9f5; /* Zmieniony kolor tła */
+    border-radius: 15px; /* Zaokrąglone rogi */
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+#point-rectangle {
+    display: inline-block;
+    width: 20px; 
+    height: 10px; 
+    background-color: #E9AE8C; 
+    border-radius: 5px; 
+    margin-left: 5px; /* Dostosuj odstęp */
+}
 
+#error{
 
+}

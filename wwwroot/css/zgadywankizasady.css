@@ -1,4 +1,13 @@
-﻿h1.title {
+﻿body {
+    background-color: #fcf9f5;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+
+h1.title {
     background-color: #D5D7CC;
     border-radius: 10px;
     padding: 20px;
@@ -91,12 +100,14 @@
     padding: 20px;
     overflow-y: auto;
     height: 300px;
-    border: 10px solid #D5D7CC; /* obramówka */
+    border: 10px solid #f2e5d9; /* obramówka */
     border-radius: 15px;
     width: 100vw;
+    background-color: #f2e5d9;
 }
 
 /* Styl dla pogrubionych napisów */
 .point {
     font-weight: bold;
 }
+

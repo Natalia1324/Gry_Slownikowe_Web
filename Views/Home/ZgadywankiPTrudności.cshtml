@@ -23,9 +23,9 @@
             <h1>Wybierz poziom trudności:</h1>
 
             <div class="poziom-buttons">
-                    <button id="latwy" class="animowany-btn" onclick="wybierzPoziom('latwy')">Łatwy</button>
-                    <button id="sredni" class="animowany-btn" onclick="wybierzPoziom('sredni')">Średni</button>
-                    <button id="trudny" class="animowany-btn" onclick="wybierzPoziom('trudny')">Trudny</button>
+                    <button id="latwy" class="animowanyp-btn" onclick="wybierzPoziom('latwy')">Łatwy</button>
+                    <button id="sredni" class="animowanyp-btn" onclick="wybierzPoziom('sredni')">Średni</button>
+                    <button id="trudny" class="animowanyp-btn" onclick="wybierzPoziom('trudny')">Trudny</button>
             </div>
 
            </div>
@@ -40,15 +40,14 @@
 
             <div id="ramkaPonumerowanychSlow" style="margin-top: 20px; ">
                 <h2 class="tytul">Słowa do odgadnięcia:</h2>
-                <div id="slowo1" class="slowo" style="display: none; "></div>
-
-                <!-- <div id="slowo1" class="slowo" style="display: none;"></div> -->
-
-                <div id="slowo2" class="slowo" style="display: none;"></div>
-                <div id="slowo3" class="slowo" style="display: none;"></div>
-                <div id="slowo4" class="slowo" style="display: none;"></div>
-
+                <ol>
+                    <li id="slowo1" class="slowo" style="display: none;"></li>
+                    <li id="slowo2" class="slowo" style="display: none;"></li>
+                    <li id="slowo3" class="slowo" style="display: none;"></li>
+                    <li id="slowo4" class="slowo" style="display: none;"></li>
+                </ol>
             </div>
+           
             <div id="error" class="error" style="display: none;">Błędne słowo!</div>
 
 
@@ -80,8 +79,9 @@
                 <button id="przyciskSprawdz" class="animowany-btn" onclick="sprawdz()">Sprawdź</button>
                 <button id="przyciskMieszaj" class="animowany-btn" onclick="mieszaj_literki()">Mieszaj</button>
             </div>
+            
             <div id="klawiatura" style="margin-top: 10px;"></div>
-
+            
         </div>
         
     </div>
@@ -125,13 +125,12 @@
         var slowo4 = @Html.Raw(Json.Serialize(@Model.Slowo4));
 
 
-        document.getElementById('slowo1').innerHTML = '<input type="text" value="1. ' + slowo1 + '" readonly>';
-        document.getElementById('slowo2').innerHTML = '<input type="text" value="2. ' + slowo2 + '" readonly>';
-        document.getElementById('slowo3').innerHTML = '<input type="text" value="3. ' + slowo3 + '" readonly>';
-        document.getElementById('slowo4').innerHTML = '<input type="text" value="4. ' + slowo4 + '" readonly>';
+        document.getElementById('slowo1').innerHTML = slowo1;
+        document.getElementById('slowo2').innerHTML = slowo2;
+        document.getElementById('slowo3').innerHTML = slowo3;
+        document.getElementById('slowo4').innerHTML = slowo4;
 
         var slowa = [slowo1, slowo2, slowo3, slowo4];
-
 
 
         //wyświetlenie słów zawartych w tabeli (konsola)

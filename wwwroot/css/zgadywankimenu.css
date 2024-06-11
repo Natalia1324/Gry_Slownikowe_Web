@@ -1,4 +1,7 @@
-﻿
+﻿body {
+    background-color: #fcf9f5;
+}
+
 /*tytuł*/
 h1 {
     background-color: #D5D7CC;
@@ -8,7 +11,7 @@ h1 {
 
 /*ramka przyciski*/
 .buttons-container {
-    background-color: #f5e6d7;
+    background-color: #f2e5d9;
     border-radius: 10px;
     padding: 20px;
     padding-bottom: 50px;
