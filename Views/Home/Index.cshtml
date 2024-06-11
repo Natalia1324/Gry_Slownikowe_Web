@@ -2,7 +2,132 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platforma z Grami Słownikowymi</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #46474a;
+        }
+
+        .main-banner {
+            text-align: center;
+            background-color: #a1dfe3;
+            color: black;
+            padding: 50px 20px;
+        }
+
+            .main-banner h1 {
+                font-size: 4em;
+                margin: 0;
+            }
+
+        .game-overview {
+            text-align: center;
+            padding: 50px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+            .game-overview h2 {
+                width: 100%;
+                font-size: 2em;
+                margin-bottom: 30px;
+            }
+
+        .game-tile {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 200px;
+            padding: 20px;
+            margin: 10px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-sizing: border-box;
+            transition: transform 0.3s;
+            cursor: pointer;
+            text-align: center;
+        }
+
+            .game-tile:hover {
+                transform: scale(1.05);
+            }
+
+            .game-tile h3 {
+                font-size: 1.5em;
+                margin: 0;
+            }
+
+            .game-tile p {
+                margin: 10px 0 0;
+            }
+
+        .stats-section {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .stats-button {
+            background-color: #a1dfe3;
+            border: none;
+            color: black;
+            padding: 15px 30px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .stats-button:hover {
+                background-color: #a1dfe3;
+            }
+    </style>
+</head>
+<body>
+    <div class="main-banner">
+        <h1>Gry Słownikowe!</h1>
+    </div>
+
+    <div class="game-overview">
+        <h2 style="color: white">Przegląd Gier</h2>
+        <div class="game-tile" onclick="window.location.href='@Url.Action("KrzyzowkaMenu", "Home")'">
+            <h3>Krzyżówki</h3>
+            <p>Spróbuj swoich sił w krzyżówkach.</p>
+        </div>
+        <div class="game-tile" onclick="window.location.href='@Url.Action("Slownikowo", "Home")'">
+            <h3>Słownikowo</h3>
+            <p>Odgadnij słowo, wyszukując binarnie.</p>
+        </div>
+        <div class="game-tile" onclick="window.location.href='@Url.Action("Scrabble", "Home")'">
+            <h3>Scrabble</h3>
+            <p>Wyzwij przyjaciół do gry!</p>
+        </div>
+        <div class="game-tile" onclick="window.location.href='@Url.Action("Wisielec", "Home")'">
+            <h3>Wisielec</h3>
+            <p>Odgadnij słowo, zanim zawiśniesz.</p>
+        </div>
+        <div class="game-tile" onclick="window.location.href='@Url.Action("ZgadywankiMenu", "Home")'">
+            <h3>Zgadywanki</h3>
+            <p>Znajdz szukane słowa w ograniczonym czasie.</p>
+        </div>
+        <div class="game-tile" onclick="window.location.href='@Url.Action("WordleGamemode", "Home")'">
+            <h3>Wordle</h3>
+            <p>Polska wersja słynnej gry New York Times!</p>
+        </div>
+    </div>
+
+    <div class="stats-section">
+        <button class="stats-button" onclick="window.location.href='@Url.Action("Statistics", "Home")'">Twoje Statystyki</button>
+    </div>
+
+</body>
+</html>

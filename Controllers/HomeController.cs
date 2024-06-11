@@ -201,7 +201,13 @@ namespace Gry_Slownikowe.Controllers
         }
         public async Task<IActionResult> Statistics()
         {
+            if (getLoggedUser() == null)
+            {
+                return View("Login");
+            }
+            else { 
             var userId = getLoggedUser().Id;
+
             var user = await _context.User
             .Include(u => u.Krzyzowki)
             .Include(u => u.Wisielec)
@@ -260,6 +266,7 @@ namespace Gry_Slownikowe.Controllers
             };
 
             return View(model);
+            }
         }
         [HttpPost]
         public IActionResult SaveGame(bool win, int tries, int gameTime)
