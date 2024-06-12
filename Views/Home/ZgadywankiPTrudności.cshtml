@@ -10,6 +10,8 @@
     <meta charset="UTF-8">
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" type="text/css" href="~/css/zgadywanki.css">
+
+    @* czcionka *@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
 </head>
@@ -17,7 +19,7 @@
 <body>
     <div id="kontener">
     
-        <!-- Okno dialogowe wybór poziomu trudności -->
+         @* Okno dialogowe wybór poziomu trudności *@
         <div id="poziomModal" class="modal" style="display: none;">
            <div class="modal-content">
             <h1>Wybierz poziom trudności:</h1>
@@ -31,12 +33,11 @@
            </div>
         </div>
 
-
+        @* czas *@
         <div id="licznik"></div>
 
-
+        @* punktacja, tabelka z słowami do odgdnięcia *@
       <div id="prostokatM">
-
 
             <div id="ramkaPonumerowanychSlow" style="margin-top: 20px; ">
                 <h2 class="tytul">Słowa do odgadnięcia:</h2>
@@ -50,7 +51,6 @@
            
             <div id="error" class="error" style="display: none;">Błędne słowo!</div>
 
-
             <table id="punktyTable">
                 <tr>
                     <th>Punkty</th>
@@ -61,12 +61,10 @@
 
                 </tr>
             </table>
-
-
       </div>
 
+      @* klawiatura, miejsce na wpisanie chaseł *@
         <div id="prostokatL">
-
 
             <div id="ramkaWybranychSlow" style="margin-bottom: 10px;">
                 <h2 class="tytul">Wpisywane słowa:</h2>
@@ -90,7 +88,7 @@
     <div id="winModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeWinModal()">&times;</span>
-            <h2>Gratulacje!</h2>
+            <h2>Gratulacje! :D</h2>
             <p>Odgadłeś/aś wszystkie słowa :3</p>
             <p>Punkty: <span id="modal-punkty"></span></p>
             <p>Czas: <span id="modal-czas"></span></p>
@@ -101,8 +99,8 @@
     <div id="lostModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeLostModal()">&times;</span>
-            <h2>Krytyczne 1</h2>
-            <p>Może następnym razem kości będą po twojej stronie</p>
+            <h2>Przykro mi :(</h2>
+            <p>Może następnym razem odgadniesz wszystkie chasła</p>
             <p>Zdobyte punkty: <span id="modal-lost-punkty"></span></p>
             <p>Słowa do odgadnięcia:</p>
             <ul id="modal-lost-words"></ul>
@@ -111,14 +109,15 @@
 
 
     <script>
-        var wybraneLitery = [];
+
+        var wybraneLitery = []; //tablica wybranych liter przez użytkownika (wybrane litery z klawiatury)
         var poziomWybrany = false; // Zmienna określająca, czy poziom trudności został wybrany
-        var czasStartowy;
+        var czasStartowy; //całkowity czas trwania gry (sekundy)
         var timer;
-        var startTime;
+        var startTime; // dokładny czar rozpoczęcia gry - ile czasu minęło od rozpoczęcia gry (śledzenie kiedy gra się rozpoczęła)
         var punkty = 0; //Zmienna przechowująca punkty gracza
 
-        
+        //zmienne przechowujące wylosowane słowa z API
         var slowo1 = @Html.Raw(Json.Serialize(@Model.Slowo1));
         var slowo2 = @Html.Raw(Json.Serialize(@Model.Slowo2));
         var slowo3 = @Html.Raw(Json.Serialize(@Model.Slowo3));
@@ -132,7 +131,7 @@
 
         var slowa = [slowo1, slowo2, slowo3, slowo4];
 
-
+        // -----------------------
         //wyświetlenie słów zawartych w tabeli (konsola)
         gry_slownikowe_showme = () => {
             document.querySelectorAll('.slowo').forEach((el) => {
@@ -146,21 +145,20 @@
                 el.style.display = 'none';
             });
         }
+        //--------------------------
+
 
         //inicjalizacja klawiatury
         function inicjujKlawiature() {
-
 
             //Sprawdzamy czy dana litera jest w zbiorze jeżeli nie to ją dodajemy i tworzymy z niego przycisk
             var klawiatura = document.getElementById('klawiatura');
             klawiatura.innerHTML = '';
 
             let literki = new Set(); //nowy zbiór,który przechowuje unikalne litery
-            //console.log(" slowo " + slowa);
             for (let slowo of slowa) {
-                for (let litera of slowo) {
-                    //console.log(" litera  " + litera);
-                    if (!literki.has(litera)) {
+                for (let litera of slowo) { 
+                    if (!literki.has(litera)) { //sprawdzamy powtóżenia
                         literki.add(litera);
                         let button = document.createElement('button');
                         button.innerHTML = litera;
@@ -168,7 +166,7 @@
                         button.addEventListener("click", () => {
                             wybierzLitere(litera);
                         });
-                        klawiatura.appendChild(button);
+                        klawiatura.appendChild(button); //dodajemy do klawiatury
                     }
                 }
             }
@@ -176,7 +174,7 @@
             mieszaj_literki();
         }
 
-        // Funkcja wybierająca literę
+        //funkcja dla miejsca z wpisywaniem słów
         function wybierzLitere(litera) {
             wybraneLitery.push(litera); // Dodajemy wybraną literę do tablicy wybranych liter
             aktualizujWpisywaneSłowo(); // Aktualizujemy wpisywane słowo
@@ -189,26 +187,25 @@
                 wybraneLitery.pop(); // Usuń ostatnią literę z tablicy wybranych liter
                 aktualizujWpisywaneSłowo(); // Aktualizuj wpisywane słowo
             }
-
-
         }
-        // Funkcja aktualizująca wpisywane słowo
+
+        // Funkcja aktualizująca wpisywane słowo (wybierzLitere)
         function aktualizujWpisywaneSłowo() {
             var wpisywaneSłowo = document.getElementById('wpisywaneSłowo');
             wpisywaneSłowo.value = wybraneLitery.join('');
         }
 
+        //funkcja sprawdzająca czy wpisane słowo znajduje się w tabeli
         function sprawdz() {
             var wpisaneSlowo = document.getElementById('wpisywaneSłowo').value;
             var slowaDoSprawdzenia = [slowo1, slowo2, slowo3, slowo4];
-            
 
             for (var i = 0; i < slowaDoSprawdzenia.length; i++) {
                 if (wpisaneSlowo === slowaDoSprawdzenia[i]) {
-                    document.getElementById('slowo' + (i + 1)).style.display = 'block';
+                    document.getElementById('slowo' + (i + 1)).style.display = 'block'; //wyświetlenie odgadniętego słowa
                     punkty += 5;
                     document.getElementById('punkty').innerHTML = punkty;
-                    if (punkty >= 20) { // Sprawdzenie, czy liczba punktów wynosi co najmniej 20
+                    if (punkty >= 20) { // Sprawdzenie, czy liczba punktów wynosi co najmniej 20   //do zmiany
                         clearInterval(timer); // Zatrzymaj timer
                         showModal(); // Pokaz okienko z gratulacjami
                     }
@@ -235,15 +232,14 @@
             przyciski.forEach(i => klawiatura.appendChild(i));
         }
 
-        //okienko z wyborem poziomu
+        //okienko z wyborem poziomu - odrazu się pokaże po załadowaniu strony
         document.addEventListener('DOMContentLoaded', function () {
             openPoziomModal();
         });
-
-        // Funkcja otwierająca okno 
+        
         function openPoziomModal() {
             var modal = document.getElementById("poziomModal");
-            var modalContent = document.querySelector(".modal-content");
+           // var modalContent = document.querySelector(".modal-content");
             modal.style.display = "block";
         }
 
@@ -284,6 +280,7 @@
             var czas = czasStartowy;
             startTime = new Date();
 
+            //czas
             function odliczanieCzasu() {
                 var minuty = Math.floor(czas / 60);
                 var sekundy = czas % 60;
@@ -381,12 +378,13 @@
             sendGameData(gameTime);
         }
 
-
+        //ukrycie okna
         function closeModal() {
             var modal = document.getElementById("myModal");
             modal.style.display = "none";
         }
 
+        //obliczanie czasu rozgrywki (mm:ss)
         function getTimeElapsed(start, end) {
             var diff = Math.abs(end - start) / 1000;
             var minutes = Math.floor(diff / 60);
@@ -409,10 +407,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', inicjujKlawiature);
-    
-            
 
-            
             </script>
 
 

@@ -49,6 +49,8 @@
 </div>
 
 <script>
+
+    // animacja kropek
     let currentDot = 0;
     const leftDots = document.querySelectorAll('.dots-left .dot');
     const rightDots = document.querySelectorAll('.dots-right .dot');
@@ -70,6 +72,7 @@
         currentDot = (currentDot + 1) % leftDots.length;
     }
 
+    //animacja przycisków
     buttons.forEach(button => {
         button.addEventListener('mouseover', () => {
             leftDots.forEach(dot => dot.classList.add('hovered'));
@@ -82,5 +85,5 @@
         });
     });
 
-    setInterval(animateDots, 500); // Animacja co 500 ms
+    setInterval(animateDots, 500); // kropki czas zmieniania
 </script>
