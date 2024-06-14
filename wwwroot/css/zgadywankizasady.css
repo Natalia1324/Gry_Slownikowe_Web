@@ -1,5 +1,5 @@
 ﻿body {
-    background-color: #fcf9f5;
+    background-color: #6d7c82;
     margin: 0;
     padding: 0;
     height: 100%;
@@ -8,7 +8,7 @@
 
 
 h1.title {
-    background-color: #D5D7CC;
+    background-color: #d0eff1;
     border-radius: 10px;
     padding: 20px;
     margin-top: 20px;
@@ -28,7 +28,7 @@ h1.title {
     padding: 15px 30px;
     font-size: 1.25rem;
     color: #2C2C2C;
-    background-color: #E9AE8C;
+    background-color: #bcebd7;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -36,12 +36,12 @@ h1.title {
 }
 
     .btn:hover {
-        background-color: #FF9376;
+        background-color: #86bfb3;
         transform: scale(1.1);
     }
 
     .btn:active {
-        background-color: #8DAAA6;
+        background-color: #d2f7e8;
         transform: scale(0.95);
     }
 
@@ -100,10 +100,10 @@ h1.title {
     padding: 20px;
     overflow-y: auto;
     height: 300px;
-    border: 10px solid #f2e5d9; /* obramówka */
+    border: 10px solid #d7f7f1; /* obramówka */
     border-radius: 15px;
     width: 100vw;
-    background-color: #f2e5d9;
+    background-color: #f0fffd;
 }
 
 /* Styl dla pogrubionych napisów */

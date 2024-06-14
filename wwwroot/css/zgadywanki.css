@@ -8,7 +8,7 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #fcf9f5;
+    background-color: #6d7c82;
 }
 
 
@@ -33,19 +33,19 @@ h1.title {
     font-family: 'Roboto', sans-serif;
     cursor: pointer;
     border: none;
-    background-color: #8DAAA6;
+    background-color: #a3d6c0;
     color: white;
     border-radius: 5px;
     transition: background-color 0.3s, transform 0.2s;
 }
 
     .animowany-btn:hover {
-        background-color: #FF9376;
+        background-color: #86bfb3;
         transform: scale(1.05);
     }
 
     .animowany-btn:active {
-        background-color: #f2e5d9;
+        background-color: #d2f7e8;
         transform: scale(0.95);
     }
 
@@ -56,21 +56,21 @@ h1.title {
     font-family: 'Roboto', sans-serif;
     cursor: pointer;
     border: none;
-    background-color: #E9AE8C;
+    background-color: #a3d6c0;
     color: white;
     border-radius: 5px;
     transition: background-color 0.3s, transform 0.2s;
 }
 
-.animowanyp-btn:hover {
-    background-color: #FF9376;
-    transform: scale(1.05);
-}
+    .animowanyp-btn:hover {
+        background-color: #86bfb3;
+        transform: scale(1.05);
+    }
 
-.animowanyp-btn:active {
-    background-color: #8DAAA6;
-    transform: scale(0.95);
-}
+    .animowanyp-btn:active {
+        background-color: #d2f7e8;
+        transform: scale(0.95);
+    }
 
     .frame h1 {
     font-size: 1.5em;
@@ -81,7 +81,7 @@ h1.title {
     margin-top: 20px;
     margin-bottom: 20px;
     padding: 20px;
-    background-color: #f2e5d9; /* Jasne tło */
+    background-color: #f0fffd; /* Jasne tło */
     border-radius: 12px; /* Zaokrąglone rogi */
     display: flex;
     gap: 15px;
@@ -97,20 +97,20 @@ h1.title {
         cursor: pointer;
         font-family: 'Roboto', sans-serif;
         border-radius: 15px;
-        background-color: #E9AE8C;
-        color: white;
+        background-color: #96e0c0;
+        color: #292e30;
         width: 2em;
         height: 2em;
         transition: background-color 0.3s ease, transform 0.3s ease; /* Dodane przejścia */
     }
 
         #klawiatura button:hover {
-            background-color: #FF9376; /* Zmiana koloru tła na hover */
+            background-color: #54c495; /* Zmiana koloru tła na hover */
             transform: scale(1.1); /* Powiększenie przycisku na hover */
         }
 
         #klawiatura button:active {
-            background-color: #8DAAA6; /* Zmiana koloru tła na active */
+            background-color: #baf5dc; /* Zmiana koloru tła na active */
             transform: scale(0.95); /* Zmniejszenie przycisku na active */
         }
         
@@ -126,7 +126,7 @@ h1.title {
 
 .slowo {
     margin-bottom: 10px;
-    background-color: #fcf9f5; /* Zmieniony kolor tła */
+    background-color: #f0fffd; /* Zmieniony kolor tła */
     border-radius: 15px; /* Zaokrąglone rogi */
     padding: 10px;
 }
@@ -140,7 +140,7 @@ h1.title {
     margin-top: 20px;
     border-collapse: collapse;
     width: 200px;
-    background-color: #fcf9f5;
+    background-color: #f0fffd;
     border-radius: 15px;
 }
 
@@ -178,7 +178,7 @@ h1.title {
 }
 
 .modal-content {
-    background-color: #f2e5d9;
+    background-color: #d0eff1;
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
@@ -223,8 +223,8 @@ h1.title {
 #prostokatL {
     flex: 1;
     margin-right: 50px;
-    background-color: #D5D7CC;
-    padding: 120px;
+    background-color: #d0eff1;
+    padding: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -235,8 +235,8 @@ h1.title {
 #prostokatM {
     flex: 1;
     margin-right: 100px;
-    background-color: #D5D7CC;
-    padding: 120px;
+    background-color: #d0eff1;
+    padding: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -271,7 +271,7 @@ h1.title {
 #wpisywaneSłowo {
     margin-bottom: 10px;
     padding: 10px;
-    background-color: #fcf9f5;
+    background-color: #f0fffd;
     border: 2px solid #ccc;
     border-radius: 10px;
     min-height: 50px;
@@ -288,7 +288,7 @@ h1.title {
 #ramka-ponumerowanych {
     margin-top: 20px;
     padding: 20px;
-    background-color: #fcf9f5; /* Zmieniony kolor tła */
+    background-color: #f0fffd; /* Zmieniony kolor tła */
     border-radius: 15px; /* Zaokrąglone rogi */
     width: 80%;
     max-width: 600px;
@@ -304,6 +304,19 @@ h1.title {
     margin-left: 5px; /* Dostosuj odstęp */
 }
 
-#error{
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+    animation: fadeout 2s forwards;
+}
 
+@keyframes fadeout {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }

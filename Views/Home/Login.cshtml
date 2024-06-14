@@ -9,68 +9,18 @@
 <html>
 <head>
     <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="~/css/login.css">
     
-    <style>
-        button {
-            border-radius: 7px;
-            background-color: #E9987D;
-            color: #fff;
-        }
-
-        input {
-            border-radius: 7px;
-        }
-
-        .left-section {
-            width: 40%;
-            height:50%;
-            flex: 1;
-            margin-right: 300px;
-            background-color: #393033;
-            color: #E9987D;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .right-section {
-            width: 50%;
-            height: 50%;
-            flex: 1;
-            float: right;
-            background-color: #554141;
-            color: #fff;
-            padding: 133px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .error-message {
-            margin-top: 20px;
-        }
-
-        .validation-summary-errors ul {
-            margin: 0;
-            list-style-type: none;
-            padding: 0;
-        }
-
-
-    </style>
 </head>
 <body >
+    
     <div class="register-container">
         <div class="left-section">
             <h1 id="hello-text">Welcome Back!</h1>
            
         </div>
         <div class="right-section">
-            <h2 style ="margin-bottom: 50px;">
-                Login to Your Account</h2>
+            <h2 style ="margin-bottom: 50px;">Login to Your Account</h2>
             @using (Html.BeginForm("Login", "Home", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
@@ -94,7 +44,30 @@
 
 
             }
+            </div>
+            
 
     </div>
+    <script>
+        // Wywołaj funkcję pokazującą błąd
+        function pokazBlad() {
+            var error = document.querySelector('.error-message');
+            error.style.display = 'block';
+            setTimeout(function () {
+                error.style.display = 'none';
+            }, 9999); // Ukryj błąd 
+        }
+
+        // Wywołanie funkcji na początku, aby wyczyścić błąd po załadowaniu strony
+        document.addEventListener('DOMContentLoaded', function () {
+            var error = document.querySelector('.error-message');
+            if (error) {
+                setTimeout(function () {
+                    error.style.display = 'none';
+                }, 9999); // Ukryj błąd 
+            }
+        });
+
+    </script>
 </body>
 </html>

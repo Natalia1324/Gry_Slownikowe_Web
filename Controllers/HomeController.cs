@@ -377,42 +377,7 @@ namespace Gry_Slownikowe.Controllers
             return View(model);
            
         }
-        private bool CzyDrugieSlowoMaMinTrzyLitery(string slowo1, string slowo2, string slowo3, string slowo4)
-        {
-            var literyZPierwszego = new HashSet<char>(slowo1);
-            int licznik2 = 0, licznik3 = 0, licznik4 = 0;
-
-
-            foreach (var litera in slowo2)
-            {
-                if (literyZPierwszego.Contains(litera))
-                {
-                    licznik2++;
-                    
-                }
-            }
-
-            foreach (var litera in slowo3)
-            {
-                if (literyZPierwszego.Contains(litera))
-                {
-                    licznik3++;
-                   
-                }
-            }
-
-            foreach (var litera in slowo4)
-            {
-                if (literyZPierwszego.Contains(litera))
-                {
-                    licznik4++;
-                 
-                }
-            }
-
-
-            return licznik2 >= 4 && licznik3 >= 4 && licznik4 >= 4;
-        }
+       
         public IActionResult ZgadywankiMenu ()
         {
             return View();

@@ -1,17 +1,17 @@
 ﻿body {
-    background-color: #fcf9f5;
+    background-color: #6d7c82;
 }
 
 /*tytuł*/
 h1 {
-    background-color: #D5D7CC;
+    background-color: #d0eff1;
     border-radius: 10px;
     padding: 20px;
 }
 
 /*ramka przyciski*/
 .buttons-container {
-    background-color: #f2e5d9;
+    background-color: #ecf8f9;
     border-radius: 10px;
     padding: 20px;
     padding-bottom: 50px;
@@ -29,7 +29,7 @@ h1 {
     padding: 15px 30px;
     font-size: 1.25rem;
     color: #2C2C2C;
-    background-color: #E9AE8C; /*  kolor tła */
+    background-color: #bcebd7; /*  kolor tła */
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -37,12 +37,12 @@ h1 {
 }
 
     .btn:hover {
-        background-color: #FF9376; /* Ciemniejszy odcień  podczas najechania */
+        background-color: #86bfb3; /* Ciemniejszy odcień  podczas najechania */
         transform: scale(1.1);
     }
 
     .btn:active {
-        background-color: #8DAAA6; /* Jeszcze ciemniejszy odcień podczas kliknięcia */
+        background-color: #d2f7e8; /* Jeszcze ciemniejszy odcień podczas kliknięcia */
         transform: scale(0.95);
     }
 
@@ -56,21 +56,21 @@ h1 {
     width: 15px;
     height: 15px;
     margin: 0 5px;
-    background-color: #D5D7CC;
+    background-color: #e5ebec;
     border-radius: 50%;
     transition: background-color 0.3s ease;
 }
 
     .dot.active {
-        background-color: #8DAAA6; /* Kolor aktywnego kółka */
+        background-color: #a9e2e5; /* Kolor aktywnego kółka */
     }
 
     .dot.hovered:not(.active) {
-        background-color: #e6c5b3; /* Kolor nieaktywnej kropki podczas najechania */
+        background-color: #c4f2e9; /* Kolor nieaktywnej kropki podczas najechania */
     }
 
     .dot.hovered.active {
-        background-color: #FF9376; /* Kolor aktywnej kropki podczas najechania */
+        background-color: #86bfb3; /* Kolor aktywnej kropki podczas najechania */
     }
 
 /* tło pod ramką przycisków */
@@ -84,7 +84,7 @@ h1 {
     left: -10px;
     width: calc(100% + 20px);
     height: calc(100% + 20px);
-    background-color: #E3E0D6;
+    background-color: #d2f7e8;
     border-radius: 10px;
     z-index: -1;
 }
@@ -96,7 +96,7 @@ h1 {
     left: 0;
     width: 100%;
     height: 50px; /* zwiększenie wysokości paska */
-    background-color: #D5D7CC; /* kolor paska */
+    background-color: #d0eff1; /* kolor paska */
     border-radius: 10px; /* zaokrąglenie rogów */
     z-index: -1;
 }
