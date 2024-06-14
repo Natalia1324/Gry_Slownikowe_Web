@@ -369,7 +369,7 @@ namespace Gry_Slownikowe.Controllers
                     api4 = new SJP_API();
                 } while (api4.getDopuszczalnosc() == false);
                 slowo4 = api4.getSlowo();
-                polskieZnaki4 = slowo4;// HttpUtility.HtmlEncode(slowo4);// - Problem z "ó"
+                polskieZnaki4 = slowo4;// HttpUtility.HtmlEncode(slowo4);// - Problem z "ó" 
 
             } while (slowo2 == null || slowo3 == null || slowo4 == null);
 
