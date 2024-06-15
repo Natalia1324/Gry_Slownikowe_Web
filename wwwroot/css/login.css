@@ -64,10 +64,6 @@ input {
     border-radius: 20px;
 }
 
-    .error-message {
-        margin-top: 20px;
-        color: red;
-    }
 
 .validation-summary-errors ul {
     margin: 0;
@@ -77,7 +73,9 @@ input {
 
 /* Animacja błędu */
 .error-message {
-    animation: fadeout 2s forwards;
+    animation: fadeout 5s forwards;
+    margin-top: 20px;
+    color: red;
 }
 
 @keyframes fadeout {
