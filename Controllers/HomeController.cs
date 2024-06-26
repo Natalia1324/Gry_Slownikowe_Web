@@ -230,8 +230,11 @@ namespace Gry_Slownikowe.Controllers
                 {
                     GameName = "Krzyzowki",
                     TotalGames = user.Krzyzowki.Count,
-                    Wins = user.Krzyzowki.Sum(g => g.Win),
-                    Losses = user.Krzyzowki.Sum(g => g.Loss)
+                   // Wins = user.Krzyzowki.Sum(g => g.Win), // rozwiązane w całości
+                     Wins = _context.Krzyzowki.Where(g => g.UserId == userId).Sum(g => g.Win),
+
+                // Suma przegranych (odgadniętych liter) dla danego użytkownika
+                     Losses = _context.Krzyzowki.Where(g => g.UserId == userId).Sum(g => g.Loss)
                 },
                 new GameStatistics
                 {
@@ -487,6 +490,27 @@ namespace Gry_Slownikowe.Controllers
         {
             if (crosswordSize < 0) crosswordSize = 5;
             ICrosswordModelReadOnly crosswordModel = _crosswordBuilder.GenerateCrossword(crosswordSize).Get();
+            if(getLoggedUser() != null)
+            {
+                Krzyzowki crosswordData = new Krzyzowki
+                {
+                    Loss = 1,
+                    Win = 0,
+                    GameTime = TimeSpan.FromMilliseconds(0),
+                    UserId = getLoggedUser().Id
+                };
+                try
+                {
+                    getLoggedUser().Krzyzowki.Add(crosswordData);
+                    _context.Krzyzowki.Add(crosswordData);
+                    _context.SaveChanges();
+                    _memoryCache.Set("CrosswordID", crosswordData.Id);
+                }
+                catch (Exception e)
+                {
+                    return Json(new { success = false, message = e.InnerException.Message });
+                }
+            }
             crosswordModel.StartTimer();
             _memoryCache.Set("CrosswordModel", crosswordModel);
             return View(crosswordModel);
@@ -513,6 +537,42 @@ namespace Gry_Slownikowe.Controllers
             ICrosswordModelReadOnly crossword = _memoryCache.Get<ICrosswordModelReadOnly>("CrosswordModel");
             if (crossword != null && crossword.Letters == crossword.GetGuessedLetters())
             {
+                var user = getLoggedUser();
+                if (user != null) {
+
+                    var crosswordID = _memoryCache.Get<int?>("CrosswordID");
+                    if(crosswordID.HasValue)
+                    {
+                        var userid = user.Id;
+                        //var crosswordData = getLoggedUser().Krzyzowki.FirstOrDefault(k => k.Id == crosswordID);
+                          //  _context.Entry()               
+                        //var crosswordData = _context.Krzyzowki.FirstOrDefault(k => k.Id == crosswordID.Value);
+                        var crosswordData = _context.Krzyzowki
+                         .FirstOrDefault(k => k.Id == crosswordID.Value && k.UserId == user.Id);
+
+                        //var crosswordData = user.Krzyzowki.FirstOrDefault(k => k.Id == crosswordID.Value);
+                        if (crosswordData != null)
+                        {
+                            // Wykonujemy operacje na pobranym obiekcie
+                            crosswordData.Win = 1;
+                            crosswordData.Loss = 0;
+                            crosswordData.GameTime = crossword.GetTimeSpan(); // Zakładam, że crossword to dostępny obiekt z metodą GetTimeSpan()
+
+                            // Zapisujemy zmiany w bazie danych
+                            _context.Update(crosswordData);
+                            _context.SaveChanges();
+                        }
+                        else
+                        {
+                            // Obsługa przypadku, gdy obiekt nie został znaleziony
+                            return Json(new { success = false, message = "Crossword not found" });
+                        }
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "CrosswordID not found in cache" });
+                    }
+                }
                 return Json(new { success = true, time = crossword.GetTime() });
             }
             else

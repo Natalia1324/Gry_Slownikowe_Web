@@ -167,6 +167,11 @@ namespace Crossword
             return roundedSeconds;
         }
 
+        public TimeSpan GetTimeSpan()
+        {
+            return _stopwatch.Elapsed;
+        }
+
 
         /**
          * Metoda wstawiająca hasło krzyżówki

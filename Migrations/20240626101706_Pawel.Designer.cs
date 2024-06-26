@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gry_Slownikowe.Migrations
 {
     [DbContext(typeof(GryContext))]
-    [Migration("20240605191045_kasia")]
-    partial class kasia
+    [Migration("20240626101706_Pawel")]
+    partial class Pawel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

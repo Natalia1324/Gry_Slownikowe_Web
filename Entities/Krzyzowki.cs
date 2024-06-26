@@ -14,7 +14,6 @@ namespace Gry_Slownikowe.Entions
         public TimeSpan GameTime { get; set; }
         public DateTime? GameData { get; set; }
 
-
         public User User { get; set; }
         public int UserId { get; set; }
         
