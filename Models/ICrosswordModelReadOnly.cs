@@ -71,5 +71,10 @@ namespace Gry_Slownikowe.Models
          * Otrzymaj czas rozwiązywania krzyżówki
          */
         public double GetTime();
+
+        /**
+         * Otrzymaj timespan rozwiązywania krzyżówki
+         */
+        public TimeSpan GetTimeSpan();
     }
 }

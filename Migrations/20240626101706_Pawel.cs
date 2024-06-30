@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Gry_Slownikowe.Migrations
 {
     /// <inheritdoc />
-    public partial class kasia : Migration
+    public partial class Pawel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

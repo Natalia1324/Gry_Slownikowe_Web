@@ -285,7 +285,11 @@
                     let timeH = document.getElementById("time_h");
                     resultDiv.classList.remove("slide");
                     timeH.innerText = "Czas rozwiązania: " + response.time + " sekund(y)";
-                } 
+                } else {
+                    if (response.time == 1) {
+                        alert("Error: Couldn't push to database");
+                    }
+                }
             },
             error: function (xhr, status, error) {
                 console.error('Błąd:', error);

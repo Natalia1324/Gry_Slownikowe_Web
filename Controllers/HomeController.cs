@@ -230,8 +230,11 @@ namespace Gry_Slownikowe.Controllers
                 {
                     GameName = "Krzyzowki",
                     TotalGames = user.Krzyzowki.Count,
-                    Wins = user.Krzyzowki.Sum(g => g.Win),
-                    Losses = user.Krzyzowki.Sum(g => g.Loss)
+                   // Wins = user.Krzyzowki.Sum(g => g.Win), // rozwiązane w całości
+                     Wins = _context.Krzyzowki.Where(g => g.UserId == userId).Sum(g => g.Win),
+
+                // Suma przegranych (odgadniętych liter) dla danego użytkownika
+                     Losses = _context.Krzyzowki.Where(g => g.UserId == userId).Sum(g => g.Loss)
                 },
                 new GameStatistics
                 {
@@ -369,7 +372,7 @@ namespace Gry_Slownikowe.Controllers
                     api4 = new SJP_API();
                 } while (api4.getDopuszczalnosc() == false);
                 slowo4 = api4.getSlowo();
-                polskieZnaki4 = slowo4;// HttpUtility.HtmlEncode(slowo4);// - Problem z "ó"
+                polskieZnaki4 = slowo4;// HttpUtility.HtmlEncode(slowo4);// - Problem z "ó" 
 
             } while (slowo2 == null || slowo3 == null || slowo4 == null);
 
@@ -377,42 +380,7 @@ namespace Gry_Slownikowe.Controllers
             return View(model);
            
         }
-        private bool CzyDrugieSlowoMaMinTrzyLitery(string slowo1, string slowo2, string slowo3, string slowo4)
-        {
-            var literyZPierwszego = new HashSet<char>(slowo1);
-            int licznik2 = 0, licznik3 = 0, licznik4 = 0;
-
-
-            foreach (var litera in slowo2)
-            {
-                if (literyZPierwszego.Contains(litera))
-                {
-                    licznik2++;
-                    
-                }
-            }
-
-            foreach (var litera in slowo3)
-            {
-                if (literyZPierwszego.Contains(litera))
-                {
-                    licznik3++;
-                   
-                }
-            }
-
-            foreach (var litera in slowo4)
-            {
-                if (literyZPierwszego.Contains(litera))
-                {
-                    licznik4++;
-                 
-                }
-            }
-
-
-            return licznik2 >= 4 && licznik3 >= 4 && licznik4 >= 4;
-        }
+       
         public IActionResult ZgadywankiMenu ()
         {
             return View();
@@ -522,6 +490,27 @@ namespace Gry_Slownikowe.Controllers
         {
             if (crosswordSize < 0) crosswordSize = 5;
             ICrosswordModelReadOnly crosswordModel = _crosswordBuilder.GenerateCrossword(crosswordSize).Get();
+            if(getLoggedUser() != null)
+            {
+                Krzyzowki crosswordData = new Krzyzowki
+                {
+                    Loss = 1,
+                    Win = 0,
+                    GameTime = TimeSpan.FromMilliseconds(0),
+                    UserId = getLoggedUser().Id
+                };
+                try
+                {
+                    getLoggedUser().Krzyzowki.Add(crosswordData);
+                    _context.Krzyzowki.Add(crosswordData);
+                    _context.SaveChanges();
+                    _memoryCache.Set("CrosswordID", crosswordData.Id);
+                }
+                catch (Exception e)
+                {
+                    return Json(new { success = false, message = e.InnerException.Message });
+                }
+            }
             crosswordModel.StartTimer();
             _memoryCache.Set("CrosswordModel", crosswordModel);
             return View(crosswordModel);
@@ -548,6 +537,42 @@ namespace Gry_Slownikowe.Controllers
             ICrosswordModelReadOnly crossword = _memoryCache.Get<ICrosswordModelReadOnly>("CrosswordModel");
             if (crossword != null && crossword.Letters == crossword.GetGuessedLetters())
             {
+                var user = getLoggedUser();
+                if (user != null) {
+
+                    var crosswordID = _memoryCache.Get<int?>("CrosswordID");
+                    if(crosswordID.HasValue)
+                    {
+                        var userid = user.Id;
+                        //var crosswordData = getLoggedUser().Krzyzowki.FirstOrDefault(k => k.Id == crosswordID);
+                          //  _context.Entry()               
+                        //var crosswordData = _context.Krzyzowki.FirstOrDefault(k => k.Id == crosswordID.Value);
+                        var crosswordData = _context.Krzyzowki
+                         .FirstOrDefault(k => k.Id == crosswordID.Value && k.UserId == user.Id);
+
+                        //var crosswordData = user.Krzyzowki.FirstOrDefault(k => k.Id == crosswordID.Value);
+                        if (crosswordData != null)
+                        {
+                            // Wykonujemy operacje na pobranym obiekcie
+                            crosswordData.Win = 1;
+                            crosswordData.Loss = 0;
+                            crosswordData.GameTime = crossword.GetTimeSpan(); // Zakładam, że crossword to dostępny obiekt z metodą GetTimeSpan()
+
+                            // Zapisujemy zmiany w bazie danych
+                            _context.Update(crosswordData);
+                            _context.SaveChanges();
+                        }
+                        else
+                        {
+                            // Obsługa przypadku, gdy obiekt nie został znaleziony
+                            return Json(new { success = false, message = "Crossword not found" });
+                        }
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "CrosswordID not found in cache" });
+                    }
+                }
                 return Json(new { success = true, time = crossword.GetTime() });
             }
             else

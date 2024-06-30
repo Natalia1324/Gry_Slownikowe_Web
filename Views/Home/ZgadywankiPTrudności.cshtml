@@ -49,7 +49,8 @@
                 </ol>
             </div>
            
-            <div id="error" class="error" style="display: none;">Błędne słowo!</div>
+            <div id="error" class="error-message" style="display: none;">Błędne słowo!</div>
+
 
             <table id="punktyTable">
                 <tr>
@@ -205,15 +206,40 @@
                     document.getElementById('slowo' + (i + 1)).style.display = 'block'; //wyświetlenie odgadniętego słowa
                     punkty += 5;
                     document.getElementById('punkty').innerHTML = punkty;
-                    if (punkty >= 20) { // Sprawdzenie, czy liczba punktów wynosi co najmniej 20   //do zmiany
+                    wyczyscBlad(); // Wyczyszczenie błędu po poprawnym słowie
+                    if (punkty >= 20) { // Sprawdzenie, czy liczba punktów wynosi co najmniej 20
                         clearInterval(timer); // Zatrzymaj timer
                         showModal(); // Pokaz okienko z gratulacjami
                     }
                     return;
                 }
             }
-            alert("Błędne słowo!");
+            pokazBlad();
         }
+
+        // Funkcja pokazująca błąd
+        function pokazBlad() {
+            var error = document.getElementById('error');
+            error.style.display = 'block';
+            setTimeout(function () {
+                error.style.display = 'none';
+            }, 2000); // Ukryj błąd po 2 sekundach
+        }
+
+        // Funkcja czyszcząca błąd
+        function wyczyscBlad() {
+            var error = document.getElementById('error');
+            error.style.display = 'none';
+        }
+
+        // Funkcja aktualizująca wpisywane słowo (wybierzLitere)
+        function aktualizujWpisywaneSłowo() {
+            var wpisywaneSłowo = document.getElementById('wpisywaneSłowo');
+            wpisywaneSłowo.value = wybraneLitery.join('');
+            wyczyscBlad(); // Wyczyszczenie błędu po wpisaniu nowej litery
+        }
+
+
 
                 
 
@@ -239,7 +265,7 @@
         
         function openPoziomModal() {
             var modal = document.getElementById("poziomModal");
-           // var modalContent = document.querySelector(".modal-content");
+          
             modal.style.display = "block";
         }
 
@@ -253,7 +279,7 @@
                     czasStartowy = 15 * 60;
                     break;
                 case 'trudny':
-                    czasStartowy = 1 * 60;
+                    czasStartowy = 10 * 60;
                     break;
                 default:
                     czasStartowy = 0;
