@@ -1,5 +1,9 @@
+element.style {
+    cursor: url('/Graphics/cute-pop-cat-pack.cur'), default;
+}
+
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
